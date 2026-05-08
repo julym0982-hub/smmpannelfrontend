@@ -1,61 +1,57 @@
-// ══════════════════════════════════════════════════════
-//  config.js — API URL Configuration
-//  ➜ Change API_URL below to your Render backend URL
-// ══════════════════════════════════════════════════════
-
+// ══════════════════════════════════════════════
+//  config.js — API URL (ဒီမှာပဲ URL ပြောင်း)
+// ══════════════════════════════════════════════
 const CONFIG = {
   API_URL: "https://smmpannelbackend.onrender.com",
 };
 
-// ─── Helper: API call wrapper ─────────────────────────
 async function apiCall(endpoint, method = "GET", body = null) {
   const token = localStorage.getItem("smm_token");
 
-  const options = {
+  const opts = {
     method,
     headers: { "Content-Type": "application/json" },
   };
+  if (token)  opts.headers["Authorization"] = `Bearer ${token}`;
+  if (body)   opts.body = JSON.stringify(body);
 
-  if (token) {
-    options.headers["Authorization"] = `Bearer ${token}`;
+  let response, data;
+  try {
+    response = await fetch(`${CONFIG.API_URL}${endpoint}`, opts);
+  } catch (networkErr) {
+    // Network/CORS error
+    throw new Error("Cannot connect to server. Check your internet or try again.");
   }
 
-  if (body) {
-    options.body = JSON.stringify(body);
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Server returned invalid response.");
   }
-
-  const response = await fetch(`${CONFIG.API_URL}${endpoint}`, options);
-  const data = await response.json();
 
   if (!response.ok) {
     throw new Error(data.message || "Something went wrong");
   }
-
   return data;
 }
 
-// ─── Helper: Redirect if not logged in ───────────────
 function requireAuth() {
-  const token = localStorage.getItem("smm_token");
-  if (!token) {
+  if (!localStorage.getItem("smm_token")) {
     window.location.href = "login.html";
   }
 }
 
-// ─── Helper: Redirect to dashboard if logged in ──────
 function redirectIfLoggedIn() {
-  const token = localStorage.getItem("smm_token");
-  if (token) {
+  if (localStorage.getItem("smm_token")) {
     window.location.href = "index.html";
   }
 }
 
-// ─── Helper: Show alert message ──────────────────────
-function showAlert(id, message, type = "error") {
+function showAlert(id, msg, type = "error") {
   const el = document.getElementById(id);
   if (!el) return;
   el.className = `alert show alert-${type}`;
-  el.textContent = message;
+  el.textContent = msg;
 }
 
 function hideAlert(id) {
@@ -63,12 +59,9 @@ function hideAlert(id) {
   if (el) el.className = "alert";
 }
 
-// ─── Helper: Toggle button loading state ─────────────
 function setLoading(btnId, loading, defaultText) {
   const btn = document.getElementById(btnId);
   if (!btn) return;
   btn.disabled = loading;
-  btn.innerHTML = loading
-    ? `<span class="spinner"></span> Please wait...`
-    : defaultText;
+  btn.innerHTML = loading ? `<span class="spinner"></span> Please wait...` : defaultText;
 }
