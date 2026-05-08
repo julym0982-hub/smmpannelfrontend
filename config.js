@@ -4,9 +4,7 @@
 // ══════════════════════════════════════════════════════
 
 const CONFIG = {
-  // 🔧 Change this to your Render backend URL after deployment
-  // Example: "https://smm-panel-api.onrender.com"
-  API_URL: "http://localhost:5000",
+  API_URL: "https://smmpannelbackend.onrender.com",
 };
 
 // ─── Helper: API call wrapper ─────────────────────────
