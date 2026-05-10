@@ -221,6 +221,179 @@
     .placeholder-tab h3 { font-size: 1.25rem; font-weight: 800; color: #374151; }
     .placeholder-tab p { font-size: 0.875rem; text-align: center; }
 
+    /* ═══ ADD FUNDS PAGE ═══════════════════════ */
+    .funds-page {
+      min-height: calc(100vh - 68px);  /* below sticky header */
+      background: linear-gradient(135deg,#230769 0%,#5B1AB0 35%,#9B2FC9 65%,#E91E8C 100%);
+      padding-bottom: 100px;
+    }
+    .funds-top-bar {
+      display: flex; align-items: center;
+      padding: 16px 16px 12px;
+      gap: 12px;
+    }
+    .funds-back-btn {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: rgba(255,255,255,0.18);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .funds-top-logo {
+      flex: 1; text-align: center;
+      font-size: 1.35rem; font-weight: 900;
+      color: #fff; letter-spacing: -0.5px;
+    }
+    .funds-top-logo span { color: #E91E8C; }
+    .funds-top-spacer { width: 40px; }  /* balance the back btn */
+
+    .funds-card {
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      padding: 28px 20px 32px;
+      min-height: calc(100vh - 130px);
+    }
+    .funds-title {
+      font-size: 2rem; font-weight: 900; color: #111827;
+      margin-bottom: 24px;
+    }
+
+    /* Payment methods */
+    .funds-section-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.95rem; font-weight: 800; color: #1E1B4B;
+      margin-bottom: 12px;
+    }
+    .fsl-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg,#7C3AED,#C026D3);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fsl-icon svg { width: 16px; height: 16px; fill: #fff; }
+    .fsl-icon-circle {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg,#7C3AED,#C026D3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 900; color: #fff; flex-shrink: 0;
+    }
+
+    .payment-row {
+      display: flex; align-items: center; gap: 14px;
+      border: 1.5px solid #E5E7EB; border-radius: 14px;
+      padding: 14px 16px; margin-bottom: 10px; cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .payment-row:hover { border-color: #7C3AED; }
+    .pm-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg,#7C3AED,#C026D3);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .pm-icon svg { width: 22px; height: 22px; fill: #fff; }
+    .pm-info { flex: 1; }
+    .pm-name { font-size: 0.95rem; font-weight: 800; color: #1E1B4B; }
+    .pm-holder { font-size: 0.8rem; color: #6B7280; margin-top: 2px; }
+    .pm-copy {
+      background: none; border: 1.5px solid #E5E7EB;
+      border-radius: 8px; padding: 6px; cursor: pointer;
+      color: #7C3AED; display: flex; align-items: center;
+      transition: background 0.15s;
+    }
+    .pm-copy:hover { background: #F5F3FF; }
+    .pm-copy svg { width: 18px; height: 18px; }
+
+    /* Instructions */
+    .instr-wrap { margin: 20px 0 8px; }
+    .instr-step {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #F3F4F6;
+    }
+    .instr-step:last-child { border-bottom: none; }
+    .instr-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg,#7C3AED,#C026D3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 900; color: #fff; flex-shrink: 0;
+    }
+    .instr-text { font-size: 0.875rem; color: #374151; line-height: 1.65; padding-top: 3px; }
+
+    /* Note box */
+    .note-box {
+      background: #FFF1F2; border: 1.5px solid #FECDD3;
+      border-radius: 12px; padding: 14px 16px; margin: 14px 0 20px;
+    }
+    .note-heading {
+      font-size: 0.88rem; font-weight: 900; color: #BE123C;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+    }
+    .note-text {
+      font-size: 0.84rem; color: #BE123C; line-height: 1.7;
+    }
+    .note-text .note-line { display: block; margin-bottom: 3px; }
+
+    /* Upload */
+    .upload-label { font-size: 0.9rem; font-weight: 800; color: #1E1B4B; margin-bottom: 10px; }
+    .upload-box {
+      border: 2px dashed #7C3AED; border-radius: 14px;
+      background: #F5F3FF; padding: 22px 16px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; cursor: pointer; margin-bottom: 18px;
+      transition: background 0.2s;
+    }
+    .upload-box:hover { background: #EDE9FE; }
+    .upload-circle {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg,#7C3AED,#C026D3);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .upload-circle svg { width: 22px; height: 22px; fill: #fff; }
+    .upload-text { font-size: 0.9rem; font-weight: 800; color: #7C3AED; }
+    .upload-hint { font-size: 0.75rem; color: #9CA3AF; }
+    .upload-preview {
+      display: none; width: 100%; border-radius: 10px;
+      margin-top: 10px; max-height: 160px; object-fit: cover;
+    }
+
+    /* Transaction ID input */
+    .txn-label { font-size: 0.9rem; font-weight: 800; color: #1E1B4B; margin-bottom: 8px; }
+    .txn-input-wrap {
+      display: flex; align-items: center; gap: 10px;
+      border: 1.5px solid #E5E7EB; border-radius: 14px;
+      padding: 13px 14px; margin-bottom: 22px;
+      transition: border-color 0.2s; background: #fff;
+    }
+    .txn-input-wrap:focus-within { border-color: #7C3AED; }
+    .txn-input-wrap svg { width: 20px; height: 20px; flex-shrink: 0; stroke: #A78BFA; fill: none; stroke-width: 2; }
+    .txn-input-wrap input {
+      border: none; outline: none; width: 100%;
+      font-size: 0.9rem; color: #374151; background: transparent;
+      font-family: inherit;
+    }
+    .txn-input-wrap input::placeholder { color: #9CA3AF; }
+
+    /* Submit */
+    .funds-submit {
+      width: 100%; padding: 17px 20px; border: none; border-radius: 16px;
+      background: linear-gradient(90deg,#7B3FBF,#E91E8C);
+      color: #fff; font-size: 1rem; font-weight: 800;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      gap: 10px; box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+      transition: opacity 0.2s; font-family: inherit;
+    }
+    .funds-submit:hover { opacity: 0.91; }
+    .funds-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+    .funds-submit svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+
+    .funds-alert {
+      padding: 12px 16px; border-radius: 12px;
+      font-size: 0.875rem; font-weight: 700; text-align: center;
+      margin-top: 12px; display: none;
+    }
+    .funds-alert.show { display: block; }
+    .funds-alert.success { background:#F0FDF4; border:1.5px solid #BBF7D0; color:#16A34A; }
+    .funds-alert.error { background:#FEF2F2; border:1.5px solid #FECACA; color:#DC2626; }
+
     /* spinner */
     .spinner {
       display: inline-block; width: 16px; height: 16px;
@@ -469,11 +642,121 @@
        TAB: ADD FUNDS
   ════════════════════════════════════════ -->
   <div class="tab-section" id="tab-funds">
-    <div class="placeholder-tab">
-      <div class="pt-emoji">💳</div>
-      <h3>Add Funds</h3>
-      <p>Top up your balance — coming soon.</p>
-    </div>
+    <div class="funds-page">
+
+      <!-- Top bar -->
+      <div class="funds-top-bar">
+        <button class="funds-back-btn" onclick="setTab('home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="funds-top-logo">TheNet<span>SMM</span></div>
+        <div class="funds-top-spacer"></div>
+      </div>
+
+      <!-- White card -->
+      <div class="funds-card">
+        <div class="funds-title">Add Funds</div>
+
+        <!-- Payment Methods -->
+        <div class="funds-section-label">
+          <div class="fsl-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9z"/></svg>
+          </div>
+          Payment Methods
+        </div>
+
+        <!-- KPay -->
+        <div class="payment-row" onclick="copyNumber('09792310926','kpay-copied')">
+          <div class="pm-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          </div>
+          <div class="pm-info">
+            <div class="pm-name">KPay &ndash; 09792310926</div>
+            <div class="pm-holder">(Daw Mi Thaung)</div>
+          </div>
+          <button class="pm-copy" id="kpay-copied" title="Copy number">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+
+        <!-- Wave Pay -->
+        <div class="payment-row" onclick="copyNumber('09792310926','wave-copied')">
+          <div class="pm-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+          </div>
+          <div class="pm-info">
+            <div class="pm-name">Wavepay &ndash; 09792310926</div>
+            <div class="pm-holder">(Min Oak Soe)</div>
+          </div>
+          <button class="pm-copy" id="wave-copied" title="Copy number">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="funds-section-label" style="margin-top:22px">
+          <div class="fsl-icon-circle">i</div>
+          Instructions (ငွေထည့်နည်း)
+        </div>
+        <div class="instr-wrap">
+          <div class="instr-step">
+            <div class="instr-num">1</div>
+            <div class="instr-text">ငွေသွင်းရန် အထက်ပါ ဖုန်းနံပါတ်များ ထဲမှတစ်ခုကို wave/kpay ဖြင့် ငွေသွင်းပါ။</div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">2</div>
+            <div class="instr-text">ငွေလွဲပြီးပါက ရရှိသော ပြေစာ (Receipt) ကို ရှင်းလင်းစွာ screenshot ရိုက်ယူပါ။</div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">3</div>
+            <div class="instr-text">Transaction ID (လုပ်ငန်းစဉ်နံပါတ်) နောက်ဆုံး 6 လုံးကို အောက်တွင် ထည့်ပါ။</div>
+          </div>
+          <div class="instr-step">
+            <div class="instr-num">4</div>
+            <div class="instr-text">အချက်အလက်များ မှန်ကန်စွာ ဖြည့်သွင်းပြီး <strong>ငွေဖြည့်ရန်တင်သွင်းမည်</strong> ကို နိပ်ပါ။</div>
+          </div>
+        </div>
+
+        <!-- Note box -->
+        <div class="note-box">
+          <div class="note-heading">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="#BE123C"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            သတိပြုရန်
+          </div>
+          <div class="note-text">
+            <span class="note-line">• အနည်းဆုံး <strong>2,500 ကျပ်</strong>မှ စဖြည့်ပါ။</span>
+            <span class="note-line">• ငွေလွှဲသည့်အခါ <strong>payment/bill</strong> လိုသာ ရေးပေးပါ။</span>
+          </div>
+        </div>
+
+        <!-- Upload Receipt -->
+        <div class="upload-label">Upload Receipt</div>
+        <div class="upload-box" onclick="document.getElementById('receiptFile').click()">
+          <div class="upload-circle">
+            <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm0-10h4v6h6v-6h4l-7-7-7 7z"/></svg>
+          </div>
+          <div class="upload-text">Tap to upload receipt</div>
+          <div class="upload-hint">JPG, PNG (Max 5MB)</div>
+          <img id="receiptPreview" class="upload-preview" alt="Receipt preview" />
+        </div>
+        <input type="file" id="receiptFile" accept="image/jpeg,image/png" style="display:none" onchange="previewReceipt(this)" />
+
+        <!-- Transaction ID -->
+        <div class="txn-label">Transaction ID (လုပ်ငန်းစဉ်နံပါတ်)</div>
+        <div class="txn-input-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <input type="text" id="txnId" placeholder="Enter last 6 digits" maxlength="6" inputmode="numeric" />
+        </div>
+
+        <!-- Submit -->
+        <button class="funds-submit" id="fundsSubmitBtn" onclick="submitFunds()">
+          <span>ငွေဖြည့်ရန် တင်သွင်းမည်</span>
+          <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </button>
+        <div class="funds-alert" id="fundsAlert"></div>
+
+      </div><!-- /funds-card -->
+    </div><!-- /funds-page -->
   </div>
 
   <!-- ════════════════════════════════════════
@@ -742,6 +1025,75 @@ async function submitOrder() {
 /* ══════════════════════════════════════════════
    SIDEBAR / LOGOUT
 ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   ADD FUNDS HELPERS
+══════════════════════════════════════════════ */
+function copyNumber(number, btnId) {
+  navigator.clipboard.writeText(number).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = number; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el);
+  });
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  const orig = btn.innerHTML;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="20 6 9 17 4 12"/></svg>`;
+  setTimeout(() => { btn.innerHTML = orig; }, 1800);
+}
+
+function previewReceipt(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const preview = document.getElementById('receiptPreview');
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function submitFunds() {
+  const alertEl = document.getElementById('fundsAlert');
+  alertEl.className = 'funds-alert';
+  const file  = document.getElementById('receiptFile').files[0];
+  const txnId = document.getElementById('txnId').value.trim();
+
+  if (!file) {
+    alertEl.className = 'funds-alert show error';
+    alertEl.textContent = 'Please upload your receipt screenshot.'; return;
+  }
+  if (!txnId || txnId.length < 6) {
+    alertEl.className = 'funds-alert show error';
+    alertEl.textContent = 'Please enter the last 6 digits of your Transaction ID.'; return;
+  }
+
+  const btn = document.getElementById('fundsSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span><span>Submitting...</span>';
+
+  try {
+    // TODO: replace with real API call that uploads image + txnId
+    // const formData = new FormData();
+    // formData.append('receipt', file);
+    // formData.append('txnId', txnId);
+    // await fetch(CONFIG.API_URL + '/api/funds/request', { method:'POST', body:formData, headers:{Authorization:'Bearer '+localStorage.getItem('smm_token')} });
+    await new Promise(r => setTimeout(r, 1200));
+    alertEl.className = 'funds-alert show success';
+    alertEl.textContent = '✅ တင်သွင်းမှု အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးပြီး ငွေထည့်ပေးပါမည်။';
+    document.getElementById('txnId').value = '';
+    document.getElementById('receiptFile').value = '';
+    document.getElementById('receiptPreview').style.display = 'none';
+  } catch(e) {
+    alertEl.className = 'funds-alert show error';
+    alertEl.textContent = e.message || 'တင်သွင်းမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>ငွေဖြည့်ရန် တင်သွင်းမည်</span><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>';
+  }
+}
+
 function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
 function logout() { localStorage.removeItem('smm_token'); localStorage.removeItem('smm_user'); window.location.replace('/login'); }
