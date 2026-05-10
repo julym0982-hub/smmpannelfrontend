@@ -252,7 +252,7 @@ body {
 /* Header */
 .dash-header {
   background: #fff;
-  padding: 48px 16px 16px;
+  padding: 16px 16px 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   position: sticky;
   top: 0;
