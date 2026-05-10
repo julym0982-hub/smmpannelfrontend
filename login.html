@@ -465,7 +465,7 @@
                 <svg id="eye-li" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
               </button>
             </div>
-            <div class="forgot-wrap"><a href="forgot-password.html" class="forgot-link">Forgot password?</a></div>
+            <div class="forgot-wrap"><a href="/forgot-password" class="forgot-link">Forgot password?</a></div>
           </div>
           <button class="btn-primary" id="loginBtn" onclick="doLogin()">Log In</button>
           <p class="auth-footer-p">Not registered yet? <a href="#" onclick="showSection('signup');return false;">Sign Up &rsaquo;</a></p>
@@ -722,7 +722,7 @@
       try {
         const data = await apiCall('/api/auth/login','POST',{username:user,password:pw});
         localStorage.setItem('smm_token', data.token);
-        window.location.href = 'index.html';
+        window.location.replace('/');
       } catch(e) {
         showAlert('loginAlert', e.message || 'Login failed.');
         btn.disabled = false; btn.textContent = 'Log In';

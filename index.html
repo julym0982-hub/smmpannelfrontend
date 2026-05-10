@@ -25,7 +25,7 @@
       </div>
     </div>
     <nav class="sidebar-nav">
-      <a href="index.html">🏠&nbsp; Dashboard</a>
+      <a href="/">🏠&nbsp; Dashboard</a>
       <a href="#">💳&nbsp; Add Funds</a>
       <a href="#">🛒&nbsp; New Order</a>
       <a href="#">📋&nbsp; Orders</a>
@@ -314,7 +314,7 @@ function closeSidebar() {
 function logout() {
   localStorage.removeItem('smm_token');
   localStorage.removeItem('smm_user');
-  window.location.href = 'login.html';
+  window.location.replace('/login');
 }
 
 // ─── Init ─────────────────────────────────────────────
