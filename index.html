@@ -5,6 +5,225 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — SMM Panel</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ═══ TAB SECTIONS ══════════════════════════ */
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* ═══ NEW ORDER FORM ════════════════════════ */
+    .order-wrap {
+      padding: 16px 14px 100px;
+      min-height: calc(100vh - 68px);
+      background: #F5F5FA;
+    }
+    .order-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 18px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    /* All Categories btn */
+    .all-cat-btn {
+      display: flex; align-items: center; gap: 14px;
+      background: #F5F3FF; border: none; border-radius: 16px;
+      padding: 13px 18px; width: 100%; cursor: pointer;
+      margin-bottom: 22px;
+    }
+    .all-cat-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg,#7C3AED,#C026D3);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .all-cat-icon svg { width: 22px; height: 22px; fill: #fff; }
+    .all-cat-btn span { font-size: 1rem; font-weight: 800; color: #1E1B4B; }
+
+    /* Form group */
+    .order-group { margin-bottom: 18px; }
+    .order-label {
+      font-size: 0.9rem; font-weight: 700; color: #1E1B4B;
+      margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+    }
+    .order-label .info-icon {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 1.5px solid #A78BFA;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; color: #7C3AED; font-weight: 900;
+    }
+
+    /* Search input */
+    .order-search {
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border: 1.5px solid #E5E7EB;
+      border-radius: 14px; padding: 12px 14px;
+      transition: border-color 0.2s;
+    }
+    .order-search:focus-within { border-color: #7C3AED; }
+    .order-search svg { width: 19px; height: 19px; flex-shrink: 0; stroke: #9CA3AF; fill: none; stroke-width: 2; }
+    .order-search input {
+      border: none; outline: none; width: 100%;
+      font-size: 0.9rem; color: #374151; background: transparent;
+      font-family: inherit;
+    }
+    .order-search input::placeholder { color: #9CA3AF; }
+
+    /* Custom dropdown */
+    .order-select {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 1.5px solid #E5E7EB;
+      border-radius: 14px; padding: 12px 14px;
+      cursor: pointer; position: relative;
+      transition: border-color 0.2s;
+    }
+    .order-select.active { border-color: #7C3AED; }
+    .order-select .sel-icon {
+      width: 38px; height: 38px; border-radius: 50%;
+      flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: #000;
+    }
+    .order-select .sel-icon svg,
+    .order-select .sel-icon img { width: 38px; height: 38px; }
+    .order-select .sel-icon.music-icon { background: transparent; }
+    .order-select .sel-icon.music-icon svg { width: 28px; height: 28px; }
+    .order-select .sel-text { flex: 1; font-size: 0.92rem; font-weight: 700; color: #1E1B4B; }
+    .order-select .sel-chevron { flex-shrink: 0; }
+    .order-select .sel-chevron svg { width: 18px; height: 18px; stroke: #7C3AED; fill: none; stroke-width: 2.5; }
+
+    /* Dropdown list */
+    .select-dropdown {
+      display: none; position: absolute; left: 0; right: 0;
+      top: calc(100% + 4px); z-index: 50;
+      background: #fff; border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+      border: 1px solid #E5E7EB; overflow: hidden;
+    }
+    .select-dropdown.open { display: block; }
+    .select-dropdown-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px; cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.88rem; font-weight: 600; color: #1E1B4B;
+    }
+    .select-dropdown-item:hover { background: #F5F3FF; }
+    .select-dropdown-item .di-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: #000;
+    }
+    .select-dropdown-item .di-icon.music { background: transparent; }
+    .select-dropdown-item .di-icon svg { width: 32px; height: 32px; }
+    .select-dropdown-item .di-icon.music svg { width: 22px; height: 22px; }
+    .select-wrap { position: relative; }
+
+    /* Info display box */
+    .order-info-box {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(90deg,#EDE9FE,#FCE7F3);
+      border-radius: 14px; padding: 14px 16px;
+    }
+    .order-info-box svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .order-info-box span { font-size: 0.92rem; font-weight: 700; color: #1E1B4B; }
+
+    /* Link input */
+    .order-input {
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border: 1.5px solid #E5E7EB;
+      border-radius: 14px; padding: 12px 14px;
+      transition: border-color 0.2s;
+    }
+    .order-input:focus-within { border-color: #7C3AED; }
+    .order-input svg { width: 20px; height: 20px; flex-shrink: 0; stroke: #A78BFA; fill: none; stroke-width: 2; }
+    .order-input input {
+      border: none; outline: none; width: 100%;
+      font-size: 0.9rem; color: #374151; background: transparent;
+      font-family: inherit;
+    }
+    .order-input input::placeholder { color: #9CA3AF; }
+
+    /* Quantity */
+    .qty-wrap {
+      display: flex; align-items: center; gap: 10px;
+      background: #fff; border: 1.5px solid #E5E7EB;
+      border-radius: 14px; padding: 12px 14px;
+      transition: border-color 0.2s;
+    }
+    .qty-wrap:focus-within { border-color: #7C3AED; }
+    .qty-wrap svg.qty-icon { width: 22px; height: 22px; flex-shrink: 0; stroke: #A78BFA; fill: none; stroke-width: 2; }
+    .qty-wrap input {
+      border: none; outline: none; flex: 1;
+      font-size: 0.9rem; color: #374151; background: transparent;
+      font-family: inherit;
+    }
+    .qty-wrap input::placeholder { color: #9CA3AF; }
+    .qty-spin {
+      display: flex; flex-direction: column; gap: 1px; flex-shrink: 0;
+    }
+    .qty-spin button {
+      background: none; border: none; cursor: pointer;
+      padding: 1px 4px; line-height: 1; color: #7C3AED; font-size: 0.75rem;
+    }
+    .qty-hint { font-size: 0.75rem; color: #7C3AED; font-weight: 600; margin-top: 5px; }
+
+    /* Charge display */
+    .charge-box {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(90deg,#EDE9FE,#FCE7F3);
+      border-radius: 14px; padding: 14px 16px;
+    }
+    .charge-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(124,58,237,0.12);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .charge-icon svg { width: 22px; height: 22px; fill: #7C3AED; }
+    .charge-amount {
+      font-size: 1.45rem; font-weight: 900; color: #1E1B4B;
+    }
+
+    /* Submit btn */
+    .order-submit {
+      width: 100%; padding: 17px; border: none; border-radius: 16px;
+      background: linear-gradient(90deg,#7B3FBF,#E91E8C);
+      color: #fff; font-size: 1.05rem; font-weight: 800;
+      cursor: pointer; margin-top: 6px;
+      box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+    .order-submit:hover { opacity: 0.92; }
+    .order-submit:active { transform: scale(0.98); }
+    .order-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    /* Order result alert */
+    .order-alert {
+      padding: 12px 16px; border-radius: 12px; font-size: 0.88rem;
+      font-weight: 700; text-align: center; margin-top: 12px; display: none;
+    }
+    .order-alert.show { display: block; }
+    .order-alert.success { background: #F0FDF4; border: 1.5px solid #BBF7D0; color: #16A34A; }
+    .order-alert.error   { background: #FEF2F2; border: 1.5px solid #FECACA; color: #DC2626; }
+
+    /* Placeholder tabs */
+    .placeholder-tab {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: calc(100vh - 140px);
+      gap: 14px; color: #9CA3AF; padding: 40px 20px;
+    }
+    .placeholder-tab .pt-emoji { font-size: 3.5rem; }
+    .placeholder-tab h3 { font-size: 1.25rem; font-weight: 800; color: #374151; }
+    .placeholder-tab p { font-size: 0.875rem; text-align: center; }
+
+    /* spinner */
+    .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 7px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
 
@@ -25,11 +244,11 @@
       </div>
     </div>
     <nav class="sidebar-nav">
-      <a href="/">🏠&nbsp; Dashboard</a>
-      <a href="#">💳&nbsp; Add Funds</a>
-      <a href="#">🛒&nbsp; New Order</a>
-      <a href="#">📋&nbsp; Orders</a>
-      <a href="#">📝&nbsp; Blog</a>
+      <a href="#" onclick="setTab('home');closeSidebar()">🏠&nbsp; Home</a>
+      <a href="#" onclick="setTab('funds');closeSidebar()">💳&nbsp; Add Funds</a>
+      <a href="#" onclick="setTab('order');closeSidebar()">🛒&nbsp; New Order</a>
+      <a href="#" onclick="setTab('orders');closeSidebar()">📋&nbsp; Orders</a>
+      <a href="#" onclick="setTab('profile');closeSidebar()">👤&nbsp; Profile</a>
       <button class="logout-btn" onclick="logout()">🚪&nbsp; Logout</button>
     </nav>
   </div>
@@ -37,8 +256,6 @@
   <!-- ═══ HEADER ════════════════════════════ -->
   <div class="dash-header">
     <div class="dash-header-inner">
-
-      <!-- Hamburger -->
       <button class="hamburger-btn" onclick="openSidebar()">
         <svg viewBox="0 0 24 24">
           <line x1="3" y1="6"  x2="21" y2="6" />
@@ -46,12 +263,9 @@
           <line x1="3" y1="18" x2="21" y2="18"/>
         </svg>
       </button>
-
-      <!-- User Info -->
       <div class="user-avatar-sm">
         <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
       </div>
-
       <div class="user-info">
         <div class="greeting">Welcome back!</div>
         <div class="username">
@@ -61,10 +275,7 @@
           </span>
         </div>
       </div>
-
-      <!-- Balance Card -->
       <div class="balance-card">
-        <!-- wallet icon -->
         <svg class="wallet-icon" viewBox="0 0 24 24">
           <path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
         </svg>
@@ -76,96 +287,228 @@
           <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </div>
       </div>
-
     </div>
   </div>
-  <!-- /HEADER -->
 
-  <!-- ═══ STAT CARDS ═══════════════════════ -->
-  <div class="stat-cards">
+  <!-- ════════════════════════════════════════
+       TAB: HOME (stat cards + services)
+  ════════════════════════════════════════ -->
+  <div class="tab-section active" id="tab-home">
 
-    <!-- Add Balance -->
-    <div class="stat-card">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-      </div>
-      <div class="stat-label">Add Balance</div>
-      <div class="stat-sub">Top up your balance</div>
-      <button class="stat-btn">
-        <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-      </button>
-    </div>
-
-    <!-- Balance Spent -->
-    <div class="stat-card">
-      <div class="stat-icon">
-        <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      </div>
-      <div class="stat-label">Balance Spent</div>
-      <div class="stat-value" id="balSpent">$0.00</div>
-      <button class="stat-btn">
-        <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-      </button>
-    </div>
-
-    <!-- Total Orders -->
-    <div class="stat-card">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      </div>
-      <div class="stat-label">Total Orders</div>
-      <div class="stat-value" id="totalOrders">0</div>
-      <button class="stat-btn">
-        <svg class="fill-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-      </button>
-    </div>
-
-  </div>
-  <!-- /STAT CARDS -->
-
-  <!-- ═══ SERVICES ══════════════════════════ -->
-  <div class="services-wrap">
-    <div class="services-card">
-
-      <!-- Header -->
-      <div class="services-header">
-        <h2>Services</h2>
-        <button class="view-all-btn">
-          View All
-          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    <!-- STAT CARDS -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        </div>
+        <div class="stat-label">Add Balance</div>
+        <div class="stat-sub">Top up your balance</div>
+        <button class="stat-btn" onclick="setTab('funds')">
+          <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </button>
       </div>
-
-      <!-- Search -->
-      <div class="search-bar">
-        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" placeholder="Search Service by ID or Name" oninput="filterServices()" />
-        <button class="filter-btn">
-          <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        </div>
+        <div class="stat-label">Balance Spent</div>
+        <div class="stat-value" id="balSpent">$0.00</div>
+        <button class="stat-btn">
+          <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
         </button>
       </div>
-
-      <!-- Popular Label -->
-      <div class="popular-label">
-        <span>🔥</span>
-        <span>Popular Services</span>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        </div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value" id="totalOrders">0</div>
+        <button class="stat-btn">
+          <svg class="fill-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        </button>
       </div>
+    </div>
 
-      <!-- Social Icons Grid -->
-      <div class="social-grid" id="socialGrid">
-        <!-- Populated by JS -->
+    <!-- SERVICES -->
+    <div class="services-wrap">
+      <div class="services-card">
+        <div class="services-header">
+          <h2>Services</h2>
+          <button class="view-all-btn">
+            View All
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search Service by ID or Name" oninput="filterServices()" />
+          <button class="filter-btn">
+            <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="popular-label">
+          <span>🔥</span>
+          <span>Popular Services</span>
+        </div>
+        <div class="social-grid" id="socialGrid"></div>
       </div>
+    </div>
 
+  </div><!-- /tab-home -->
+
+  <!-- ════════════════════════════════════════
+       TAB: NEW ORDER
+  ════════════════════════════════════════ -->
+  <div class="tab-section" id="tab-order">
+    <div class="order-wrap">
+      <div class="order-card">
+
+        <!-- All Categories -->
+        <button class="all-cat-btn" onclick="resetOrder()">
+          <div class="all-cat-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+          </div>
+          <span>All Categories</span>
+        </button>
+
+        <!-- Search -->
+        <div class="order-group">
+          <div class="order-label">Search Service by ID</div>
+          <div class="order-search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="orderSearch" placeholder="type ID or name" oninput="searchOrderService()" />
+          </div>
+        </div>
+
+        <!-- Category dropdown -->
+        <div class="order-group">
+          <div class="order-label">Category</div>
+          <div class="select-wrap">
+            <div class="order-select" id="catSelect" onclick="toggleDropdown('catDrop')">
+              <div class="sel-icon" id="catSelIcon">
+                <!-- TikTok icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" style="background:#000;border-radius:50%"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+              </div>
+              <span class="sel-text" id="catSelText">TikTok Likes (Non Drop)</span>
+              <div class="sel-chevron"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+            </div>
+            <div class="select-dropdown" id="catDrop">
+              <!-- populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Service dropdown -->
+        <div class="order-group">
+          <div class="order-label">Service</div>
+          <div class="select-wrap">
+            <div class="order-select" id="svcSelect" onclick="toggleDropdown('svcDrop')">
+              <div class="sel-icon music-icon" id="svcSelIcon">
+                <svg viewBox="0 0 24 24" fill="#E91E8C"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+              </div>
+              <span class="sel-text" id="svcSelText">1479 - TikTok - Likes ~</span>
+              <div class="sel-chevron"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+            </div>
+            <div class="select-dropdown" id="svcDrop">
+              <!-- populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Average time -->
+        <div class="order-group">
+          <div class="order-label">
+            Average time
+            <span class="info-icon">i</span>
+          </div>
+          <div class="order-info-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="avgTimeDisplay">18 Minutes</span>
+          </div>
+        </div>
+
+        <!-- Link -->
+        <div class="order-group">
+          <div class="order-label">Link</div>
+          <div class="order-input">
+            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            <input type="url" id="orderLink" placeholder="Paste your link here" />
+          </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="order-group">
+          <div class="order-label">Quantity</div>
+          <div class="qty-wrap">
+            <svg class="qty-icon" viewBox="0 0 24 24"><path d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/></svg>
+            <input type="number" id="orderQty" placeholder="Enter quantity"
+              oninput="calcCharge()" />
+            <div class="qty-spin">
+              <button type="button" onclick="changeQty(100)">▲</button>
+              <button type="button" onclick="changeQty(-100)">▼</button>
+            </div>
+          </div>
+          <div class="qty-hint" id="qtyHint">Min: 10 - Max: 10,000,000</div>
+        </div>
+
+        <!-- Charge -->
+        <div class="order-group">
+          <div class="order-label">Charge</div>
+          <div class="charge-box">
+            <div class="charge-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            </div>
+            <span class="charge-amount" id="chargeAmt">0.00 Ks</span>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button class="order-submit" id="submitBtn" onclick="submitOrder()">Submit</button>
+        <div class="order-alert" id="orderAlert"></div>
+
+      </div><!-- /order-card -->
+    </div>
+  </div><!-- /tab-order -->
+
+  <!-- ════════════════════════════════════════
+       TAB: ADD FUNDS
+  ════════════════════════════════════════ -->
+  <div class="tab-section" id="tab-funds">
+    <div class="placeholder-tab">
+      <div class="pt-emoji">💳</div>
+      <h3>Add Funds</h3>
+      <p>Top up your balance — coming soon.</p>
     </div>
   </div>
-  <!-- /SERVICES -->
+
+  <!-- ════════════════════════════════════════
+       TAB: ORDERS
+  ════════════════════════════════════════ -->
+  <div class="tab-section" id="tab-orders">
+    <div class="placeholder-tab">
+      <div class="pt-emoji">📋</div>
+      <h3>My Orders</h3>
+      <p>Your order history will appear here.</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       TAB: PROFILE
+  ════════════════════════════════════════ -->
+  <div class="tab-section" id="tab-profile">
+    <div class="placeholder-tab">
+      <div class="pt-emoji">👤</div>
+      <h3>Profile</h3>
+      <p>Your profile settings will appear here.</p>
+    </div>
+  </div>
 
   <!-- ═══ BOTTOM NAV ════════════════════════ -->
   <nav class="bottom-nav">
 
-    <button class="nav-item active" id="nav-services" onclick="setTab('services')">
+    <button class="nav-item active" id="nav-home" onclick="setTab('home')">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      <span>Services</span>
+      <span>Home</span>
     </button>
 
     <button class="nav-item" id="nav-funds" onclick="setTab('funds')">
@@ -173,7 +516,6 @@
       <span>Add Funds</span>
     </button>
 
-    <!-- Center cart -->
     <div>
       <button class="nav-center" id="nav-order" onclick="setTab('order')">
         <div class="nav-center-circle">
@@ -188,95 +530,96 @@
       <span>Orders</span>
     </button>
 
-    <button class="nav-item" id="nav-blog" onclick="setTab('blog')">
-      <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
-      <span>Blog</span>
+    <button class="nav-item" id="nav-profile" onclick="setTab('profile')">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      <span>Profile</span>
     </button>
 
   </nav>
-  <!-- /BOTTOM NAV -->
 
 </div><!-- /dash-page -->
 
 <script src="config.js"></script>
 <script>
 
-// ─── Auth guard ───────────────────────────────────────
+/* ══════════════════════════════════════════════
+   AUTH GUARD
+══════════════════════════════════════════════ */
 requireAuth();
 
-// ─── Services data ────────────────────────────────────
+/* ══════════════════════════════════════════════
+   SERVICES GRID DATA
+══════════════════════════════════════════════ */
 const SERVICES = [
+  { name:'Instagram', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#dc2743"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs><path fill="url(#ig)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>` },
+  { name:'Facebook', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>` },
+  { name:'TikTok', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>` },
+  { name:'YouTube', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>` },
+  { name:'Twitter', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1DA1F2"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>` },
+  { name:'Telegram', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#26A5E4"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>` },
+  { name:'Spotify', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>` },
+  { name:'LinkedIn', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>` },
+  { name:'Snapchat', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="background:#FFFC00;border-radius:6px;"><path fill="#000" d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.165-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/></svg>` },
+  { name:'Pinterest', svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E60023"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>` },
+];
+
+/* ══════════════════════════════════════════════
+   ORDER CATALOGUE DATA
+   (category → services)
+   — Add more categories/services here later —
+══════════════════════════════════════════════ */
+const ORDER_CATALOGUE = [
   {
-    name: 'Instagram',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#f09433"/>
-        <stop offset="50%" stop-color="#dc2743"/>
-        <stop offset="100%" stop-color="#bc1888"/>
-      </linearGradient></defs>
-      <path fill="url(#ig)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-    </svg>`
-  },
-  {
-    name: 'Facebook',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2">
-      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-    </svg>`
-  },
-  {
-    name: 'TikTok',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000">
-      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-    </svg>`
-  },
-  {
-    name: 'YouTube',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FF0000">
-      <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
-    </svg>`
-  },
-  {
-    name: 'Twitter',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1DA1F2">
-      <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
-    </svg>`
-  },
-  {
-    name: 'Telegram',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#26A5E4">
-      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-    </svg>`
-  },
-  {
-    name: 'Spotify',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1DB954">
-      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-    </svg>`
-  },
-  {
-    name: 'LinkedIn',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#0A66C2">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-    </svg>`
-  },
-  {
-    name: 'Snapchat',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="background:#FFFC00;border-radius:6px;">
-      <path fill="#000" d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301.165-.088.344-.104.464-.104.182 0 .359.029.509.09.45.149.734.479.734.838.015.449-.39.839-1.213 1.168-.089.029-.209.075-.344.119-.45.135-1.139.36-1.333.81-.09.224-.061.524.12.868l.015.015c.06.136 1.526 3.475 4.791 4.014.255.044.435.27.42.509 0 .075-.015.149-.045.225-.24.569-1.273.988-3.146 1.271-.059.091-.12.375-.164.57-.029.179-.074.36-.134.553-.076.271-.27.405-.555.405h-.03c-.135 0-.313-.031-.538-.074-.36-.075-.765-.135-1.273-.135-.3 0-.599.015-.913.074-.6.104-1.123.464-1.723.884-.853.599-1.826 1.288-3.294 1.288-.06 0-.119-.015-.165-.015h-.149c-1.468 0-2.427-.675-3.279-1.288-.599-.42-1.107-.779-1.707-.884-.314-.045-.629-.074-.928-.074-.54 0-.958.089-1.272.149-.211.043-.391.074-.54.074-.374 0-.523-.224-.583-.42-.061-.192-.09-.389-.135-.567-.046-.181-.105-.494-.166-.57-1.918-.222-2.95-.642-3.189-1.226-.031-.063-.052-.15-.055-.225-.015-.243.165-.465.42-.509 3.264-.54 4.73-3.879 4.791-4.02l.016-.029c.18-.345.224-.645.119-.869-.195-.434-.884-.658-1.332-.809-.121-.029-.24-.074-.346-.119-1.107-.435-1.257-.93-1.197-1.273.09-.479.674-.793 1.168-.793.146 0 .27.029.383.074.42.194.789.3 1.104.3.234 0 .384-.06.465-.105l-.046-.569c-.098-1.626-.225-3.651.307-4.837C7.392 1.077 10.739.807 11.727.807l.419-.015h.06z"/>
-    </svg>`
-  },
-  {
-    name: 'Pinterest',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E60023">
-      <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
-    </svg>`
+    id: 'tiktok-likes-nd',
+    name: 'TikTok Likes (Non Drop)',
+    iconSvg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+    iconBg: '#000',
+    services: [
+      {
+        id: 1479,
+        name: '1479 - TikTok - Likes ~',
+        avgTime: '18 Minutes',
+        min: 10,
+        max: 10000000,
+        ratePerK: 79.2,   // Ks per 1000 units
+      },
+    ],
   },
 ];
 
-// ─── Render social grid ───────────────────────────────
+/* Current order state */
+let currentCat = ORDER_CATALOGUE[0];
+let currentSvc = ORDER_CATALOGUE[0].services[0];
+
+/* ══════════════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════════════ */
+function setTab(tab) {
+  // hide all sections
+  document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+  // deactivate all nav btns
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  // deactivate center btn if not order
+  document.getElementById('nav-order').classList.remove('active');
+
+  // show correct section
+  const sec = document.getElementById('tab-' + tab);
+  if (sec) sec.classList.add('active');
+
+  // activate correct nav btn
+  const navBtn = document.getElementById('nav-' + tab);
+  if (navBtn) navBtn.classList.add('active');
+
+  // close dropdowns
+  closeAllDropdowns();
+}
+
+/* ══════════════════════════════════════════════
+   SERVICES GRID
+══════════════════════════════════════════════ */
 function renderGrid(list) {
   const grid = document.getElementById('socialGrid');
-  if (list.length === 0) {
+  if (!list.length) {
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:#9CA3AF;font-weight:600;">No services found.</div>`;
     return;
   }
@@ -287,20 +630,182 @@ function renderGrid(list) {
     </div>
   `).join('');
 }
-
 function filterServices() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   renderGrid(SERVICES.filter(s => s.name.toLowerCase().includes(q)));
 }
 
-// ─── Bottom Nav tabs ──────────────────────────────────
-function setTab(tab) {
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  const el = document.getElementById('nav-' + tab);
-  if (el) el.classList.add('active');
+/* ══════════════════════════════════════════════
+   ORDER FORM — DROPDOWNS
+══════════════════════════════════════════════ */
+function buildDropdowns() {
+  // Category dropdown
+  const catDrop = document.getElementById('catDrop');
+  catDrop.innerHTML = ORDER_CATALOGUE.map(c => `
+    <div class="select-dropdown-item" onclick="selectCategory('${c.id}')">
+      <div class="di-icon" style="background:${c.iconBg}">${c.iconSvg}</div>
+      <span>${c.name}</span>
+    </div>
+  `).join('');
 }
 
-// ─── Sidebar ──────────────────────────────────────────
+function toggleDropdown(id) {
+  const drop = document.getElementById(id);
+  const isOpen = drop.classList.contains('open');
+  closeAllDropdowns();
+  if (!isOpen) drop.classList.add('open');
+}
+function closeAllDropdowns() {
+  document.querySelectorAll('.select-dropdown').forEach(d => d.classList.remove('open'));
+}
+
+function selectCategory(catId) {
+  currentCat = ORDER_CATALOGUE.find(c => c.id === catId);
+  currentSvc = currentCat.services[0];
+  // update category display
+  document.getElementById('catSelText').textContent = currentCat.name;
+  document.getElementById('catSelIcon').innerHTML = `<div style="background:${currentCat.iconBg};width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;">${currentCat.iconSvg}</div>`;
+  // rebuild service dropdown
+  buildServiceDropdown();
+  // apply first service
+  applySvc(currentSvc);
+  closeAllDropdowns();
+}
+
+function buildServiceDropdown() {
+  const svcDrop = document.getElementById('svcDrop');
+  svcDrop.innerHTML = currentCat.services.map(s => `
+    <div class="select-dropdown-item" onclick="selectService(${s.id})">
+      <div class="di-icon music" style="background:transparent">
+        <svg viewBox="0 0 24 24" fill="#E91E8C"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </div>
+      <span>${s.id} - ${s.name}</span>
+    </div>
+  `).join('');
+}
+
+function selectService(svcId) {
+  currentSvc = currentCat.services.find(s => s.id === svcId);
+  applySvc(currentSvc);
+  closeAllDropdowns();
+}
+
+function applySvc(svc) {
+  document.getElementById('svcSelText').textContent = svc.id + ' - ' + svc.name;
+  document.getElementById('avgTimeDisplay').textContent = svc.avgTime;
+  document.getElementById('qtyHint').textContent = `Min: ${svc.min.toLocaleString()} - Max: ${svc.max.toLocaleString()}`;
+  document.getElementById('orderQty').min = svc.min;
+  document.getElementById('orderQty').max = svc.max;
+  calcCharge();
+}
+
+function resetOrder() {
+  currentCat = ORDER_CATALOGUE[0];
+  currentSvc = ORDER_CATALOGUE[0].services[0];
+  document.getElementById('catSelText').textContent = currentCat.name;
+  buildServiceDropdown();
+  applySvc(currentSvc);
+  document.getElementById('orderLink').value = '';
+  document.getElementById('orderQty').value = '';
+  document.getElementById('chargeAmt').textContent = '0.00 Ks';
+  document.getElementById('orderAlert').className = 'order-alert';
+  closeAllDropdowns();
+}
+
+/* ══════════════════════════════════════════════
+   CHARGE CALCULATION
+══════════════════════════════════════════════ */
+function calcCharge() {
+  const qty = parseInt(document.getElementById('orderQty').value) || 0;
+  if (!currentSvc || qty <= 0) {
+    document.getElementById('chargeAmt').textContent = '0.00 Ks';
+    return;
+  }
+  const charge = (qty / 1000) * currentSvc.ratePerK;
+  document.getElementById('chargeAmt').textContent = charge.toFixed(2) + ' Ks';
+}
+
+function changeQty(delta) {
+  const inp = document.getElementById('orderQty');
+  const cur = parseInt(inp.value) || 0;
+  const min = currentSvc ? currentSvc.min : 10;
+  const max = currentSvc ? currentSvc.max : 10000000;
+  inp.value = Math.min(max, Math.max(min, cur + delta));
+  calcCharge();
+}
+
+/* ══════════════════════════════════════════════
+   SEARCH ORDER SERVICE
+══════════════════════════════════════════════ */
+function searchOrderService() {
+  const q = document.getElementById('orderSearch').value.toLowerCase();
+  if (!q) { buildServiceDropdown(); return; }
+  const results = [];
+  ORDER_CATALOGUE.forEach(cat => {
+    cat.services.forEach(svc => {
+      if (svc.name.toLowerCase().includes(q) || String(svc.id).includes(q)) {
+        results.push({ cat, svc });
+      }
+    });
+  });
+  const svcDrop = document.getElementById('svcDrop');
+  if (!results.length) {
+    svcDrop.innerHTML = `<div class="select-dropdown-item" style="color:#9CA3AF">No results found</div>`;
+  } else {
+    svcDrop.innerHTML = results.map(r => `
+      <div class="select-dropdown-item" onclick="selectService(${r.svc.id})">
+        <div class="di-icon music"><svg viewBox="0 0 24 24" fill="#E91E8C"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
+        <span>${r.svc.id} - ${r.svc.name}</span>
+      </div>
+    `).join('');
+  }
+  document.getElementById('svcDrop').classList.add('open');
+}
+
+/* ══════════════════════════════════════════════
+   SUBMIT ORDER
+══════════════════════════════════════════════ */
+async function submitOrder() {
+  const alertEl = document.getElementById('orderAlert');
+  alertEl.className = 'order-alert';
+
+  const link = document.getElementById('orderLink').value.trim();
+  const qty  = parseInt(document.getElementById('orderQty').value) || 0;
+
+  if (!link) {
+    alertEl.className = 'order-alert show error';
+    alertEl.textContent = 'Please paste your link.'; return;
+  }
+  if (!qty || qty < currentSvc.min || qty > currentSvc.max) {
+    alertEl.className = 'order-alert show error';
+    alertEl.textContent = `Quantity must be between ${currentSvc.min} and ${currentSvc.max.toLocaleString()}.`; return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Submitting...';
+
+  try {
+    // TODO: replace with real order API call
+    // await apiCall('/api/orders', 'POST', { serviceId: currentSvc.id, link, quantity: qty });
+    await new Promise(r => setTimeout(r, 1200)); // placeholder delay
+    alertEl.className = 'order-alert show success';
+    alertEl.textContent = '✅ Order placed successfully!';
+    document.getElementById('orderLink').value = '';
+    document.getElementById('orderQty').value = '';
+    calcCharge();
+  } catch (e) {
+    alertEl.className = 'order-alert show error';
+    alertEl.textContent = e.message || 'Order failed. Try again.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit';
+  }
+}
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════ */
 function openSidebar() {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('overlay').classList.add('open');
@@ -310,45 +815,53 @@ function closeSidebar() {
   document.getElementById('overlay').classList.remove('open');
 }
 
-// ─── Logout ───────────────────────────────────────────
+/* ══════════════════════════════════════════════
+   LOGOUT
+══════════════════════════════════════════════ */
 function logout() {
   localStorage.removeItem('smm_token');
   localStorage.removeItem('smm_user');
   window.location.replace('/login');
 }
 
-// ─── Init ─────────────────────────────────────────────
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
 (async function init() {
-  // Load saved user
+  // Load cached user
   const saved = localStorage.getItem('smm_user');
   let user = saved ? JSON.parse(saved) : null;
-
-  if (user) {
-    document.getElementById('headerName').textContent = user.name || 'SMM Panel';
-    document.getElementById('sidebarName').textContent  = user.name  || '—';
-    document.getElementById('sidebarEmail').textContent = user.email || '—';
-    document.getElementById('balanceAmt').textContent   = '$' + (user.balance || 0).toFixed(2);
-    document.getElementById('balSpent').textContent     = '$' + (user.balanceSpent || 0).toFixed(2);
-    document.getElementById('totalOrders').textContent  = user.totalOrders || 0;
-  }
+  if (user) applyUser(user);
 
   // Refresh from API
   try {
     const fresh = await apiCall('/api/auth/me');
     localStorage.setItem('smm_user', JSON.stringify(fresh));
-    document.getElementById('headerName').textContent = fresh.name  || 'SMM Panel';
-    document.getElementById('sidebarName').textContent  = fresh.name  || '—';
-    document.getElementById('sidebarEmail').textContent = fresh.email || '—';
-    document.getElementById('balanceAmt').textContent   = '$' + (fresh.balance || 0).toFixed(2);
-    document.getElementById('balSpent').textContent     = '$' + (fresh.balanceSpent || 0).toFixed(2);
-    document.getElementById('totalOrders').textContent  = fresh.totalOrders || 0;
-  } catch (_) {
-    // keep local data if API fails
-  }
+    applyUser(fresh);
+  } catch (_) {}
 
-  // Render social grid
+  // Render services grid
   renderGrid(SERVICES);
+
+  // Build order dropdowns
+  buildDropdowns();
+  buildServiceDropdown();
+  applySvc(currentSvc);
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.select-wrap')) closeAllDropdowns();
+  });
 })();
+
+function applyUser(u) {
+  document.getElementById('headerName').textContent   = u.name  || 'SMM Panel';
+  document.getElementById('sidebarName').textContent  = u.name  || '—';
+  document.getElementById('sidebarEmail').textContent = u.email || '—';
+  document.getElementById('balanceAmt').textContent   = '$' + (u.balance      || 0).toFixed(2);
+  document.getElementById('balSpent').textContent     = '$' + (u.balanceSpent || 0).toFixed(2);
+  document.getElementById('totalOrders').textContent  = u.totalOrders || 0;
+}
 
 </script>
 </body>
