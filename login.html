@@ -32,24 +32,24 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255,255,255,0.07);
-      height: 68px;
+      height: 64px;
       display: flex; align-items: center;
-      padding: 0 44px;
-      justify-content: space-between;
+      padding: 0 32px;
+      gap: 8px;
     }
 
     .logo {
-      font-size: 1.45rem; font-weight: 900;
+      font-size: 1.35rem; font-weight: 900;
       color: #fff; text-decoration: none; letter-spacing: -0.5px;
-      cursor: pointer;
+      cursor: pointer; margin-right: auto; white-space: nowrap;
     }
     .logo span { color: #E91E8C; }
 
     .nav-links { display: flex; align-items: center; gap: 2px; }
 
     .nav-link {
-      padding: 8px 15px; border-radius: 10px;
-      font-size: 0.88rem; font-weight: 700;
+      padding: 7px 13px; border-radius: 10px;
+      font-size: 0.85rem; font-weight: 700;
       color: rgba(255,255,255,0.82);
       background: none; border: none; cursor: pointer;
       font-family: var(--font);
@@ -65,96 +65,123 @@
     }
     .hamburger span {
       display: block; width: 23px; height: 2.5px;
-      background: #fff; border-radius: 3px;
+      background: #fff; border-radius: 3px; transition: 0.3s;
     }
+    .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
     .mobile-drawer {
       display: none; flex-direction: column;
       background: rgba(15, 3, 40, 0.97);
-      position: fixed; top: 68px; left: 0; right: 0;
+      position: fixed; top: 64px; left: 0; right: 0;
       z-index: 90; padding: 12px 16px 16px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(14px);
     }
     .mobile-drawer.open { display: flex; }
     .mobile-drawer .nav-link {
       width: 100%; text-align: left;
       padding: 13px 16px; border-radius: 12px;
-      margin-bottom: 3px; font-size: 0.97rem;
+      margin-bottom: 3px; font-size: 0.95rem;
     }
 
     /* ═══ SECTIONS ══════════════════════════════ */
     .section { display: none; }
     .section.active { display: block; }
 
+    /* ═══ MOBILE BRAND CARD (shown only on mobile) ════ */
+    .mobile-brand {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px 0;
+      gap: 0;
+    }
+    .mb-logo {
+      font-size: 1.85rem; font-weight: 900;
+      color: #fff; letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+    .mb-logo span { color: #E91E8C; }
+    .mb-lines { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 7px; }
+    .mb-line {
+      height: 4px; border-radius: 3px;
+      background: linear-gradient(90deg, #7C3AED, #E91E8C);
+    }
+    .mb-line:nth-child(1) { width: 100%; }
+    .mb-line:nth-child(2) { width: 68%; }
+    .mb-line:nth-child(3) { width: 42%; }
+
     /* ═══ AUTH SPLIT LAYOUT ═════════════════════ */
     .auth-split {
       display: flex; align-items: stretch;
-      min-height: calc(100vh - 68px);
+      min-height: calc(100vh - 64px);
     }
 
     .auth-hero {
-      flex: 1; padding: 72px 64px 72px 80px;
+      flex: 1; padding: 60px 48px 60px 60px;
       display: flex; flex-direction: column;
       justify-content: center; color: #fff;
     }
 
     .auth-hero h1 {
-      font-size: 2.85rem; font-weight: 900;
-      line-height: 1.18; margin-bottom: 22px;
+      font-size: clamp(1.7rem, 2.5vw, 2.8rem); font-weight: 900;
+      line-height: 1.2; margin-bottom: 20px;
     }
     .auth-hero h1 .pink { color: #E91E8C; }
 
     .hero-desc {
-      font-size: 0.92rem; color: rgba(255,255,255,0.82);
-      line-height: 1.78; margin-bottom: 38px; max-width: 520px;
+      font-size: 0.88rem; color: rgba(255,255,255,0.82);
+      line-height: 1.78; margin-bottom: 34px; max-width: 480px;
     }
 
-    .hero-bullets { list-style: none; display: flex; flex-direction: column; gap: 15px; }
+    .hero-bullets { list-style: none; display: flex; flex-direction: column; gap: 14px; }
     .hero-bullet {
-      display: flex; align-items: center; gap: 14px;
-      font-size: 1rem; font-weight: 800; color: #fff;
+      display: flex; align-items: center; gap: 13px;
+      font-size: 0.95rem; font-weight: 800; color: #fff;
     }
     .bullet-check {
-      width: 32px; height: 32px; flex-shrink: 0;
+      width: 30px; height: 30px; flex-shrink: 0;
       background: linear-gradient(135deg, #7C3AED, #E91E8C);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 3px 12px rgba(124,58,237,0.5);
+      box-shadow: 0 3px 10px rgba(124,58,237,0.5);
     }
     .bullet-check svg {
-      width: 16px; height: 16px; fill: none;
+      width: 14px; height: 14px; fill: none;
       stroke: white; stroke-width: 2.8;
       stroke-linecap: round; stroke-linejoin: round;
     }
 
     .auth-form-side {
-      width: 500px; flex-shrink: 0;
+      width: 460px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      padding: 48px 48px 48px 20px;
+      padding: 40px 40px 40px 16px;
     }
 
     .auth-card {
-      background: #fff; border-radius: 28px;
-      padding: 46px 38px; width: 100%;
-      box-shadow: 0 28px 80px rgba(0,0,0,0.32);
+      background: #fff; border-radius: 26px;
+      padding: 40px 34px; width: 100%;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.32);
     }
 
-    .avatar-wrap { display: flex; justify-content: center; margin-bottom: 14px; }
+    .avatar-wrap { display: flex; justify-content: center; margin-bottom: 12px; }
     .avatar-circle {
-      width: 80px; height: 80px;
+      width: 74px; height: 74px;
       background: var(--avatar-grad); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 24px rgba(124,58,237,0.4);
+      box-shadow: 0 6px 22px rgba(124,58,237,0.4);
     }
-    .avatar-circle svg { width: 40px; height: 40px; fill: white; }
+    .avatar-circle svg { width: 37px; height: 37px; fill: white; }
 
     .auth-title {
-      font-size: 2rem; font-weight: 900;
-      color: #111827; text-align: center; margin-bottom: 26px;
+      font-size: 1.9rem; font-weight: 900;
+      color: #111827; text-align: center; margin-bottom: 24px;
     }
 
     .alert {
-      padding: 12px 16px; border-radius: 12px;
+      padding: 11px 14px; border-radius: 12px;
       font-size: 0.875rem; font-weight: 700;
       text-align: center; margin-bottom: 14px; display: none;
     }
@@ -162,57 +189,57 @@
     .alert-error { background: #FEF2F2; border: 1.5px solid #FECACA; color: #DC2626; }
     .alert-success { background: #F0FDF4; border: 1.5px solid #BBF7D0; color: #16A34A; }
 
-    .form-group { margin-bottom: 18px; }
-    .form-label { display: block; font-size: 0.875rem; font-weight: 700; color: #374151; margin-bottom: 8px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 700; color: #374151; margin-bottom: 7px; }
 
     .input-wrap {
-      display: flex; align-items: center; gap: 11px;
+      display: flex; align-items: center; gap: 10px;
       background: #F9FAFB; border: 1.5px solid #E5E7EB;
-      border-radius: 15px; padding: 13px 15px;
+      border-radius: 14px; padding: 12px 14px;
       transition: border-color 0.2s, background 0.2s;
     }
     .input-wrap:focus-within { border-color: #9333EA; background: #fff; }
-    .input-wrap > svg { flex-shrink: 0; width: 20px; height: 20px; fill: #A78BFA; }
+    .input-wrap > svg { flex-shrink: 0; width: 19px; height: 19px; fill: #A78BFA; }
     .input-wrap input {
       flex: 1; border: none; background: transparent; outline: none;
-      font-size: 0.9rem; font-weight: 600; font-family: var(--font); color: #374151;
+      font-size: 0.88rem; font-weight: 600; font-family: var(--font); color: #374151;
     }
     .input-wrap input::placeholder { color: #9CA3AF; font-weight: 500; }
 
     .eye-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; color: #9CA3AF; }
     .eye-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
 
-    .forgot-wrap { text-align: right; margin-top: 8px; }
+    .forgot-wrap { text-align: right; margin-top: 7px; }
     .forgot-link { font-size: 0.875rem; font-weight: 700; color: #7C3AED; text-decoration: none; }
     .forgot-link:hover { color: #E91E8C; }
 
     .btn-primary {
-      width: 100%; padding: 16px; border: none; border-radius: 16px;
+      width: 100%; padding: 15px; border: none; border-radius: 14px;
       background: var(--btn-grad); color: #fff;
       font-size: 1rem; font-weight: 800; font-family: var(--font);
-      cursor: pointer; box-shadow: 0 6px 24px rgba(139,47,201,0.45);
-      transition: opacity 0.2s, transform 0.1s; margin-top: 6px;
+      cursor: pointer; box-shadow: 0 5px 20px rgba(139,47,201,0.42);
+      transition: opacity 0.2s, transform 0.1s; margin-top: 4px;
     }
     .btn-primary:hover { opacity: 0.91; }
     .btn-primary:active { transform: scale(0.97); }
     .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
 
     .spinner {
-      display: inline-block; width: 17px; height: 17px;
+      display: inline-block; width: 16px; height: 16px;
       border: 2.5px solid rgba(255,255,255,0.4); border-top-color: #fff;
       border-radius: 50%; animation: spin 0.7s linear infinite;
-      vertical-align: middle; margin-right: 8px;
+      vertical-align: middle; margin-right: 7px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .auth-footer-p { text-align: center; font-size: 0.875rem; color: #6B7280; font-weight: 500; margin-top: 18px; }
+    .auth-footer-p { text-align: center; font-size: 0.875rem; color: #6B7280; font-weight: 500; margin-top: 16px; }
     .auth-footer-p a { color: #7C3AED; font-weight: 800; text-decoration: none; }
     .auth-footer-p a:hover { color: #E91E8C; }
 
     /* ═══ PLACEHOLDER ═══════════════════════════ */
     .placeholder-wrap {
       display: flex; flex-direction: column; align-items: center;
-      justify-content: center; min-height: calc(100vh - 68px);
+      justify-content: center; min-height: calc(100vh - 64px);
       color: rgba(255,255,255,0.7); gap: 14px; padding: 40px 20px;
     }
     .placeholder-wrap .ph-emoji { font-size: 4.5rem; }
@@ -220,138 +247,150 @@
     .placeholder-wrap p { font-size: 0.9rem; text-align: center; max-width: 320px; line-height: 1.6; }
 
     /* ═══ ABOUT US ═══════════════════════════════ */
-    .about-wrap { padding: 52px 44px 60px; }
+    .about-wrap { padding: 48px 40px 60px; }
 
     .feature-grid {
       display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 22px; max-width: 1160px; margin: 0 auto 48px;
+      gap: 20px; max-width: 1120px; margin: 0 auto 44px;
     }
     .feature-card {
       background: var(--card-glass); border: 1px solid var(--border-glass);
-      border-radius: 20px; padding: 32px 26px;
+      border-radius: 20px; padding: 30px 24px;
       backdrop-filter: blur(6px); color: #fff;
     }
     .feature-icon-circle {
-      width: 66px; height: 66px;
+      width: 62px; height: 62px;
       background: linear-gradient(135deg, #7C3AED, #C026D3);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      margin-bottom: 18px; box-shadow: 0 6px 22px rgba(124,58,237,0.45);
+      margin-bottom: 16px; box-shadow: 0 5px 18px rgba(124,58,237,0.42);
     }
-    .feature-icon-circle svg { width: 32px; height: 32px; fill: white; }
-    .feature-card h3 { font-size: 1.05rem; font-weight: 900; margin-bottom: 10px; }
-    .feature-underline { width: 38px; height: 3px; background: #E91E8C; border-radius: 2px; margin-bottom: 14px; }
-    .feature-card p { font-size: 0.855rem; color: rgba(255,255,255,0.8); line-height: 1.75; }
+    .feature-icon-circle svg { width: 30px; height: 30px; fill: white; }
+    .feature-card h3 { font-size: 1rem; font-weight: 900; margin-bottom: 9px; }
+    .feature-underline { width: 36px; height: 3px; background: #E91E8C; border-radius: 2px; margin-bottom: 12px; }
+    .feature-card p { font-size: 0.845rem; color: rgba(255,255,255,0.8); line-height: 1.75; }
 
     .about-intro {
-      max-width: 1160px; margin: 0 auto 32px;
+      max-width: 1120px; margin: 0 auto 28px;
       background: var(--card-glass); border: 1px solid var(--border-glass);
-      border-radius: 20px; padding: 38px 40px; color: #fff;
+      border-radius: 20px; padding: 36px 38px; color: #fff;
     }
-    .about-intro h2 { font-size: 1.55rem; font-weight: 900; margin-bottom: 14px; }
+    .about-intro h2 { font-size: 1.45rem; font-weight: 900; margin-bottom: 13px; }
     .about-intro h2 .pink { color: #E91E8C; }
-    .about-intro p { font-size: 0.875rem; color: rgba(255,255,255,0.82); line-height: 1.82; margin-bottom: 14px; }
+    .about-intro p { font-size: 0.875rem; color: rgba(255,255,255,0.82); line-height: 1.82; margin-bottom: 13px; }
 
-    .sub-heading { font-size: 1.05rem; font-weight: 900; color: #fff; margin: 24px 0 14px; }
+    .sub-heading { font-size: 1rem; font-weight: 900; color: #fff; margin: 22px 0 12px; }
 
-    .why-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .why-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .why-item {
-      display: flex; gap: 14px; align-items: flex-start;
+      display: flex; gap: 13px; align-items: flex-start;
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 13px; padding: 14px 18px;
+      border-radius: 12px; padding: 13px 16px;
     }
     .why-tag {
-      font-size: 0.74rem; font-weight: 900; color: #E91E8C;
+      font-size: 0.72rem; font-weight: 900; color: #E91E8C;
       background: rgba(233,30,140,0.14); border-radius: 8px;
-      padding: 4px 9px; white-space: nowrap; align-self: flex-start; margin-top: 1px;
+      padding: 4px 8px; white-space: nowrap; align-self: flex-start; margin-top: 1px;
     }
-    .why-text { font-size: 0.875rem; color: rgba(255,255,255,0.85); line-height: 1.65; }
+    .why-text { font-size: 0.865rem; color: rgba(255,255,255,0.85); line-height: 1.65; }
     .why-text strong { color: #fff; }
 
     .mission-block {
-      max-width: 1160px; margin: 0 auto 44px;
+      max-width: 1120px; margin: 0 auto 40px;
       background: var(--card-glass); border: 1px solid var(--border-glass);
-      border-radius: 20px; padding: 38px 40px;
-      display: flex; gap: 32px; align-items: flex-start;
+      border-radius: 20px; padding: 36px 38px;
+      display: flex; gap: 28px; align-items: flex-start;
     }
-    .mission-emoji { font-size: 3.8rem; flex-shrink: 0; margin-top: 4px; }
-    .mission-text h2 { font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 12px; }
+    .mission-emoji { font-size: 3.5rem; flex-shrink: 0; margin-top: 4px; }
+    .mission-text h2 { font-size: 1.35rem; font-weight: 900; color: #fff; margin-bottom: 11px; }
     .mission-text h2 .pink { color: #E91E8C; }
     .mission-text p { font-size: 0.875rem; color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 10px; }
 
-    .faq-wrap { max-width: 1160px; margin: 0 auto 44px; }
+    .faq-wrap { max-width: 1120px; margin: 0 auto 40px; }
     .faq-header {
-      display: flex; align-items: center; gap: 16px;
-      font-size: 1.7rem; font-weight: 900; color: #fff;
-      margin-bottom: 28px; justify-content: center;
+      display: flex; align-items: center; gap: 14px;
+      font-size: 1.6rem; font-weight: 900; color: #fff;
+      margin-bottom: 24px; justify-content: center;
     }
     .faq-q-icon {
-      width: 48px; height: 48px;
+      width: 44px; height: 44px;
       background: linear-gradient(135deg, #7C3AED, #C026D3);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 1.25rem; font-weight: 900; color: #fff;
+      font-size: 1.15rem; font-weight: 900; color: #fff;
     }
     .faq-item {
       background: var(--card-glass); border: 1px solid var(--border-glass);
-      border-radius: 16px; margin-bottom: 10px; overflow: hidden;
+      border-radius: 14px; margin-bottom: 9px; overflow: hidden;
     }
     .faq-question {
-      display: flex; align-items: center; gap: 16px;
-      padding: 20px 24px; cursor: pointer; color: #fff; user-select: none;
+      display: flex; align-items: center; gap: 14px;
+      padding: 18px 22px; cursor: pointer; color: #fff; user-select: none;
     }
     .faq-num {
-      width: 36px; height: 36px; flex-shrink: 0;
+      width: 34px; height: 34px; flex-shrink: 0;
       background: linear-gradient(135deg, #7C3AED, #C026D3);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 0.88rem; font-weight: 900; color: #fff;
+      font-size: 0.85rem; font-weight: 900; color: #fff;
     }
-    .faq-q-text { flex: 1; font-size: 0.95rem; font-weight: 800; }
-    .faq-arrow { font-size: 0.82rem; color: rgba(255,255,255,0.55); transition: transform 0.28s; flex-shrink: 0; }
+    .faq-q-text { flex: 1; font-size: 0.93rem; font-weight: 800; }
+    .faq-arrow { font-size: 0.8rem; color: rgba(255,255,255,0.55); transition: transform 0.28s; flex-shrink: 0; }
     .faq-item.open .faq-arrow { transform: rotate(180deg); }
     .faq-body {
       max-height: 0; overflow: hidden;
       transition: max-height 0.3s ease, padding 0.28s;
       font-size: 0.875rem; color: rgba(255,255,255,0.8);
-      line-height: 1.8; padding: 0 24px 0 76px;
+      line-height: 1.8; padding: 0 22px 0 70px;
     }
-    .faq-item.open .faq-body { max-height: 250px; padding-bottom: 20px; }
+    .faq-item.open .faq-body { max-height: 250px; padding-bottom: 18px; }
 
     .about-footer {
       border-top: 1px solid rgba(255,255,255,0.1);
-      padding: 18px 44px;
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      color: rgba(255,255,255,0.68); font-size: 0.83rem; font-weight: 700;
+      padding: 16px 40px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      color: rgba(255,255,255,0.68); font-size: 0.82rem; font-weight: 700;
     }
-    .about-footer svg { width: 20px; height: 20px; fill: none; stroke: #9B59B6; stroke-width: 2; }
+    .about-footer svg { width: 19px; height: 19px; fill: none; stroke: #9B59B6; stroke-width: 2; }
 
-    /* ═══ RESPONSIVE ════════════════════════════ */
-    @media (max-width: 900px) {
-      .navbar { padding: 0 18px; }
+    /* ═══ RESPONSIVE — Android Desktop (800-1200px) ═══ */
+    @media (min-width: 801px) and (max-width: 1100px) {
+      .auth-hero { padding: 44px 36px 44px 44px; }
+      .auth-form-side { width: 400px; padding: 36px 32px 36px 12px; }
+      .auth-card { padding: 34px 28px; }
+    }
+
+    /* ═══ RESPONSIVE — Mobile (≤800px) ════════════ */
+    @media (max-width: 800px) {
+      .navbar { padding: 0 16px; height: 60px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
+      .mobile-drawer { top: 60px; }
 
-      .auth-split { flex-direction: column; min-height: auto; }
-      .auth-hero { padding: 28px 20px 20px; justify-content: flex-start; }
-      .auth-hero h1 { font-size: 1.5rem; margin-bottom: 12px; }
-      .hero-desc { font-size: 0.82rem; margin-bottom: 20px; }
-      .hero-bullet { font-size: 0.875rem; gap: 11px; }
-      .bullet-check { width: 27px; height: 27px; }
-      .bullet-check svg { width: 13px; height: 13px; }
+      /* Show brand card, hide hero */
+      .mobile-brand { display: flex; }
+      .auth-hero { display: none; }
 
-      .auth-form-side { width: 100%; padding: 0 16px 40px; }
+      /* Stack form full-width */
+      .auth-split {
+        flex-direction: column; min-height: auto;
+        align-items: center; padding-bottom: 40px;
+      }
+      .auth-form-side {
+        width: 100%; max-width: 420px;
+        padding: 22px 18px 0;
+      }
       .auth-card { padding: 28px 20px; border-radius: 20px; }
-      .auth-title { font-size: 1.6rem; }
+      .auth-title { font-size: 1.55rem; }
 
-      .about-wrap { padding: 24px 16px 60px; }
-      .feature-grid { grid-template-columns: 1fr; gap: 14px; margin-bottom: 28px; }
-      .about-intro { padding: 24px 20px; margin-bottom: 20px; }
-      .about-intro h2 { font-size: 1.15rem; }
-      .mission-block { flex-direction: column; gap: 16px; padding: 24px 20px; margin-bottom: 24px; }
-      .mission-emoji { font-size: 3rem; }
-      .mission-text h2 { font-size: 1.15rem; }
-      .faq-wrap { margin-bottom: 24px; }
-      .faq-header { font-size: 1.2rem; gap: 12px; }
-      .faq-body { padding-left: 56px; }
-      .about-footer { padding: 14px 16px; font-size: 0.75rem; flex-wrap: wrap; justify-content: center; text-align: center; gap: 6px; }
+      .about-wrap { padding: 20px 14px 50px; }
+      .feature-grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 22px; }
+      .about-intro { padding: 22px 18px; margin-bottom: 18px; }
+      .about-intro h2 { font-size: 1.1rem; }
+      .mission-block { flex-direction: column; gap: 14px; padding: 22px 18px; margin-bottom: 20px; }
+      .mission-emoji { font-size: 2.8rem; }
+      .mission-text h2 { font-size: 1.1rem; }
+      .faq-wrap { margin-bottom: 20px; }
+      .faq-header { font-size: 1.15rem; gap: 10px; }
+      .faq-body { padding-left: 54px; }
+      .about-footer { padding: 12px 14px; font-size: 0.73rem; flex-wrap: wrap; justify-content: center; text-align: center; gap: 6px; }
     }
   </style>
 </head>
@@ -386,6 +425,15 @@
 
   <!-- ═══════════════ LOGIN ═══════════════ -->
   <section class="section active" id="sec-login">
+    <!-- Mobile brand card (hidden on desktop) -->
+    <div class="mobile-brand">
+      <div class="mb-logo">TheNet<span>SMM</span></div>
+      <div class="mb-lines">
+        <div class="mb-line"></div>
+        <div class="mb-line"></div>
+        <div class="mb-line"></div>
+      </div>
+    </div>
     <div class="auth-split">
       <div class="auth-hero">
         <h1>TheNet<span class="pink">SMM</span>: Myanmar's Premier Choice for Digital Growth</h1>
@@ -405,7 +453,7 @@
             <label class="form-label">Username</label>
             <div class="input-wrap">
               <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-              <input type="text" id="li-email" placeholder="Enter your username" autocomplete="email" />
+              <input type="text" id="li-email" placeholder="Enter your username" autocomplete="username" />
             </div>
           </div>
           <div class="form-group">
@@ -420,7 +468,7 @@
             <div class="forgot-wrap"><a href="forgot-password.html" class="forgot-link">Forgot password?</a></div>
           </div>
           <button class="btn-primary" id="loginBtn" onclick="doLogin()">Log In</button>
-          <p class="auth-footer-p">Not registered yet? <a href="#" onclick="showSection('signup')">Sign Up &rsaquo;</a></p>
+          <p class="auth-footer-p">Not registered yet? <a href="#" onclick="showSection('signup');return false;">Sign Up &rsaquo;</a></p>
         </div>
       </div>
     </div>
@@ -428,6 +476,15 @@
 
   <!-- ═══════════════ SIGNUP ═══════════════ -->
   <section class="section" id="sec-signup">
+    <!-- Mobile brand card (hidden on desktop) -->
+    <div class="mobile-brand">
+      <div class="mb-logo">TheNet<span>SMM</span></div>
+      <div class="mb-lines">
+        <div class="mb-line"></div>
+        <div class="mb-line"></div>
+        <div class="mb-line"></div>
+      </div>
+    </div>
     <div class="auth-split">
       <div class="auth-hero">
         <h1>Join <span class="pink">TheNetSMM</span> — Grow Your Digital Presence Today</h1>
@@ -468,7 +525,7 @@
             </div>
           </div>
           <button class="btn-primary" id="signupBtn" onclick="doSignup()">Sign Up</button>
-          <p class="auth-footer-p">Already have an account? <a href="#" onclick="showSection('login')">Log In &rsaquo;</a></p>
+          <p class="auth-footer-p">Already have an account? <a href="#" onclick="showSection('login');return false;">Log In &rsaquo;</a></p>
         </div>
       </div>
     </div>
@@ -513,8 +570,6 @@
   <!-- ═══════════════ ABOUT US ═══════════════ -->
   <section class="section" id="sec-about">
     <div class="about-wrap">
-
-      <!-- 3 Feature Cards (top row like screenshot) -->
       <div class="feature-grid">
         <div class="feature-card">
           <div class="feature-icon-circle">
@@ -542,200 +597,166 @@
         </div>
       </div>
 
-      <!-- About Intro Rich Content -->
       <div class="about-intro">
         <h2><span class="pink">About TheNetSmm</span> – Myanmar's Next-Gen Digital Growth Hub</h2>
         <p>TheNetSmm ဆိုတာ Social Media Marketing လောကမှာ ဝန်ဆောင်မှုပေးရုံသက်သက်မဟုတ်ဘဲ သင့်ရဲ့ Digital အောင်မြင်မှုအတွက် စနစ်တကျ တည်ဆောက်ထားတဲ့ Next-Generation Ecosystem တစ်ခုဖြစ်ပါတယ်။ ကျွန်တော်တို့ဟာ မြန်မာနိုင်ငံရဲ့ IT နဲ့ Digital နည်းပညာနယ်ပယ်မှာ အတွေ့အကြုံရှိတဲ့ ကျွမ်းကျင်သူတွေနဲ့ ဖွဲ့စည်းထားပြီး၊ လူတိုင်း လက်လှမ်းမီနိုင်တဲ့ ဈေးနှုန်းနဲ့ အဆင့်မြင့်ဆုံး ဝန်ဆောင်မှုတွေကို ပေးစွမ်းနေပါတယ်။</p>
-
         <div class="sub-heading">🚀 ကျွန်တော်တို့ ကဘယ်သူလဲ? (Who We Are)</div>
         <p>TheNetSmm ဟာ ခေတ်မှီနည်းပညာတွေကို အခြေခံပြီး တည်ဆောက်ထားတဲ့ မြန်မာ့ဦးဆောင် SMM Panel တစ်ခုဖြစ်ပါတယ်။ ကျွန်တော်တို့ရဲ့ ရည်မှန်းချက်ကတော့ Influencers တွေ၊ လုပ်ငန်းရှင်တွေနဲ့ အနုပညာရှင်တွေရဲ့ Social Media Presence ကို အချိန်တိုအတွင်း ခိုင်မာလာစေဖို့ ဖြစ်ပါတယ်။ ကျွန်တော်တို့ရဲ့ စနစ်ကို Developer ကိုယ်တိုင် စနစ်တကျ ထိန်းသိမ်းထားတာကြောင့် တခြားသူတွေထက် ပိုမိုမြန်ဆန်ပြီး လုံခြုံစိတ်ချရပါတယ်။</p>
-
-        <div class="sub-heading" style="margin-top:26px;">💡 TheNetSmm ကို ဘာကြောင့် ရွေးချယ်သင့်တာလဲ?</div>
+        <div class="sub-heading" style="margin-top:22px;">💡 TheNetSmm ကို ဘာကြောင့် ရွေးချယ်သင့်တာလဲ?</div>
         <ul class="why-list">
-          <li class="why-item">
-            <span class="why-tag">Precision Delivery</span>
-            <span class="why-text">အော်ဒါတိုင်းကို စက္ကန့်ပိုင်းအတွင်း စတင်လုပ်ဆောင်ပေးတဲ့ <strong>အလိုအလျောက် စနစ်</strong>ကို အသုံးပြုထားပါတယ်</span>
-          </li>
-          <li class="why-item">
-            <span class="why-tag">Developer Security</span>
-            <span class="why-text">သင့်ရဲ့ Data နဲ့ ငွေပေးချေမှုတွေကို <strong>အဆင့်မြင့် Security</strong> စနစ်တွေနဲ့ ကာကွယ်ထားပါတယ်</span>
-          </li>
-          <li class="why-item">
-            <span class="why-tag">Wholesale Pricing</span>
-            <span class="why-text">ကြားခံမရှိဘဲ တိုက်ရိုက်ဝန်ဆောင်မှုပေးတာကြောင့် ဈေးကွက်ထဲမှာ <strong>အသက်သာဆုံးနှုန်းထားများ</strong>ကို အာမခံပါတယ်</span>
-          </li>
-          <li class="why-item">
-            <span class="why-tag">24/7 Support</span>
-            <span class="why-text">စက်ရုပ်တွေနဲ့တင်မဟုတ်ဘဲ <strong>လူကိုယ်တိုင် ဖြေကြားပေးတဲ့</strong> Customer Support စနစ် ရှိပါတယ်</span>
-          </li>
+          <li class="why-item"><span class="why-tag">Precision Delivery</span><span class="why-text">အော်ဒါတိုင်းကို စက္ကန့်ပိုင်းအတွင်း စတင်လုပ်ဆောင်ပေးတဲ့ <strong>အလိုအလျောက် စနစ်</strong>ကို အသုံးပြုထားပါတယ်</span></li>
+          <li class="why-item"><span class="why-tag">Developer Security</span><span class="why-text">သင့်ရဲ့ Data နဲ့ ငွေပေးချေမှုတွေကို <strong>အဆင့်မြင့် Security</strong> စနစ်တွေနဲ့ ကာကွယ်ထားပါတယ်</span></li>
+          <li class="why-item"><span class="why-tag">Wholesale Pricing</span><span class="why-text">ကြားခံမရှိဘဲ တိုက်ရိုက်ဝန်ဆောင်မှုပေးတာကြောင့် <strong>ဈေးကွက်ထဲမှာ အသက်သာဆုံး</strong>နှုန်းထားတွေကို အာမခံပါတယ်</span></li>
+          <li class="why-item"><span class="why-tag">24/7 Support</span><span class="why-text">စက်ရုပ်တွေနဲ့တင်မဟုတ်ဘဲ <strong>လူကိုယ်တိုင် ဖြေကြားပေးတဲ့</strong> Customer Support စနစ် ရှိပါတယ်</span></li>
         </ul>
       </div>
 
-      <!-- Our Mission (like screenshot middle section) -->
       <div class="mission-block">
         <div class="mission-emoji">🌍</div>
         <div class="mission-text">
           <h2>ကျွန်တော်တို့ရဲ့ ရည်မှန်းချက် <span class="pink">(Our Mission)</span></h2>
-          <p>မြန်မာနိုင်ငံမှ လုပ်ငန်းရှင်များ၊ Influencer များနဲ့ Brand များအတွက် ကမ္ဘာ့အဆင့်မြင့် Digital Growth Solutions များကို အလွယ်တကူ ဝယ်ယူနိုင်ပြီး၊ လဲြခြိမ်တရာချပြီး တစ်နေရာတည်းမှ ရည်ရွယ်ချက်နဲ့ ပေးဆောင်ပါတယ်။</p>
-          <p>မြန်မာနိုင်ငံက Digital Content Creator တွေနဲ့ လုပ်ငန်းရှင်တိုင်းအတွက် အရည်အသွေးမြင့် Social Media Marketing ကို ဈေးနှုန်းသက်သာစွာနဲ့ တစ်နေရာတည်းမှာ ရရှိစေဖို့ ကျွန်တော်တို့ ဦးတည်နေပါတယ်။ သင်ရဲ့ အောင်မြင်မှုသည် ကျွန်တော်တို့ရဲ့ အောင်မြင်မှုပဲ။</p>
+          <p>မြန်မာနိုင်ငံက Digital Content Creator တွေနဲ့ လုပ်ငန်းရှင်တိုင်းအတွက် အရည်အသွေးမြင့် Social Media Marketing ကို ဈေးနှုန်းသက်သာစွာနဲ့ တစ်နေရာတည်းမှာ ရရှိစေဖို့တွက်ပါ။</p>
+          <p>မြန်မာနိုင်ငံမှ လုပ်ငန်းရှင်များ, Influencer များနှင် Brand များအတွက် ကမ္ဘာ့အဆင့်မြင့် Digital Growth Solutions များကို အလွယ်တကူ ဝယ်ယူနိုင်ပြီး, လုံခြုံစိတ်ချရပြီး, တစ်ခန်းစာပတ်သကဲ့ ရရှိနိုင်ရန် ရည်ရွယ်ပါသည်။</p>
         </div>
       </div>
 
-      <!-- FAQ (like screenshot bottom section) -->
       <div class="faq-wrap">
-        <div class="faq-header">
-          <div class="faq-q-icon">?</div>
-          FAQ (မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ)
-        </div>
-
-        <div class="faq-item" id="faq-1">
-          <div class="faq-question" onclick="toggleFaq('faq-1')">
+        <div class="faq-header"><div class="faq-q-icon">?</div>FAQ (မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ)</div>
+        <div class="faq-item" id="faq1">
+          <div class="faq-question" onclick="toggleFaq('faq1')">
             <div class="faq-num">1</div>
-            <span class="faq-q-text">TheNetSmm ဆိုတာ ဘာလဲ?</span>
-            <span class="faq-arrow">▼</span>
+            <div class="faq-q-text">TheNetSmm ဆိုတာ ဘာလဲ?</div>
+            <div class="faq-arrow">▼</div>
           </div>
-          <div class="faq-body">TheNetSmm ဆိုတာ Facebook, TikTok, Instagram, YouTube နဲ့ Telegram စတဲ့ Platform တွေအတွက် Followers, Likes, Views နဲ့ တခြား Engagement ဝန်ဆောင်မှုတွေကို လက်ကားဈေးနှုန်းနဲ့ ဝယ်ယူနိုင်တဲ့ Social Media Marketing (SMM) Platform တစ်ခု ဖြစ်ပါတယ်။</div>
+          <div class="faq-body">TheNetSmm ဆိုတာ Facebook, TikTok, Instagram, YouTube နဲ့ Telegram စတဲ့ Platform တွေအတွက် Followers, Likes, Views နဲ့ တခြား Engagement ဝန်ဆောင်မှုတွေကို လက်ကားဈေးနှုန်းနဲ့ ဝယ်ယူနိုင်တဲ့ SMM Platform တစ်ခုဖြစ်ပါတယ်။</div>
         </div>
-
-        <div class="faq-item" id="faq-2">
-          <div class="faq-question" onclick="toggleFaq('faq-2')">
+        <div class="faq-item" id="faq2">
+          <div class="faq-question" onclick="toggleFaq('faq2')">
             <div class="faq-num">2</div>
-            <span class="faq-q-text">အော်ဒါတွေက ဘယ်လောက်ကြာတတ်လဲ?</span>
-            <span class="faq-arrow">▼</span>
+            <div class="faq-q-text">အော်ဒါတွေက ဘယ်လောက်ကြာတတ်လဲ?</div>
+            <div class="faq-arrow">▼</div>
           </div>
-          <div class="faq-body">ကျွန်တော်တို့ရဲ့ စနစ်ဟာ ၁၀၀% အလိုအလျောက် (Automated) ဖြစ်တာကြောင့် ငွေပေးချေမှုပြီးတာနဲ့ အော်ဒါအများစုဟာ စက္ကန့်ပိုင်းအတွင်း စတင်ဆောင်ရွက်ပါတယ်။ အများဆုံး ၁၀ မိနစ်မှ ၂၄ နာရီအတွင်း ပြီးမြောက်ပါတယ်။ မြန်နှန်သော ဝန်ဆောင်မှုများကိုလည်း ပေးအပ်ပါတယ်။</div>
+          <div class="faq-body">ကျွန်တော်တို့ရဲ့ စနစ်ဟာ ၁၀၀% အလိုအလျောက် (Automated) ဖြစ်တာကြောင့် ငွေပေးချေမှုပြီးတာနဲ့ အော်ဒါအများစုဟာ စက္ကန့်ပိုင်းအတွင်း စတင်ဆောင်ရွက်ပါတယ်။ အများဆုံး 24 နာရီအတွင်း ပြီးမြောက်ပါသည်။</div>
         </div>
-
-        <div class="faq-item" id="faq-3">
-          <div class="faq-question" onclick="toggleFaq('faq-3')">
+        <div class="faq-item" id="faq3">
+          <div class="faq-question" onclick="toggleFaq('faq3')">
             <div class="faq-num">3</div>
-            <span class="faq-q-text">ငွေပေးချေမှုအတွက် ဘယ်လိုပေးရမလဲ?</span>
-            <span class="faq-arrow">▼</span>
+            <div class="faq-q-text">ငွေပေးချေမှုနဲ့ ပတ်သက်ပြီး မေးချင်တာ?</div>
+            <div class="faq-arrow">▼</div>
           </div>
-          <div class="faq-body">ကျွန်တော်တို့ Panel ပေါ်တွင် ငွေဖြည့်သွင်းပြီး ဝန်ဆောင်မှုများကို လက်ခံပါသည်။ ငွေပေးချေနည်းလမ်းများ အသေးစိတ်အတွက် Admin နှင့် ဆက်သွယ်ပါ သို့မဟုတ် Panel ထဲ Login ဝင်ပြီးကြည့်ရှုနိုင်ပါတယ်။</div>
+          <div class="faq-body">ကျွန်ုပ်တို့တွင် ငွေပေးချေနည်းများကို လက်ခံပေးပါသည်။ ငွေဖြည့်ပြီးပါက သင့် Balance မှ ဝန်ဆောင်မှုများ တိုက်ရိုက်ဝယ်ယူနိုင်ပါသည်။ ပိုမိုသိရှိလိုပါက Support Team ထံ ဆက်သွယ်ပါ။</div>
         </div>
       </div>
 
-    </div>
-    <div class="about-footer">
-      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-      လုံခြုံစိတ်ချရသည် &nbsp;✓&nbsp; &nbsp;|&nbsp; &nbsp;အရည်အသွေးမြင့် ဝန်ဆောင်မှု &nbsp;✓&nbsp; &nbsp;|&nbsp; &nbsp;သင်ရဲ့ အောင်မြင်မှုတွက် ကျွန်တော်တို့ အမြဲရှိနေပါသည်
+      <div class="about-footer">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" stroke-width="1.5"/></svg>
+        <span>လုံခြုံစိတ်ချရသော ✔</span>
+        <span style="color:rgba(255,255,255,0.3)">|</span>
+        <span>အရည်အသွေးမြင့် ✔</span>
+        <span style="color:rgba(255,255,255,0.3)">|</span>
+        <span>သင်အောင်မြင်မှုသည် ကျွန်ုပ်တို့၏ ရည်မှန်းချက် ✔</span>
+      </div>
     </div>
   </section>
 
   <script src="config.js"></script>
   <script>
-    // Redirect if already logged in
-    if (localStorage.getItem('smm_token')) {
-      window.location.href = 'index.html';
-    }
-
-    const SECTIONS = ['login','signup','api','faqs','terms','services','about'];
+    const TABS = ['login','signup','api','faqs','terms','services','about'];
 
     function showSection(id) {
-      SECTIONS.forEach(s => {
-        document.getElementById('sec-' + s)?.classList.remove('active');
-        document.getElementById('nl-' + s)?.classList.remove('active');
+      TABS.forEach(t => {
+        document.getElementById('sec-'+t).classList.toggle('active', t === id);
+        const nl = document.getElementById('nl-'+t);
+        if (nl) nl.classList.toggle('active', t === id);
       });
-      document.getElementById('sec-' + id)?.classList.add('active');
-      document.getElementById('nl-' + id)?.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo(0, 0);
     }
 
     function toggleDrawer() {
       document.getElementById('drawer').classList.toggle('open');
+      document.getElementById('hamburger').classList.toggle('open');
     }
     function closeDrawer() {
       document.getElementById('drawer').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
     }
-    document.addEventListener('click', e => {
-      const d = document.getElementById('drawer');
-      const h = document.getElementById('hamburger');
-      if (d.classList.contains('open') && !d.contains(e.target) && !h.contains(e.target)) {
-        closeDrawer();
-      }
-    });
 
     function toggleFaq(id) {
       const item = document.getElementById(id);
-      const wasOpen = item.classList.contains('open');
+      const isOpen = item.classList.contains('open');
       document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
+      if (!isOpen) item.classList.add('open');
     }
 
     function togglePw(inputId, iconId) {
-      const pw = document.getElementById(inputId);
+      const inp = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
-      if (pw.type === 'password') {
-        pw.type = 'text';
+      if (inp.type === 'password') {
+        inp.type = 'text';
         icon.innerHTML = `<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>`;
       } else {
-        pw.type = 'password';
+        inp.type = 'password';
         icon.innerHTML = `<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
       }
     }
 
-    function showAlt(id, msg, type = 'error') {
+    function showAlert(id, msg, type='error') {
       const el = document.getElementById(id);
       if (!el) return;
-      el.className = `alert show alert-${type}`;
+      el.className = 'alert show alert-' + type;
       el.textContent = msg;
     }
-    function hideAlt(id) {
+    function hideAlert(id) {
       const el = document.getElementById(id);
       if (el) el.className = 'alert';
     }
-    function setBtn(id, loading, label) {
-      const btn = document.getElementById(id);
-      if (!btn) return;
-      btn.disabled = loading;
-      btn.innerHTML = loading ? `<span class="spinner"></span> Please wait...` : label;
-    }
 
     async function doLogin() {
-      hideAlt('loginAlert');
-      const email    = document.getElementById('li-email').value.trim();
-      const password = document.getElementById('li-pw').value;
-      if (!email || !password) { showAlt('loginAlert', 'Please fill in all fields.'); return; }
-      setBtn('loginBtn', true, 'Log In');
+      hideAlert('loginAlert');
+      const user = document.getElementById('li-email').value.trim();
+      const pw   = document.getElementById('li-pw').value;
+      if (!user || !pw) { showAlert('loginAlert','Please fill in all fields.'); return; }
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Logging in...';
       try {
-        const data = await apiCall('/api/auth/login', 'POST', { email, password });
+        const data = await apiCall('/api/auth/login','POST',{username:user,password:pw});
         localStorage.setItem('smm_token', data.token);
-        localStorage.setItem('smm_user', JSON.stringify(data.user));
         window.location.href = 'index.html';
-      } catch (err) {
-        showAlt('loginAlert', err.message);
-      } finally {
-        setBtn('loginBtn', false, 'Log In');
+      } catch(e) {
+        showAlert('loginAlert', e.message || 'Login failed.');
+        btn.disabled = false; btn.textContent = 'Log In';
       }
     }
 
     async function doSignup() {
-      hideAlt('signupAlert');
-      const name     = document.getElementById('su-name').value.trim();
-      const email    = document.getElementById('su-email').value.trim();
-      const password = document.getElementById('su-pw').value;
-      if (!name || !email || !password) { showAlt('signupAlert', 'Please fill in all fields.'); return; }
-      if (password.length < 6) { showAlt('signupAlert', 'Password must be at least 6 characters.'); return; }
-      setBtn('signupBtn', true, 'Sign Up');
+      hideAlert('signupAlert');
+      const name  = document.getElementById('su-name').value.trim();
+      const email = document.getElementById('su-email').value.trim();
+      const pw    = document.getElementById('su-pw').value;
+      if (!name || !email || !pw) { showAlert('signupAlert','Please fill in all fields.'); return; }
+      const btn = document.getElementById('signupBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Creating account...';
       try {
-        const data = await apiCall('/api/auth/signup', 'POST', { name, email, password });
-        localStorage.setItem('smm_token', data.token);
-        localStorage.setItem('smm_user', JSON.stringify(data.user));
-        window.location.href = 'index.html';
-      } catch (err) {
-        showAlt('signupAlert', err.message);
-      } finally {
-        setBtn('signupBtn', false, 'Sign Up');
+        await apiCall('/api/auth/signup','POST',{name,email,password:pw});
+        showAlert('signupAlert','Account created! Redirecting to login...','success');
+        setTimeout(()=>showSection('login'), 1800);
+        btn.disabled = false; btn.textContent = 'Sign Up';
+      } catch(e) {
+        showAlert('signupAlert', e.message || 'Signup failed.');
+        btn.disabled = false; btn.textContent = 'Sign Up';
       }
     }
 
     document.addEventListener('keydown', e => {
-      if (e.key !== 'Enter') return;
-      const active = document.querySelector('.section.active');
-      if (active?.id === 'sec-login')  doLogin();
-      if (active?.id === 'sec-signup') doSignup();
+      if (e.key === 'Enter') {
+        if (document.getElementById('sec-login').classList.contains('active')) doLogin();
+        else if (document.getElementById('sec-signup').classList.contains('active')) doSignup();
+      }
     });
+
+    redirectIfLoggedIn();
   </script>
 </body>
 </html>
