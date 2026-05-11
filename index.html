@@ -526,21 +526,41 @@
   <!-- ═══ SIDEBAR ═══════════════════════════ -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-user">
-      <div class="sidebar-avatar">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-      </div>
-      <div>
-        <div class="sidebar-name" id="sidebarName">—</div>
-        <div class="sidebar-email" id="sidebarEmail">—</div>
+      <div class="sidebar-user-inner">
+        <div class="sidebar-avatar">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        </div>
+        <div>
+          <div class="sidebar-name" id="sidebarName">—</div>
+          <div class="sidebar-email" id="sidebarEmail">—</div>
+        </div>
       </div>
     </div>
     <nav class="sidebar-nav">
-      <a href="#" onclick="setTab('home');closeSidebar()">🏠&nbsp; Home</a>
-      <a href="#" onclick="setTab('funds');closeSidebar()">💳&nbsp; Add Funds</a>
-      <a href="#" onclick="goToOrders();closeSidebar()">🛒&nbsp; New Order</a>
-      <a href="#" onclick="setTab('orders');closeSidebar()">📋&nbsp; Orders</a>
-      <a href="#" onclick="setTab('profile');closeSidebar()">👤&nbsp; Profile</a>
-      <button class="logout-btn" onclick="logout()">🚪&nbsp; Logout</button>
+      <a href="#" onclick="setTab('home');closeSidebar()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
+        Home
+      </a>
+      <a href="#" onclick="setTab('funds');closeSidebar()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+        Add Funds
+      </a>
+      <a href="#" onclick="goToOrders();closeSidebar()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 6.9 18 9 18h12v-2H9.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.47 5H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg></span>
+        New Order
+      </a>
+      <a href="#" onclick="setTab('orders');closeSidebar()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></span>
+        Orders
+      </a>
+      <a href="#" onclick="setTab('profile');closeSidebar()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>
+        Profile
+      </a>
+      <button class="logout-btn" onclick="logout()">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></span>
+        Logout
+      </button>
     </nav>
   </div>
 
@@ -556,10 +576,10 @@
         </svg>
       </button>
       <div class="header-logo">TheNet<span>SMM</span></div>
-      <div class="balance-card">
+      <div class="balance-card" onclick="setTab('funds')" style="cursor:pointer">
         <svg class="wallet-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         <div class="bal-text">
-          <div class="bal-amount" id="balanceAmt">MMK 0</div>
+          <div class="bal-amount" id="balanceAmt">0 MMK</div>
           <div class="bal-label">Your Balance</div>
         </div>
         <div class="chevron"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
@@ -599,12 +619,12 @@
           <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </button>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" onclick="setTab('funds')" style="cursor:pointer">
         <div class="stat-icon">
           <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
         </div>
         <div class="stat-label">Balance Spent</div>
-        <div class="stat-value" id="balSpent">MMK 0</div>
+        <div class="stat-value" id="balSpent">0 MMK</div>
         <button class="stat-btn">
           <svg class="stroke-icon" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
         </button>
@@ -910,7 +930,7 @@
         <div class="profile-stat-card">
           <div class="psc-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
           <div class="psc-label">Total Spent</div>
-          <div class="psc-value" id="profileSpent">MMK 0</div>
+          <div class="psc-value" id="profileSpent">0 MMK</div>
         </div>
         <div class="profile-stat-card">
           <div class="psc-icon"><svg viewBox="0 0 24 24"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg></div>
@@ -1385,7 +1405,7 @@ function logout() { localStorage.removeItem('smm_token'); localStorage.removeIte
 })();
 
 function fmtMMK(v) {
-  return 'MMK ' + Math.round(v || 0).toLocaleString();
+  return Math.round(v || 0).toLocaleString() + ' MMK';
 }
 
 function applyUser(u) {

@@ -403,7 +403,7 @@
       <button class="nav-link active" id="nl-login"    onclick="showSection('login')">Login</button>
       <button class="nav-link"        id="nl-signup"   onclick="showSection('signup')">Signup</button>
       <button class="nav-link"        id="nl-api"      onclick="showSection('api')">API</button>
-      <button class="nav-link"        id="nl-faqs"     onclick="showSection('faqs')">FAQs</button>
+      <button class="nav-link"        id="nl-faqs"     onclick="goToFaq()">FAQs</button>
       <button class="nav-link"        id="nl-terms"    onclick="showSection('terms')">Terms</button>
       <button class="nav-link"        id="nl-services" onclick="showSection('services')">Services</button>
       <button class="nav-link"        id="nl-about"    onclick="showSection('about')">About Us</button>
@@ -417,7 +417,7 @@
     <button class="nav-link" onclick="showSection('login');closeDrawer()">Login</button>
     <button class="nav-link" onclick="showSection('signup');closeDrawer()">Signup</button>
     <button class="nav-link" onclick="showSection('api');closeDrawer()">API</button>
-    <button class="nav-link" onclick="showSection('faqs');closeDrawer()">FAQs</button>
+    <button class="nav-link" onclick="goToFaq();closeDrawer()">FAQs</button>
     <button class="nav-link" onclick="showSection('terms');closeDrawer()">Terms</button>
     <button class="nav-link" onclick="showSection('services');closeDrawer()">Services</button>
     <button class="nav-link" onclick="showSection('about');closeDrawer()">About Us</button>
@@ -755,6 +755,15 @@
         else if (document.getElementById('sec-signup').classList.contains('active')) doSignup();
       }
     });
+
+    /* FAQs tab → About section + scroll to FAQ */
+    function goToFaq() {
+      showSection('about');
+      setTimeout(() => {
+        const el = document.getElementById('faqAnchor');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
 
     redirectIfLoggedIn();
   </script>
