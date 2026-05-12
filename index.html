@@ -514,84 +514,86 @@
       vertical-align: middle; margin-right: 7px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+      .stat-cards { margin: 16px 20px 0; }
+      .home-split { padding: 14px 20px 40px; gap: 18px; }
+    }
 
-    /* ═══ DESKTOP LAYOUT (≥900px) ══════════════════════ */
+    /* ═══ DESKTOP LAYOUT (≥ 900px) ═══════════════════════════
+       Uses in-flow flex sidebar — no margin-left hacks
+    ════════════════════════════════════════════════════════ */
     @media (min-width: 900px) {
-      /* Header: full width, single row only */
-      .dash-header { padding: 0 24px; height: 64px; display: flex; align-items: center; }
-      .header-row1 { margin-bottom: 0; width: 100%; display: flex; align-items: center; gap: 12px; }
-      .header-row2 { display: none; }          /* sidebar shows user info */
-      .hamburger-btn { display: none; }        /* sidebar always visible */
-      .bottom-nav { display: none; }           /* no bottom nav on desktop */
-      .sidebar-overlay { display: none !important; }
+      /* Page: column flex */
+      .dash-page { display: flex; flex-direction: column; min-height: 100vh; }
 
-      /* Sidebar: always visible, below header */
+      /* Header: full-width single row */
+      .dash-header { height: 64px; padding: 0 24px; display: flex; align-items: center; box-shadow: 0 1px 0 #E5E7EB; }
+      .header-row1 { margin-bottom: 0; width: 100%; }
+      .header-row2 { display: none; }
+      .hamburger-btn { display: none; }
+
+      /* Body = sidebar + main */
+      .dash-body  { display: flex; flex: 1; min-height: 0; }
+      .dash-main  { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(100vh - 64px); }
+
+      /* Sidebar: in-flow sticky (NOT fixed) */
       .sidebar {
-        transform: translateX(0) !important;
-        position: fixed !important;
-        top: 64px !important; left: 0 !important;
+        position: sticky !important;
+        top: 0 !important;
+        left: unset !important;
+        transform: none !important;
         width: 220px !important;
+        min-width: 220px !important;
         height: calc(100vh - 64px) !important;
         border-radius: 0 !important;
         box-shadow: none !important;
         border-right: 1px solid #E5E7EB;
         overflow-y: auto;
-        padding: 16px 14px !important;
+        padding: 16px 12px !important;
+        flex-shrink: 0;
         background: #fff !important;
+        z-index: 10;
       }
+      .sidebar-overlay { display: none !important; }
       .sidebar-user { padding-bottom: 14px; }
       .sidebar-user-inner { gap: 10px; }
       .sidebar-avatar { width: 52px; height: 52px; }
-      .sidebar-avatar svg { width: 28px; height: 28px; }
       .sidebar-name { font-size: 0.95rem; }
       .sidebar-nav a, .sidebar-nav button {
         padding: 12px 10px; border-radius: 10px;
         border-bottom: none; font-size: 0.88rem; gap: 12px;
       }
-      .sidebar-nav a:hover, .sidebar-nav button:hover {
-        background: #F5F3FF; color: #7C3AED;
-      }
-      /* Active home highlight */
-      .sidebar-nav a.nav-active { background: #EDE9FE; color: #7C3AED; border-radius: 10px; }
+      .sidebar-nav a:hover, .sidebar-nav button:hover { background: #F5F3FF; color: #7C3AED; }
+      .sidebar-nav .nav-active-item { background: #EDE9FE !important; color: #7C3AED !important; border-radius: 10px !important; }
 
-      /* Push ALL tab content right of sidebar */
-      .tab-section { margin-left: 220px; }
+      /* No bottom nav on desktop */
+      .bottom-nav { display: none !important; }
 
-      /* Home tab: split layout */
+      /* Tab sections: no margin (sidebar is in-flow) */
+      .tab-section { margin-left: 0 !important; }
+
+      /* ── HOME TAB: Services || All Categories ── */
+      .stat-cards { margin: 14px 16px 0; }
       .home-split {
-        display: flex;
-        gap: 14px;
+        display: flex; gap: 16px;
         padding: 14px 16px 40px;
         align-items: flex-start;
       }
-      .services-wrap {
-        flex: 1; min-width: 0;
-        padding: 0 !important;
-      }
-      #orderSection {
-        flex: 1; min-width: 0;
-        padding: 0 !important;
-      }
+      .services-wrap { flex: 1; min-width: 0; padding: 0 !important; }
+      #orderSection  { flex: 1; min-width: 0; padding: 0 !important; }
       #orderSection .order-section-title { padding-top: 0; }
+      .order-card { max-height: calc(100vh - 140px); overflow-y: auto; }
 
-      /* Stat cards */
-      .stat-cards { margin: 14px 16px 0; }
-
-      /* Other tabs */
-      #tab-funds .funds-page,
+      /* ── OTHER TABS ── */
+      #tab-funds .funds-page { min-height: calc(100vh - 64px); }
       #tab-orders .placeholder-tab,
       #tab-profile .profile-page,
       #tab-change-pw .chpw-page { min-height: calc(100vh - 64px); }
-
-      /* Sidebar nav active state management via JS */
-      .sidebar-nav .nav-active-item { background: #EDE9FE !important; color: #7C3AED !important; border-radius: 10px; }
     }
 
     @media (min-width: 1200px) {
-      .sidebar { width: 240px !important; }
-      .tab-section { margin-left: 240px; }
+      .sidebar { width: 240px !important; min-width: 240px !important; }
       .stat-cards { margin: 16px 20px 0; }
-      .home-split { padding: 14px 20px 40px; gap: 18px; }
+      .home-split { padding: 14px 20px 40px; gap: 20px; }
     }
   </style>
 </head>
@@ -602,6 +604,46 @@
   <!-- ═══ SIDEBAR OVERLAY ═══════════════════ -->
   <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
+  <!-- ═══ HEADER ════════════════════════════ -->
+  <div class="dash-header">
+    <!-- Row 1: hamburger + logo + balance -->
+    <div class="header-row1">
+      <button class="hamburger-btn" onclick="openSidebar()">
+        <svg viewBox="0 0 24 24">
+          <line x1="3" y1="6"  x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <div class="header-logo">TheNet<span>SMM</span></div>
+      <div class="balance-card" onclick="setTab('funds')" style="cursor:pointer">
+        <svg class="wallet-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        <div class="bal-text">
+          <div class="bal-amount" id="balanceAmt">0 MMK</div>
+          <div class="bal-label">Your Balance</div>
+        </div>
+        <div class="chevron"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
+      </div>
+    </div>
+    <!-- Row 2: avatar + user info -->
+    <div class="header-row2">
+      <div class="user-avatar-sm">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <div class="user-info">
+        <div class="greeting">Welcome back!</div>
+        <div class="username">
+          <span id="headerName">SMM Panel</span>
+          <span class="verified-badge">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="dash-body">
   <!-- ═══ SIDEBAR ═══════════════════════════ -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-user">
@@ -643,44 +685,7 @@
     </nav>
   </div>
 
-  <!-- ═══ HEADER ════════════════════════════ -->
-  <div class="dash-header">
-    <!-- Row 1: hamburger + logo + balance -->
-    <div class="header-row1">
-      <button class="hamburger-btn" onclick="openSidebar()">
-        <svg viewBox="0 0 24 24">
-          <line x1="3" y1="6"  x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-      </button>
-      <div class="header-logo">TheNet<span>SMM</span></div>
-      <div class="balance-card" onclick="setTab('funds')" style="cursor:pointer">
-        <svg class="wallet-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-        <div class="bal-text">
-          <div class="bal-amount" id="balanceAmt">0 MMK</div>
-          <div class="bal-label">Your Balance</div>
-        </div>
-        <div class="chevron"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
-      </div>
-    </div>
-    <!-- Row 2: avatar + user info -->
-    <div class="header-row2">
-      <div class="user-avatar-sm">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-      </div>
-      <div class="user-info">
-        <div class="greeting">Welcome back!</div>
-        <div class="username">
-          <span id="headerName">SMM Panel</span>
-          <span class="verified-badge">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <div class="dash-main">
   <!-- ════════════════════════════════════════
        TAB: HOME
   ════════════════════════════════════════ -->
@@ -1101,6 +1106,9 @@
       </div>
     </div>
   </div>
+
+  </div><!-- /dash-main -->
+  </div><!-- /dash-body -->
 
   <!-- ═══ BOTTOM NAV ════════════════════════ -->
   <nav class="bottom-nav">
