@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════
    TheNetSMM — Main Stylesheet
-   Strategy: mobile-first, desktop via 1024px breakpoint
+   Strategy: mobile-first, desktop via 900px breakpoint
    Sidebar: position:fixed on desktop (most reliable)
 ═══════════════════════════════════════════════ */
 
@@ -188,9 +188,9 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
 .sidebar-nav .logout-btn:hover .nav-icon svg { fill:#EF4444; }
 
 /* ════════════════════════════════════════════════
-   MOBILE ONLY (<1024px)
+   MOBILE ONLY (<900px)
 ════════════════════════════════════════════════ */
-@media (max-width: 1023px) {
+@media (max-width: 899px) {
   .dash-page { max-width:430px; margin:0 auto; }
   .bottom-nav { max-width:430px; left:50%; right:auto; transform:translateX(-50%); }
   /* Space for bottom nav */
@@ -199,10 +199,10 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
 }
 
 /* ════════════════════════════════════════════════
-   DESKTOP (≥1024px)
+   DESKTOP (≥900px)
    Strategy: sidebar = position:fixed + dash-main = margin-left
 ════════════════════════════════════════════════ */
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
 
   /* ── Full-width page, no mobile cap ── */
   .dash-page { max-width:none; margin:0; }
@@ -303,7 +303,7 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
   #tab-profile .profile-page { min-height:calc(100vh - var(--header-h)); }
   #tab-change-pw .chpw-page { min-height:calc(100vh - var(--header-h)); }
 
-} /* end @media 1024px */
+} /* end @media 900px */
 
 /* ── Wide screens 1440px+ ── */
 @media (min-width: 1440px) {
