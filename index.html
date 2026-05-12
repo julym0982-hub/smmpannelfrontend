@@ -32,10 +32,8 @@
   .hd-user-info .greeting { font-size:0.8rem; color:#9CA3AF; line-height:1; margin-bottom:4px; }
   .hd-user-info .username { display:flex; align-items:center; gap:5px; font-size:1rem; font-weight:900; color:#111827; }
 
-  /* Balance card: larger on mobile */
-  .balance-card { padding:12px 16px; border-radius:20px; min-width:auto; }
-  .balance-card .bal-amount { font-size:1.1rem; }
-  .balance-card .bal-label  { font-size:0.72rem; }
+  /* Balance card base (overrides in style.css @media) */
+  .balance-card { min-width: auto; }
 
   /* ── home-split/order-row: mobile stacked, desktop handled by style.css ── */
   @media (max-width: 899px) {
