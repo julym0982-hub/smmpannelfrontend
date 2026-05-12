@@ -12,14 +12,30 @@
 
   /* ── dash-body/dash-main: style.css handles both mobile and desktop ── */
 
-  /* ── Header 2-row (mobile) ── */
-  .header-row1 { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-  .header-logo { flex:1; font-size:1.45rem; font-weight:900; letter-spacing:-0.5px; color:#1E1B4B; }
+  /* ── Header: mobile layout ── */
+  .header-row1 { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .header-logo { flex:1; font-size:1.5rem; font-weight:900; letter-spacing:-0.5px; color:#1E1B4B; }
   .header-logo span { color:#E91E8C; }
-  /* header-row2: mobile only (desktop uses sidebar for user info) */
-  @media (max-width: 899px) {
-    .header-row2 { display:flex; align-items:center; gap:12px; }
+
+  /* Row 2: always flex (balance always visible, hd-user mobile only) */
+  .header-row2 { display:flex; align-items:center; gap:12px; }
+
+  /* hd-user: avatar + name in mobile header row2 */
+  .hd-user { display:flex; align-items:center; gap:12px; flex:1; }
+  .hd-avatar {
+    width:62px; height:62px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg,#C026D3,#7C3AED);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(124,58,237,0.35);
   }
+  .hd-avatar svg { width:36px; height:36px; fill:white; }
+  .hd-user-info .greeting { font-size:0.8rem; color:#9CA3AF; line-height:1; margin-bottom:4px; }
+  .hd-user-info .username { display:flex; align-items:center; gap:5px; font-size:1rem; font-weight:900; color:#111827; }
+
+  /* Balance card: larger on mobile */
+  .balance-card { padding:12px 16px; border-radius:20px; min-width:auto; }
+  .balance-card .bal-amount { font-size:1.1rem; }
+  .balance-card .bal-label  { font-size:0.72rem; }
 
   /* ── home-split/order-row: mobile stacked, desktop handled by style.css ── */
   @media (max-width: 899px) {
@@ -214,7 +230,7 @@
 
   <!-- ═══ HEADER ════════════════════════════ -->
   <div class="dash-header">
-    <!-- Row 1: hamburger + logo + balance -->
+    <!-- Row 1: hamburger + logo only -->
     <div class="header-row1">
       <button class="hamburger-btn" onclick="openSidebar()">
         <svg viewBox="0 0 24 24">
@@ -224,6 +240,25 @@
         </svg>
       </button>
       <div class="header-logo">TheNet<span>SMM</span></div>
+    </div>
+    <!-- Row 2: avatar + user info + balance card (same row on mobile) -->
+    <div class="header-row2">
+      <!-- User info: hidden on desktop (sidebar shows it) -->
+      <div class="hd-user">
+        <div class="hd-avatar">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        </div>
+        <div class="hd-user-info">
+          <div class="greeting">Welcome back!</div>
+          <div class="username">
+            <span id="headerName">SMM Panel</span>
+            <span class="verified-badge">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+      <!-- Balance card: always visible -->
       <div class="balance-card" onclick="setTab('funds')" style="cursor:pointer">
         <svg class="wallet-icon" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
         <div class="bal-text">
@@ -231,21 +266,6 @@
           <div class="bal-label">Your Balance</div>
         </div>
         <div class="chevron"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg></div>
-      </div>
-    </div>
-    <!-- Row 2: avatar + user info -->
-    <div class="header-row2">
-      <div class="user-avatar-sm">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-      </div>
-      <div class="user-info">
-        <div class="greeting">Welcome back!</div>
-        <div class="username">
-          <span id="headerName">SMM Panel</span>
-          <span class="verified-badge">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          </span>
-        </div>
       </div>
     </div>
   </div>

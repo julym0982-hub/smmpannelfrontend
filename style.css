@@ -71,7 +71,7 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
 .dash-page { background:#F3F4F6; min-height:100vh; font-family:var(--font); }
 
 /* ── Header ────────────────────────────────────── */
-.dash-header { background:#fff; box-shadow:0 1px 0 #E5E7EB; position:sticky; top:0; z-index:100; }
+.dash-header { background:#fff; box-shadow:0 1px 0 #E5E7EB; position:sticky; top:0; z-index:100; padding:14px 16px 12px; }
 
 .balance-card { background:var(--balance-grad); border-radius:18px; padding:10px 14px; display:flex; align-items:center; gap:8px; box-shadow:0 4px 16px rgba(107,33,168,0.42); cursor:pointer; }
 .balance-card svg.wallet-icon { width:20px; height:20px; fill:rgba(255,255,255,0.82); flex-shrink:0; }
@@ -106,9 +106,9 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
 
 /* ── Services Card ───────────────────────────────── */
 .services-wrap { padding:14px 14px 0; }
-.services-card { background:#fff; border-radius:24px; padding:16px; box-shadow:var(--card-shadow); }
+.services-card { background:#fff; border-radius:24px; padding:20px 16px; box-shadow:var(--card-shadow); }
 .services-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.services-header h2 { font-size:1.2rem; font-weight:900; color:#111827; }
+.services-header h2 { font-size:1.4rem; font-weight:900; color:#111827; }
 .view-all-btn { display:flex; align-items:center; gap:3px; font-size:0.85rem; font-weight:700; color:#7C3AED; background:none; border:none; cursor:pointer; }
 .view-all-btn:hover { color:#E91E8C; }
 .view-all-btn svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:2.5; }
@@ -119,12 +119,12 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
 .filter-btn { background:none; border:none; cursor:pointer; display:flex; }
 .filter-btn svg { width:18px; height:18px; fill:none; stroke:#9CA3AF; stroke-width:2; }
 .popular-label { display:flex; align-items:center; gap:6px; margin-bottom:16px; font-size:0.85rem; font-weight:800; color:#374151; }
-.social-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.social-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
 .social-item { display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; transition:transform .15s; }
 .social-item:hover { transform:scale(1.08); }
-.social-icon-wrap { width:50px; height:50px; border-radius:16px; display:flex; align-items:center; justify-content:center; background:#F9FAFB; box-shadow:0 2px 8px rgba(0,0,0,0.08); overflow:hidden; }
-.social-icon-wrap svg { width:32px; height:32px; }
-.social-name { font-size:0.67rem; font-weight:700; color:#4B5563; text-align:center; line-height:1.2; }
+.social-icon-wrap { width:68px; height:68px; border-radius:18px; display:flex; align-items:center; justify-content:center; background:#F9FAFB; box-shadow:0 2px 10px rgba(0,0,0,0.09); overflow:hidden; }
+.social-icon-wrap svg { width:44px; height:44px; }
+.social-name { font-size:0.75rem; font-weight:700; color:#4B5563; text-align:center; line-height:1.2; }
 
 /* ── Home split: block on mobile, flex on desktop (via @media) ── */
 .home-split { display: block; }
@@ -213,10 +213,16 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
     display: flex;
     align-items: center;
     padding: 0 24px;
+    gap: 16px;
   }
-  .header-row1 { display:flex; align-items:center; gap:12px; margin-bottom:0; width:100%; }
-  .header-row2 { display:none; }    /* user info lives in sidebar */
-  .hamburger-btn { display:none; } /* sidebar always open, no hamburger */
+  .header-row1 { display:flex; align-items:center; gap:12px; margin-bottom:0; flex:1; }
+  .header-logo { font-size:1.4rem; }
+  .header-row2 { display:flex; align-items:center; flex-shrink:0; }
+  .hd-user { display:none; }         /* sidebar shows user info on desktop */
+  .balance-card { padding:10px 14px; border-radius:18px; }  /* restore normal size */
+  .balance-card .bal-amount { font-size:1rem; }
+  .balance-card .bal-label  { font-size:0.7rem; }
+  .hamburger-btn { display:none; }   /* sidebar always open */
 
   /* ── Sidebar: FIXED left panel, always visible ── */
   .sidebar {
