@@ -10,9 +10,7 @@
   .tab-section { display:none; }
   .tab-section.active { display:block; }
 
-  /* ── dash-body/dash-main base ── */
-  .dash-body { display:block; }
-  .dash-main { display:block; }
+  /* ── dash-body/dash-main: style.css handles both mobile and desktop ── */
 
   /* ── Header 2-row (mobile) ── */
   .header-row1 { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
@@ -20,9 +18,11 @@
   .header-logo span { color:#E91E8C; }
   .header-row2 { display:flex; align-items:center; gap:12px; }
 
-  /* ── home-split: stacked on mobile ── */
-  .home-split { display:block; }
-  .order-row  { display:block; }  /* 2-col on desktop via style.css */
+  /* ── home-split/order-row: mobile stacked, desktop handled by style.css ── */
+  @media (max-width: 1023px) {
+    .home-split { display:block; }
+    .order-row  { display:block; }
+  }
 
   /* ── Order section ── */
   .order-section { padding:14px; }

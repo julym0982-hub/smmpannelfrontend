@@ -126,6 +126,10 @@ body { font-family: var(--font); -webkit-font-smoothing: antialiased; }
 .social-icon-wrap svg { width:32px; height:32px; }
 .social-name { font-size:0.67rem; font-weight:700; color:#4B5563; text-align:center; line-height:1.2; }
 
+/* ── Home split: block on mobile, flex on desktop (via @media) ── */
+.home-split { display: block; }
+.order-row  { display: block; }
+
 /* ── Bottom Nav ──────────────────────────────────── */
 .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #F3F4F6; box-shadow:0 -4px 20px rgba(0,0,0,0.08); display:grid; grid-template-columns:repeat(5,1fr); align-items:flex-end; padding:8px 8px 12px; z-index:20; }
 .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; background:none; border:none; padding:4px; }
