@@ -809,7 +809,7 @@ const SERVICES = [
 ];
 
 /* ══════════════════════════════════════════════
-   DYNAMIC ORDER CATALOGUE (from Brother SMM API)
+   DYNAMIC ORDER CATALOGUE (from JAP API)
    Rate: 1 USD = MMK_RATE Kyats × MARKUP markup
 ══════════════════════════════════════════════ */
 const MMK_RATE = 2200;   // 1 USD = 2200 Ks
@@ -916,19 +916,20 @@ async function fetchServices() {
   try {
     const data = await apiCall('/api/provider/services');
 
-    // Group services by category
+    // Group services by category — JAP field mapping
+    // JAP: service(ID), name, rate(USD/1000), min, max, category, refill, cancel
     const grouped = {};
-    Object.values(data).forEach(svc => {
+    (Array.isArray(data) ? data : Object.values(data)).forEach(svc => {
       const cat = (svc.category || 'Other').trim();
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat].push({
-        id:          String(svc.service_id),
-        name:        svc.name || '',
-        avgTime:     svc.avg_time ? svc.avg_time + ' Min' : '—',
-        min:         parseInt(svc.min_amount)  || 10,
-        max:         parseInt(svc.max_amount)  || 10000000,
-        priceUSD:    parseFloat(svc.price)     || 0,  // USD per 1000 units
-        description: svc.description || '',
+        id:       String(svc.service_id || svc.service || ''), // normalized by backend
+        name:     svc.name || '',
+        avgTime:  '—',                                         // JAP has no avg_time
+        min:      parseInt(svc.min || svc.min_amount)  || 10,
+        max:      parseInt(svc.max || svc.max_amount)  || 10000000,
+        priceUSD: parseFloat(svc.rate || svc.price)    || 0,  // JAP: rate per 1000 USD
+        description: '',
         type:        svc.type || 'default',
         category:    cat,
       });
@@ -1071,7 +1072,7 @@ function calcCharge() {
     _chargeMMK = 0;
     return;
   }
-  // priceUSD = USD per 1000 units (Brother SMM standard)
+  // priceUSD = USD per 1000 units (JAP standard)
   const usd   = (qty / 1000) * currentSvc.priceUSD * MARKUP;
   _chargeMMK  = Math.ceil(usd * MMK_RATE);
   document.getElementById('chargeAmt').textContent = _chargeMMK.toLocaleString() + ' Ks';
@@ -1287,7 +1288,7 @@ function logout() { localStorage.removeItem('smm_token'); localStorage.removeIte
   const sbHome = document.getElementById('sb-home');
   if (sbHome) sbHome.classList.add('nav-active-item');
   renderGrid(SERVICES);
-  // Fetch all services dynamically from Brother SMM API
+  // Fetch all services dynamically from JAP API
   fetchServices();
   document.addEventListener('click', e => {
     if (!e.target.closest('.select-wrap')) closeAllDropdowns();
