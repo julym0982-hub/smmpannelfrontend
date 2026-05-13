@@ -309,11 +309,6 @@
         <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></span>
         Profile
       </a>
-      <!-- Admin link (shown only for admin users) -->
-      <a href="#" id="sb-admin" class="admin-sidebar-item" onclick="setTab('admin');closeSidebar()">
-        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93-2.67-1.14-5-4.43-5-7.93V7.18L12 5z"/></svg></span>
-        Admin Panel
-      </a>
       <button class="logout-btn" onclick="logout()">
         <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></span>
         Logout
@@ -609,20 +604,8 @@
           </div>
         </div>
 
-        <!-- Deposit Amount -->
-        <div class="funds-section-label" style="margin-top:22px">
-          <div class="fsl-icon">
-            <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-          </div>
-          ငွေဖြည့်ရမည့် ပမာဏ (Ks)
-        </div>
-        <div class="txn-input-wrap" style="margin-bottom:18px">
-          <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" fill="#A78BFA"/></svg>
-          <input type="number" id="depositAmount" placeholder="ဥပမာ: 5000" min="1000" inputmode="numeric" style="font-size:1rem;font-weight:700" />
-        </div>
-
         <!-- Upload Receipt -->
-        <div class="upload-label">Upload Receipt (ပြေစာ Screenshot)</div>
+        <div class="upload-label">Upload Receipt</div>
         <div class="upload-box" onclick="document.getElementById('receiptFile').click()">
           <div class="upload-circle">
             <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm0-10h4v6h6v-6h4l-7-7-7 7z"/></svg>
@@ -632,6 +615,13 @@
           <img id="receiptPreview" class="upload-preview" alt="Receipt preview" />
         </div>
         <input type="file" id="receiptFile" accept="image/jpeg,image/png" style="display:none" onchange="previewReceipt(this)" />
+
+        <!-- Transaction ID -->
+        <div class="txn-label">Transaction ID (လုပ်ငန်းစဉ်နံပါတ်)</div>
+        <div class="txn-input-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <input type="text" id="txnId" placeholder="Enter last 6 digits" maxlength="6" inputmode="numeric" />
+        </div>
 
         <!-- Submit -->
         <button class="funds-submit" id="fundsSubmitBtn" onclick="submitFunds()">
@@ -774,38 +764,6 @@
   </div><!-- /dash-main -->
   </div><!-- /dash-body -->
 
-
-  <!-- ════════════════════════════════════════
-       TAB: ADMIN
-  ════════════════════════════════════════ -->
-  <div class="tab-section" id="tab-admin">
-    <div class="admin-page">
-
-      <div class="admin-header">
-        <h2>🛡 Admin Panel</h2>
-        <button class="admin-refresh" onclick="loadAdminDeposits()">⟳ Refresh</button>
-      </div>
-
-      <!-- Status filter -->
-      <div class="admin-filter">
-        <button id="af-pending"  class="active" onclick="loadAdminDeposits('pending')">⏳ Pending</button>
-        <button id="af-approved"               onclick="loadAdminDeposits('approved')">✅ Approved</button>
-        <button id="af-rejected"               onclick="loadAdminDeposits('rejected')">❌ Rejected</button>
-      </div>
-
-      <!-- Deposit list -->
-      <div id="adminDepositList">
-        <div style="text-align:center;padding:40px;color:#9CA3AF;font-weight:700">Loading...</div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Image Modal (screenshot viewer) -->
-  <div class="img-modal" id="imgModal" style="display:none" onclick="closeImgModal()">
-    <img id="imgModalSrc" src="" alt="Screenshot" />
-  </div>
-
   <!-- ═══ BOTTOM NAV ════════════════════════ -->
   <nav class="bottom-nav">
 
@@ -917,13 +875,11 @@ function setTab(tab) {
   const btn = document.getElementById('nav-' + tab);
   if (btn) btn.classList.add('active');
   // Highlight correct sidebar link
-  const sideMap = { home:'sb-home', funds:'sb-funds', orders:'sb-orders', profile:'sb-profile', 'change-pw':'sb-profile', admin:'sb-admin' };
+  const sideMap = { home:'sb-home', funds:'sb-funds', orders:'sb-orders', profile:'sb-profile', 'change-pw':'sb-profile' };
   if (sideMap[tab]) {
     const sb = document.getElementById(sideMap[tab]);
     if (sb) sb.classList.add('nav-active-item');
   }
-  // Load admin deposits when admin tab opens
-  if (tab === 'admin') loadAdminDeposits('pending');
   closeAllDropdowns();
 }
 
@@ -1304,214 +1260,45 @@ function previewReceipt(input) {
   reader.readAsDataURL(file);
 }
 
-/* ══════════════════════════════════════════════════════════
-   DEPOSIT / ADD FUNDS
-══════════════════════════════════════════════════════════ */
 async function submitFunds() {
   const alertEl = document.getElementById('fundsAlert');
   alertEl.className = 'funds-alert';
+  const file  = document.getElementById('receiptFile').files[0];
+  const txnId = document.getElementById('txnId').value.trim();
 
-  const amount = parseInt(document.getElementById('depositAmount').value) || 0;
-  const file   = document.getElementById('receiptFile').files[0];
-
-  if (amount < 1000) {
-    alertEl.className = 'funds-alert show error';
-    alertEl.textContent = 'Minimum deposit amount is 1,000 Ks';
-    return;
-  }
   if (!file) {
     alertEl.className = 'funds-alert show error';
-    alertEl.textContent = 'Please upload your payment screenshot (ပြေစာ ပုံ)';
-    return;
+    alertEl.textContent = 'Please upload your receipt screenshot.'; return;
+  }
+  if (!txnId || txnId.length < 6) {
+    alertEl.className = 'funds-alert show error';
+    alertEl.textContent = 'Please enter the last 6 digits of your Transaction ID.'; return;
   }
 
   const btn = document.getElementById('fundsSubmitBtn');
   btn.disabled = true;
-  btn.querySelector('span').textContent = 'Uploading...';
+  btn.innerHTML = '<span class="spinner"></span><span>Submitting...</span>';
 
   try {
-    const token    = localStorage.getItem('smm_token');
-    const formData = new FormData();
-    formData.append('amount',     amount);
-    formData.append('screenshot', file);
-
-    const resp = await fetch((CONFIG.API_URL || '') + '/api/deposit/request', {
-      method:  'POST',
-      headers: { 'Authorization': 'Bearer ' + token },
-      body:    formData,
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.message || 'Upload failed');
-
+    // TODO: replace with real API call that uploads image + txnId
+    // const formData = new FormData();
+    // formData.append('receipt', file);
+    // formData.append('txnId', txnId);
+    // await fetch(CONFIG.API_URL + '/api/funds/request', { method:'POST', body:formData, headers:{Authorization:'Bearer '+localStorage.getItem('smm_token')} });
+    await new Promise(r => setTimeout(r, 1200));
     alertEl.className = 'funds-alert show success';
-    alertEl.textContent = '✅ ' + data.message;
-
-    // Clear form
-    document.getElementById('depositAmount').value = '';
-    document.getElementById('receiptFile').value   = '';
-    const preview = document.getElementById('receiptPreview');
-    if (preview) { preview.style.display = 'none'; preview.src = ''; }
-  } catch (e) {
+    alertEl.textContent = '✅ တင်သွင်းမှု အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးပြီး ငွေထည့်ပေးပါမည်။';
+    document.getElementById('txnId').value = '';
+    document.getElementById('receiptFile').value = '';
+    document.getElementById('receiptPreview').style.display = 'none';
+  } catch(e) {
     alertEl.className = 'funds-alert show error';
-    alertEl.textContent = e.message || 'Submission failed';
+    alertEl.textContent = e.message || 'တင်သွင်းမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။';
   } finally {
     btn.disabled = false;
-    const sp = btn.querySelector('span');
-    if (sp) sp.textContent = 'ငွေဖြည့်ရန် တင်သွင်းမည်';
+    btn.innerHTML = '<span>ငွေဖြည့်ရန် တင်သွင်းမည်</span><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>';
   }
 }
-
-/* ══════════════════════════════════════════════════════════
-   ADMIN — Deposit Management
-══════════════════════════════════════════════════════════ */
-let _adminStatus = 'pending';
-
-async function loadAdminDeposits(status = 'pending') {
-  _adminStatus = status;
-  // Update filter buttons
-  ['pending','approved','rejected'].forEach(s => {
-    const btn = document.getElementById('af-' + s);
-    if (btn) btn.className = s === status ? 'active' : '';
-  });
-
-  const listEl = document.getElementById('adminDepositList');
-  if (!listEl) return;
-  listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#9CA3AF;font-weight:700">⏳ Loading...</div>';
-
-  try {
-    const data = await apiCall('/api/admin/deposits?status=' + status);
-    if (!data.length) {
-      listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#9CA3AF;font-weight:700">No ' + status + ' requests</div>';
-      return;
-    }
-    listEl.innerHTML = data.map(dep => buildDepositCard(dep)).join('');
-  } catch (e) {
-    listEl.innerHTML = '<div style="text-align:center;padding:40px;color:#DC2626;font-weight:700">Error: ' + e.message + '</div>';
-  }
-}
-
-function buildDepositCard(dep) {
-  const u          = dep.user || {};
-  const balance    = typeof u.balance === 'number' ? u.balance.toLocaleString() : '—';
-  const requested  = dep.amount.toLocaleString();
-  const credited   = dep.creditAmount ? dep.creditAmount.toLocaleString() : '—';
-  const dateStr    = new Date(dep.createdAt).toLocaleString();
-  const badge      = { pending:'⏳ Pending', approved:'✅ Approved', rejected:'❌ Rejected' }[dep.status] || dep.status;
-  const badgeCls   = 'deposit-badge badge-' + dep.status;
-  const isPending  = dep.status === 'pending';
-
-  const actionHtml = isPending ? `
-    <div class="deposit-actions">
-      <div class="deposit-credit-row">
-        <input type="number" id="credit-${dep._id}" class="deposit-credit-inp"
-               value="${dep.amount}" placeholder="Amount to credit (Ks)" min="1" />
-      </div>
-      <textarea id="note-${dep._id}" class="deposit-note-inp" rows="2" placeholder="Rejection reason (optional)"></textarea>
-      <div class="deposit-btn-row">
-        <button class="btn-approve" id="app-${dep._id}" onclick="approveDeposit('${dep._id}')">✅ Approve</button>
-        <button class="btn-reject"  id="rej-${dep._id}" onclick="rejectDeposit('${dep._id}')">❌ Reject</button>
-      </div>
-    </div>` : `<div style="font-size:0.82rem;color:#6B7280;margin-top:6px">
-      ${dep.status === 'approved' ? '✅ Credited: ' + credited + ' Ks' : '❌ ' + (dep.note || 'Rejected')}
-      ${dep.approvedBy ? ' by ' + dep.approvedBy : ''}
-    </div>`;
-
-  return `
-  <div class="deposit-card" id="card-${dep._id}">
-    <div class="deposit-card-top">
-      <div class="deposit-avatar">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-      </div>
-      <div class="deposit-user-info">
-        <div class="deposit-name">${dep.username || u.name || 'Unknown'}</div>
-        <div class="deposit-email">${dep.email || u.email || ''}</div>
-      </div>
-      <div class="${badgeCls}">${badge}</div>
-    </div>
-
-    <div class="deposit-amounts">
-      <div class="deposit-amount-box">
-        <div class="deposit-amount-label">Requested</div>
-        <div class="deposit-amount-val">${requested} Ks</div>
-      </div>
-      <div class="deposit-amount-box">
-        <div class="deposit-amount-label">Current Balance</div>
-        <div class="deposit-amount-val">${balance} Ks</div>
-      </div>
-    </div>
-
-    <img class="deposit-screenshot" src="${dep.screenshotUrl}" alt="Receipt"
-         onclick="openImgModal('${dep.screenshotUrl}')" loading="lazy" />
-
-    <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:8px">${dateStr}</div>
-
-    ${actionHtml}
-  </div>`;
-}
-
-async function approveDeposit(id) {
-  const creditAmount = parseInt(document.getElementById('credit-' + id)?.value) || 0;
-  if (!creditAmount || creditAmount < 1) { alert('Enter credit amount (Ks)'); return; }
-
-  const appBtn = document.getElementById('app-' + id);
-  const rejBtn = document.getElementById('rej-' + id);
-  if (appBtn) { appBtn.disabled = true; appBtn.textContent = 'Approving...'; }
-  if (rejBtn) rejBtn.disabled = true;
-
-  try {
-    const res = await apiCall('/api/admin/deposits/' + id + '/approve', 'POST', { creditAmount });
-    const card = document.getElementById('card-' + id);
-    if (card) {
-      card.style.border = '2px solid #10B981';
-      card.querySelector('.deposit-actions').innerHTML =
-        '<div style="color:#059669;font-weight:800;text-align:center;padding:8px">✅ ' + res.message + '</div>';
-    }
-  } catch (e) {
-    alert('Error: ' + e.message);
-    if (appBtn) { appBtn.disabled = false; appBtn.textContent = '✅ Approve'; }
-    if (rejBtn)   rejBtn.disabled = false;
-  }
-}
-
-async function rejectDeposit(id) {
-  const noteEl = document.getElementById('note-' + id);
-  if (noteEl) noteEl.classList.add('show');
-  if (!confirm('Reject this deposit request?')) {
-    if (noteEl) noteEl.classList.remove('show');
-    return;
-  }
-  const note   = noteEl ? noteEl.value.trim() : '';
-  const appBtn = document.getElementById('app-' + id);
-  const rejBtn = document.getElementById('rej-' + id);
-  if (rejBtn) { rejBtn.disabled = true; rejBtn.textContent = 'Rejecting...'; }
-  if (appBtn) appBtn.disabled = true;
-
-  try {
-    await apiCall('/api/admin/deposits/' + id + '/reject', 'POST', { note: note || 'Rejected by admin' });
-    const card = document.getElementById('card-' + id);
-    if (card) {
-      card.style.border = '2px solid #EF4444';
-      card.querySelector('.deposit-actions').innerHTML =
-        '<div style="color:#DC2626;font-weight:800;text-align:center;padding:8px">❌ Request Rejected</div>';
-    }
-  } catch (e) {
-    alert('Error: ' + e.message);
-    if (rejBtn) { rejBtn.disabled = false; rejBtn.textContent = '❌ Reject'; }
-    if (appBtn)   appBtn.disabled = false;
-  }
-}
-
-function openImgModal(url) {
-  const modal = document.getElementById('imgModal');
-  const img   = document.getElementById('imgModalSrc');
-  if (modal && img) { img.src = url; modal.style.display = 'flex'; }
-}
-function closeImgModal() {
-  const modal = document.getElementById('imgModal');
-  if (modal) modal.style.display = 'none';
-}
-
-
 
 function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
@@ -1560,12 +1347,6 @@ function applyUser(u) {
   if (ps) ps.textContent = fmtMMK(u.balanceSpent);
   if (pm && u.createdAt) {
     pm.textContent = new Date(u.createdAt).toLocaleDateString('en-US', { month:'long', year:'numeric' });
-  
-  // Show admin nav if admin
-  const adminNav = document.getElementById('sb-admin');
-  if (adminNav) {
-    if (u.isAdmin) adminNav.classList.add('visible');
-    else           adminNav.classList.remove('visible');
   }
 }
 </script>
