@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Admin Panel — TheNetSMM</title>
+<script src="/config.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
@@ -352,7 +353,7 @@ body{font-family:'Nunito',system-ui,sans-serif;background:#F3F4F6;color:#111827;
 
 <script>
 /* ── Config ────────────────────────────────────────── */
-const API = ''; // relative path — same domain
+const API = (typeof CONFIG !== 'undefined' && CONFIG.API_URL) ? CONFIG.API_URL : '';
 
 let adminToken = localStorage.getItem('smm_admin_token') || '';
 let currentFRStatus = 'Pending';
@@ -364,9 +365,23 @@ async function api(path, method='GET', body=null) {
     headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' }
   };
   if (body) opts.body = JSON.stringify(body);
-  const r = await fetch(API + path, opts);
+
+  let r;
+  try {
+    r = await fetch(API + path, opts);
+  } catch(e) {
+    throw new Error('Cannot reach server. Check backend URL in config.js');
+  }
+
+  // Guard against non-JSON responses (HTML error pages)
+  const contentType = r.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    const text = await r.text();
+    throw new Error('Server returned non-JSON response (HTTP ' + r.status + '). Check backend URL.');
+  }
+
   const d = await r.json();
-  if (!r.ok) throw new Error(d.message || 'API error');
+  if (!r.ok) throw new Error(d.message || 'API error ' + r.status);
   return d;
 }
 
