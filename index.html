@@ -604,8 +604,18 @@
           </div>
         </div>
 
+        <!-- Amount input -->
+        <div class="funds-section-label" style="margin-top:20px">
+          <div class="fsl-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+          ဖြည့်ငွေပမာဏ (Kyats)
+        </div>
+        <div class="txn-input-wrap" style="margin-bottom:14px">
+          <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" fill="#A78BFA"/></svg>
+          <input type="number" id="fundAmount" placeholder="ဥပမာ: 5000" min="1000" inputmode="numeric" style="font-size:1rem;font-weight:700" />
+        </div>
+
         <!-- Upload Receipt -->
-        <div class="upload-label">Upload Receipt</div>
+        <div class="upload-label">Payment Receipt Screenshot (ပြေစာပုံ)</div>
         <div class="upload-box" onclick="document.getElementById('receiptFile').click()">
           <div class="upload-circle">
             <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zm0-10h4v6h6v-6h4l-7-7-7 7z"/></svg>
@@ -1263,40 +1273,62 @@ function previewReceipt(input) {
 async function submitFunds() {
   const alertEl = document.getElementById('fundsAlert');
   alertEl.className = 'funds-alert';
-  const file  = document.getElementById('receiptFile').files[0];
-  const txnId = document.getElementById('txnId').value.trim();
 
+  const amount = parseInt(document.getElementById('fundAmount')?.value) || 0;
+  const txnId  = document.getElementById('txnId')?.value.trim() || '';
+  const file   = document.getElementById('receiptFile')?.files[0];
+
+  if (amount < 1000) {
+    alertEl.className = 'funds-alert show error';
+    alertEl.textContent = 'အနည်းဆုံး 1,000 Ks ထည့်ပေးပါ';
+    return;
+  }
+  if (!txnId || txnId.length < 4) {
+    alertEl.className = 'funds-alert show error';
+    alertEl.textContent = 'Transaction ID ထည့်ပေးပါ (အနည်းဆုံး 4 လုံး)';
+    return;
+  }
   if (!file) {
     alertEl.className = 'funds-alert show error';
-    alertEl.textContent = 'Please upload your receipt screenshot.'; return;
-  }
-  if (!txnId || txnId.length < 6) {
-    alertEl.className = 'funds-alert show error';
-    alertEl.textContent = 'Please enter the last 6 digits of your Transaction ID.'; return;
+    alertEl.textContent = 'Payment screenshot တင်ပေးပါ';
+    return;
   }
 
   const btn = document.getElementById('fundsSubmitBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span><span>Submitting...</span>';
+  const sp = btn.querySelector('span');
+  if (sp) sp.textContent = 'Uploading...';
 
   try {
-    // TODO: replace with real API call that uploads image + txnId
-    // const formData = new FormData();
-    // formData.append('receipt', file);
-    // formData.append('txnId', txnId);
-    // await fetch(CONFIG.API_URL + '/api/funds/request', { method:'POST', body:formData, headers:{Authorization:'Bearer '+localStorage.getItem('smm_token')} });
-    await new Promise(r => setTimeout(r, 1200));
+    const token    = localStorage.getItem('smm_token');
+    const formData = new FormData();
+    formData.append('amount',        amount);
+    formData.append('transactionId', txnId);
+    formData.append('screenshot',    file);
+
+    const resp = await fetch((CONFIG.API_URL || '') + '/api/funds/request', {
+      method:  'POST',
+      headers: { 'Authorization': 'Bearer ' + token },
+      body:    formData,
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.message || 'Submission failed');
+
     alertEl.className = 'funds-alert show success';
-    alertEl.textContent = '✅ တင်သွင်းမှု အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးပြီး ငွေထည့်ပေးပါမည်။';
-    document.getElementById('txnId').value = '';
-    document.getElementById('receiptFile').value = '';
-    document.getElementById('receiptPreview').style.display = 'none';
-  } catch(e) {
+    alertEl.textContent = '✅ ' + data.message;
+
+    // Clear form
+    if (document.getElementById('fundAmount')) document.getElementById('fundAmount').value = '';
+    if (document.getElementById('txnId'))      document.getElementById('txnId').value = '';
+    if (document.getElementById('receiptFile')) document.getElementById('receiptFile').value = '';
+    const prev = document.getElementById('receiptPreview');
+    if (prev) { prev.style.display = 'none'; prev.src = ''; }
+  } catch (e) {
     alertEl.className = 'funds-alert show error';
-    alertEl.textContent = e.message || 'တင်သွင်းမှု မအောင်မြင်ပါ။ ထပ်မံကြိုးစားပါ။';
+    alertEl.textContent = e.message || 'တင်သွင်းမှု မအောင်မြင်ပါ';
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<span>ငွေဖြည့်ရန် တင်သွင်းမည်</span><svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>';
+    if (sp) sp.textContent = 'ငွေဖြည့်ရန် တင်သွင်းမည်';
   }
 }
 

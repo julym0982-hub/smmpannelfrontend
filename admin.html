@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin Panel — TheNetSMM</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+body{font-family:'Nunito',system-ui,sans-serif;background:#F3F4F6;color:#111827;-webkit-font-smoothing:antialiased}
+
+/* ── Layout ── */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:#fff;border-right:1px solid #E5E7EB;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;flex-shrink:0}
+.main{flex:1;overflow-x:hidden}
+
+/* Sidebar */
+.sb-logo{padding:20px 18px;border-bottom:1px solid #F3F4F6}
+.sb-logo-text{font-size:1.2rem;font-weight:900;letter-spacing:-.5px;color:#1E1B4B}
+.sb-logo-text span{color:#E91E8C}
+.sb-logo-badge{font-size:.65rem;background:#EDE9FE;color:#7C3AED;padding:2px 8px;border-radius:20px;font-weight:800;margin-left:6px;vertical-align:middle}
+.sb-nav{flex:1;padding:12px 10px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;cursor:pointer;font-size:.875rem;font-weight:700;color:#374151;transition:all .15s;margin-bottom:2px;text-decoration:none;background:none;border:none;width:100%;font-family:inherit;text-align:left}
+.sb-item:hover{background:#F5F3FF;color:#7C3AED}
+.sb-item.active{background:#EDE9FE;color:#7C3AED}
+.sb-item svg{width:18px;height:18px;fill:currentColor;flex-shrink:0}
+.sb-bottom{padding:12px 10px;border-top:1px solid #F3F4F6}
+.sb-admin-info{font-size:.75rem;color:#9CA3AF;padding:0 12px;margin-bottom:8px}
+.sb-admin-email{font-weight:700;color:#374151;font-size:.8rem}
+
+/* Header */
+.page-header{background:#fff;border-bottom:1px solid #E5E7EB;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.page-title{font-size:1.1rem;font-weight:900;color:#111827}
+.page-subtitle{font-size:.78rem;color:#9CA3AF;margin-top:2px}
+.refresh-btn{background:none;border:1.5px solid #E5E7EB;border-radius:10px;padding:8px 14px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;color:#374151;transition:all .15s}
+.refresh-btn:hover{border-color:#7C3AED;color:#7C3AED}
+
+/* Content area */
+.content{padding:20px 24px}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat-card{background:#fff;border-radius:16px;padding:16px 18px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.stat-card .val{font-size:1.6rem;font-weight:900;color:#1E1B4B;margin-top:4px}
+.stat-card .lbl{font-size:.75rem;color:#9CA3AF;font-weight:700}
+.stat-card .icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.stat-card .icon svg{width:20px;height:20px;fill:#fff}
+.ic-purple{background:linear-gradient(135deg,#7C3AED,#9333EA)}
+.ic-yellow{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.ic-green{background:linear-gradient(135deg,#059669,#10B981)}
+.ic-blue{background:linear-gradient(135deg,#2563EB,#3B82F6)}
+
+/* Filter tabs */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:8px 16px;border-radius:10px;border:1.5px solid #E5E7EB;background:#fff;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;color:#6B7280;transition:all .15s}
+.filter-btn.active{background:#7C3AED;color:#fff;border-color:#7C3AED}
+.filter-btn:hover:not(.active){border-color:#7C3AED;color:#7C3AED}
+.filter-count{font-size:.7rem;background:#F3F4F6;color:#6B7280;padding:1px 7px;border-radius:10px;margin-left:4px}
+.filter-count.yellow{background:#FEF3C7;color:#D97706}
+.filter-count.green{background:#D1FAE5;color:#059669}
+
+/* Fund request cards */
+.req-grid{display:grid;gap:14px}
+.req-card{background:#fff;border-radius:16px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1.5px solid transparent;transition:border-color .2s}
+.req-card:hover{border-color:#E5E7EB}
+.req-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.req-user{display:flex;align-items:center;gap:10px}
+.req-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#C026D3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.req-avatar svg{width:22px;height:22px;fill:#fff}
+.req-name{font-size:.95rem;font-weight:800;color:#111827}
+.req-email{font-size:.75rem;color:#6B7280;margin-top:1px}
+.badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:800;white-space:nowrap}
+.badge-pending{background:#FEF3C7;color:#D97706}
+.badge-approved{background:#D1FAE5;color:#059669}
+.badge-rejected{background:#FEE2E2;color:#DC2626}
+
+.req-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.req-info-box{background:#F9FAFB;border-radius:10px;padding:10px 12px}
+.req-info-label{font-size:.68rem;color:#9CA3AF;font-weight:700;margin-bottom:3px}
+.req-info-val{font-size:.92rem;font-weight:800;color:#1E1B4B}
+
+.req-screenshot{width:100%;max-height:200px;object-fit:cover;border-radius:10px;cursor:pointer;border:1.5px solid #E5E7EB;margin-bottom:14px;transition:opacity .15s}
+.req-screenshot:hover{opacity:.88}
+.req-date{font-size:.72rem;color:#9CA3AF;margin-bottom:12px}
+.req-note{font-size:.8rem;color:#6B7280;background:#F9FAFB;border-radius:8px;padding:8px 10px;margin-bottom:10px}
+
+/* Action area */
+.action-area{display:flex;flex-direction:column;gap:10px}
+.action-row{display:flex;gap:8px;align-items:center}
+.amount-inp{flex:1;border:1.5px solid #E5E7EB;border-radius:10px;padding:10px 13px;font-size:.9rem;font-weight:700;font-family:inherit;outline:none;color:#1E1B4B}
+.amount-inp:focus{border-color:#7C3AED}
+.note-inp{width:100%;border:1.5px solid #E5E7EB;border-radius:10px;padding:9px 13px;font-size:.85rem;font-family:inherit;color:#374151;outline:none;resize:none;display:none}
+.note-inp.show{display:block}
+.btn-row{display:flex;gap:8px}
+.btn-approve{flex:1;padding:11px;border:none;border-radius:10px;background:linear-gradient(90deg,#059669,#10B981);color:#fff;font-size:.875rem;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn-approve:hover{opacity:.88}
+.btn-approve:disabled{opacity:.5;cursor:not-allowed}
+.btn-reject{flex:1;padding:11px;border:none;border-radius:10px;background:linear-gradient(90deg,#DC2626,#EF4444);color:#fff;font-size:.875rem;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn-reject:hover{opacity:.88}
+.btn-reject:disabled{opacity:.5;cursor:not-allowed}
+.action-done{font-size:.875rem;font-weight:800;text-align:center;padding:10px;border-radius:10px}
+.action-done.approved{background:#D1FAE5;color:#059669}
+.action-done.rejected{background:#FEE2E2;color:#DC2626}
+
+/* Users table */
+.users-table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.users-table th{background:#F9FAFB;padding:12px 16px;text-align:left;font-size:.78rem;font-weight:800;color:#6B7280;border-bottom:1px solid #E5E7EB}
+.users-table td{padding:14px 16px;border-bottom:1px solid #F3F4F6;font-size:.875rem;color:#374151;vertical-align:middle}
+.users-table tr:last-child td{border-bottom:none}
+.users-table tr:hover td{background:#FAFAFA;cursor:pointer}
+.user-cell{display:flex;align-items:center;gap:10px}
+.user-dot{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#C026D3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.user-dot svg{width:18px;height:18px;fill:#fff}
+.user-name-cell{font-weight:800;color:#111827}
+.user-email-cell{font-size:.78rem;color:#9CA3AF}
+.balance-chip{background:#EDE9FE;color:#7C3AED;padding:3px 10px;border-radius:20px;font-size:.78rem;font-weight:800;white-space:nowrap}
+.admin-chip{background:#FEF3C7;color:#D97706;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:800;margin-left:5px}
+.view-btn{padding:6px 14px;border:1.5px solid #7C3AED;border-radius:8px;color:#7C3AED;font-size:.78rem;font-weight:700;cursor:pointer;background:none;font-family:inherit;transition:all .15s}
+.view-btn:hover{background:#7C3AED;color:#fff}
+
+/* User detail modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#fff;border-radius:20px;width:100%;max-width:640px;overflow:hidden;margin:auto}
+.modal-header{padding:18px 22px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:1rem;font-weight:900;color:#111827}
+.modal-close{background:none;border:none;cursor:pointer;padding:4px;border-radius:8px;color:#9CA3AF;font-size:1.3rem;line-height:1}
+.modal-close:hover{background:#F3F4F6;color:#374151}
+.modal-body{padding:20px 22px;max-height:80vh;overflow-y:auto}
+.modal-section{margin-bottom:18px}
+.modal-section-title{font-size:.78rem;font-weight:800;color:#9CA3AF;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.user-stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.user-stat-box{background:#F9FAFB;border-radius:10px;padding:10px 12px}
+.user-stat-val{font-size:1.1rem;font-weight:900;color:#1E1B4B}
+.user-stat-lbl{font-size:.7rem;color:#9CA3AF;font-weight:700;margin-top:2px}
+.mini-req{background:#F9FAFB;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.mini-req-img{width:60px;height:50px;border-radius:8px;object-fit:cover;cursor:pointer;flex-shrink:0}
+.mini-req-info{flex:1}
+.mini-req-txn{font-size:.82rem;font-weight:800;color:#1E1B4B}
+.mini-req-amt{font-size:.78rem;color:#6B7280;margin-top:2px}
+.mini-req-date{font-size:.72rem;color:#9CA3AF}
+.balance-edit-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.bal-inp{flex:1;border:1.5px solid #E5E7EB;border-radius:10px;padding:9px 13px;font-size:.9rem;font-weight:700;font-family:inherit;outline:none}
+.bal-inp:focus{border-color:#7C3AED}
+.bal-save-btn{padding:9px 18px;border:none;border-radius:10px;background:#7C3AED;color:#fff;font-size:.85rem;font-weight:800;cursor:pointer;font-family:inherit}
+.bal-save-btn:hover{opacity:.88}
+
+/* Image viewer */
+.img-viewer{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px}
+.img-viewer.hidden{display:none}
+.img-viewer img{max-width:100%;max-height:100%;border-radius:12px;object-fit:contain}
+.img-viewer-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:40px;height:40px;color:#fff;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* Loading / empty */
+.loading{text-align:center;padding:50px 20px;color:#9CA3AF;font-weight:700}
+.empty{text-align:center;padding:50px 20px;color:#9CA3AF}
+.empty svg{width:48px;height:48px;fill:#D1D5DB;margin-bottom:12px}
+.empty p{font-weight:700;font-size:.9rem}
+
+/* Login screen */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#5B1AB0,#8B2FC9,#E91E8C);padding:20px}
+.login-card{background:#fff;border-radius:24px;padding:36px 30px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.login-logo{text-align:center;margin-bottom:20px;font-size:1.5rem;font-weight:900;color:#1E1B4B}
+.login-logo span{color:#E91E8C}
+.login-badge{display:inline-block;background:#EDE9FE;color:#7C3AED;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:800;margin-left:6px}
+.login-subtitle{text-align:center;color:#9CA3AF;font-size:.85rem;margin-bottom:24px}
+.login-group{margin-bottom:16px}
+.login-label{font-size:.85rem;font-weight:700;color:#374151;margin-bottom:7px;display:block}
+.login-input{width:100%;border:1.5px solid #E5E7EB;border-radius:13px;padding:12px 14px;font-size:.9rem;font-family:inherit;color:#374151;outline:none}
+.login-input:focus{border-color:#7C3AED}
+.login-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(90deg,#7B3FBF,#E91E8C);color:#fff;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;margin-top:8px;box-shadow:0 5px 18px rgba(124,58,237,.38)}
+.login-btn:hover{opacity:.91}
+.login-btn:disabled{opacity:.55}
+.login-err{background:#FEF2F2;border:1.5px solid #FECACA;color:#DC2626;border-radius:10px;padding:10px 14px;font-size:.85rem;font-weight:700;text-align:center;margin-bottom:14px;display:none}
+.login-err.show{display:block}
+
+@media(max-width:768px){
+  .layout{flex-direction:column}
+  .sidebar{width:100%;height:auto;position:static;flex-direction:row;border-right:none;border-bottom:1px solid #E5E7EB}
+  .sb-nav{display:flex;flex-direction:row;padding:8px;overflow-x:auto;flex:1}
+  .sb-item{flex-direction:column;gap:3px;padding:8px;font-size:.65rem;min-width:60px;align-items:center}
+  .sb-logo{padding:12px;display:none}
+  .sb-bottom{display:none}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .req-info-grid{grid-template-columns:repeat(2,1fr)}
+  .content{padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ─────────────────────────────────────── -->
+<div id="loginScreen">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">TheNet<span>SMM</span><span class="login-badge">Admin</span></div>
+      <div class="login-subtitle">Admin Panel — Authorized Access Only</div>
+      <div class="login-err" id="loginErr"></div>
+      <div class="login-group">
+        <label class="login-label">Email</label>
+        <input class="login-input" type="email" id="loginEmail" placeholder="admin@example.com" />
+      </div>
+      <div class="login-group">
+        <label class="login-label">Password</label>
+        <input class="login-input" type="password" id="loginPass" placeholder="••••••••"
+               onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">Login as Admin</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADMIN DASHBOARD ──────────────────────────────────── -->
+<div id="adminScreen" style="display:none">
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-text">TheNet<span>SMM</span><span class="sb-logo-badge">Admin</span></div>
+      </div>
+      <nav class="sb-nav">
+        <button class="sb-item active" id="sb-dashboard" onclick="showSection('dashboard')">
+          <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          Dashboard
+        </button>
+        <button class="sb-item" id="sb-fundrequests" onclick="showSection('fundrequests')">
+          <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+          Fund Requests
+        </button>
+        <button class="sb-item" id="sb-users" onclick="showSection('users')">
+          <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          Users
+        </button>
+      </nav>
+      <div class="sb-bottom">
+        <div class="sb-admin-info">Logged in as</div>
+        <div class="sb-admin-email" id="adminEmail">—</div>
+        <button class="sb-item" style="margin-top:6px;color:#EF4444" onclick="doLogout()">
+          <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- DASHBOARD -->
+      <div id="sec-dashboard">
+        <div class="page-header">
+          <div><div class="page-title">Dashboard</div><div class="page-subtitle">Overview at a glance</div></div>
+          <button class="refresh-btn" onclick="loadDashboard()">⟳ Refresh</button>
+        </div>
+        <div class="content">
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="icon ic-purple"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+              <div class="lbl">Total Users</div>
+              <div class="val" id="stat-users">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="icon ic-yellow"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+              <div class="lbl">Pending Deposits</div>
+              <div class="val" id="stat-pending">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="icon ic-green"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+              <div class="lbl">Approved Today</div>
+              <div class="val" id="stat-approved">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="icon ic-blue"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg></div>
+              <div class="lbl">Total Requests</div>
+              <div class="val" id="stat-total">—</div>
+            </div>
+          </div>
+          <div style="font-weight:700;color:#9CA3AF;font-size:.85rem;text-align:center;padding:20px">
+            Select a section from the sidebar to manage data.
+          </div>
+        </div>
+      </div>
+
+      <!-- FUND REQUESTS -->
+      <div id="sec-fundrequests" style="display:none">
+        <div class="page-header">
+          <div><div class="page-title">Fund Requests</div><div class="page-subtitle">Review and approve deposit requests</div></div>
+          <button class="refresh-btn" onclick="loadFundRequests(currentFRStatus)">⟳ Refresh</button>
+        </div>
+        <div class="content">
+          <div class="filter-bar">
+            <button class="filter-btn active" id="fr-pending"  onclick="loadFundRequests('Pending')">
+              ⏳ Pending <span class="filter-count yellow" id="cnt-pending">0</span>
+            </button>
+            <button class="filter-btn" id="fr-approved" onclick="loadFundRequests('Approved')">
+              ✅ Approved <span class="filter-count green" id="cnt-approved">0</span>
+            </button>
+            <button class="filter-btn" id="fr-rejected" onclick="loadFundRequests('Rejected')">
+              ❌ Rejected
+            </button>
+          </div>
+          <div class="req-grid" id="frList">
+            <div class="loading">⏳ Loading fund requests...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- USERS -->
+      <div id="sec-users" style="display:none">
+        <div class="page-header">
+          <div><div class="page-title">Users</div><div class="page-subtitle">All registered accounts</div></div>
+          <button class="refresh-btn" onclick="loadUsers()">⟳ Refresh</button>
+        </div>
+        <div class="content">
+          <table class="users-table" id="usersTable">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Balance</th>
+                <th>Orders</th>
+                <th>Joined</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="usersBody">
+              <tr><td colspan="5" class="loading">⏳ Loading users...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- User Detail Modal -->
+<div class="modal-overlay hidden" id="userModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalUserName">User Detail</div>
+      <button class="modal-close" onclick="closeUserModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Image Viewer -->
+<div class="img-viewer hidden" id="imgViewer" onclick="closeImg()">
+  <button class="img-viewer-close" onclick="closeImg()">✕</button>
+  <img id="viewerImg" src="" alt="Screenshot" />
+</div>
+
+<script>
+/* ── Config ────────────────────────────────────────── */
+const API = ''; // relative path — same domain
+
+let adminToken = localStorage.getItem('smm_admin_token') || '';
+let currentFRStatus = 'Pending';
+
+/* ── API helper ─────────────────────────────────────── */
+async function api(path, method='GET', body=null) {
+  const opts = {
+    method,
+    headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const r = await fetch(API + path, opts);
+  const d = await r.json();
+  if (!r.ok) throw new Error(d.message || 'API error');
+  return d;
+}
+
+/* ── Auth ───────────────────────────────────────────── */
+async function doLogin() {
+  const email    = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPass').value;
+  const errEl    = document.getElementById('loginErr');
+  const btn      = document.getElementById('loginBtn');
+  errEl.className = 'login-err';
+  if (!email || !password) { errEl.className='login-err show'; errEl.textContent='Email and password required'; return; }
+  btn.disabled = true; btn.textContent = 'Logging in...';
+  try {
+    const data = await fetch(API + '/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    }).then(r => r.json());
+    if (!data.token) throw new Error(data.message || 'Login failed');
+    if (!data.user?.isAdmin) throw new Error('Admin access required. Contact support.');
+    adminToken = data.token;
+    localStorage.setItem('smm_admin_token', adminToken);
+    document.getElementById('adminEmail').textContent = data.user.email;
+    showDashboard();
+  } catch(e) {
+    errEl.className = 'login-err show';
+    errEl.textContent = e.message;
+  } finally { btn.disabled=false; btn.textContent='Login as Admin'; }
+}
+
+function doLogout() {
+  adminToken = '';
+  localStorage.removeItem('smm_admin_token');
+  document.getElementById('adminScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = '';
+  document.getElementById('loginPass').value = '';
+}
+
+/* ── Show/hide screens ──────────────────────────────── */
+async function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminScreen').style.display = '';
+  try {
+    const me = await api('/api/admin/me');
+    document.getElementById('adminEmail').textContent = me.email;
+  } catch(e) { doLogout(); return; }
+  loadDashboard();
+}
+
+function showSection(sec) {
+  ['dashboard','fundrequests','users'].forEach(s => {
+    document.getElementById('sec-'+s).style.display = s===sec ? '' : 'none';
+    const btn = document.getElementById('sb-'+s);
+    if(btn) btn.className = 'sb-item' + (s===sec?' active':'');
+  });
+  if(sec==='fundrequests') loadFundRequests('Pending');
+  if(sec==='users')        loadUsers();
+  if(sec==='dashboard')    loadDashboard();
+}
+
+/* ── Dashboard stats ─────────────────────────────────── */
+async function loadDashboard() {
+  try {
+    const [users, pending, approved, allReqs] = await Promise.all([
+      api('/api/admin/users'),
+      api('/api/admin/fund-requests?status=Pending'),
+      api('/api/admin/fund-requests?status=Approved'),
+      api('/api/admin/fund-requests'),
+    ]);
+    document.getElementById('stat-users').textContent    = users.length;
+    document.getElementById('stat-pending').textContent  = pending.length;
+    document.getElementById('stat-approved').textContent = approved.length;
+    document.getElementById('stat-total').textContent    = allReqs.length;
+    document.getElementById('cnt-pending').textContent   = pending.length;
+    document.getElementById('cnt-approved').textContent  = approved.length;
+  } catch(e) { console.error('Dashboard err:', e.message); }
+}
+
+/* ── Fund Requests ───────────────────────────────────── */
+async function loadFundRequests(status='Pending') {
+  currentFRStatus = status;
+  ['Pending','Approved','Rejected'].forEach(s => {
+    const btn = document.getElementById('fr-'+s.toLowerCase());
+    if(btn) btn.className = 'filter-btn' + (s===status?' active':'');
+  });
+  const listEl = document.getElementById('frList');
+  listEl.innerHTML = '<div class="loading">⏳ Loading...</div>';
+  try {
+    const list = await api('/api/admin/fund-requests?status=' + status);
+    if(!list.length) {
+      listEl.innerHTML = `<div class="empty"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><p>No ${status.toLowerCase()} requests</p></div>`;
+      return;
+    }
+    listEl.innerHTML = list.map(r => buildFRCard(r)).join('');
+  } catch(e) {
+    listEl.innerHTML = `<div class="loading" style="color:#DC2626">Error: ${e.message}</div>`;
+  }
+}
+
+function buildFRCard(r) {
+  const u = r.userId || {};
+  const isPending = r.status === 'Pending';
+  const badge = { Pending:'⏳ Pending', Approved:'✅ Approved', Rejected:'❌ Rejected' }[r.status];
+  const badgeCls = { Pending:'badge-pending', Approved:'badge-approved', Rejected:'badge-rejected' }[r.status];
+  const date = new Date(r.createdAt).toLocaleString();
+
+  const actions = isPending ? `
+    <div class="action-area" id="act-${r._id}">
+      <div class="action-row">
+        <input type="number" class="amount-inp" id="amt-${r._id}" placeholder="Credit amount (Ks)" min="1" value="${r.amount||''}" />
+      </div>
+      <textarea class="note-inp" id="note-${r._id}" rows="2" placeholder="Admin notes (optional)"></textarea>
+      <div class="btn-row">
+        <button class="btn-approve" id="abtn-${r._id}" onclick="approveReq('${r._id}')">✅ Approve</button>
+        <button class="btn-reject"  id="rbtn-${r._id}" onclick="rejectReq('${r._id}')">❌ Reject</button>
+      </div>
+    </div>` : r.adminNotes ? `<div class="req-note">📝 ${r.adminNotes}</div>` : '';
+
+  return `<div class="req-card" id="card-${r._id}">
+    <div class="req-card-top">
+      <div class="req-user">
+        <div class="req-avatar"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+        <div>
+          <div class="req-name">${u.name||'Unknown'}</div>
+          <div class="req-email">${u.email||''}</div>
+        </div>
+      </div>
+      <div class="badge ${badgeCls}">${badge}</div>
+    </div>
+    <div class="req-info-grid">
+      <div class="req-info-box"><div class="req-info-label">Transaction ID</div><div class="req-info-val">${r.transactionId||'—'}</div></div>
+      <div class="req-info-box"><div class="req-info-label">Amount Requested</div><div class="req-info-val">${r.amount?r.amount.toLocaleString()+' Ks':'—'}</div></div>
+      <div class="req-info-box"><div class="req-info-label">Current Balance</div><div class="req-info-val">${(u.balance||0).toLocaleString()} Ks</div></div>
+    </div>
+    ${r.screenshotUrl ? `<img class="req-screenshot" src="${r.screenshotUrl}" onclick="viewImg('${r.screenshotUrl}')" loading="lazy" />` : ''}
+    <div class="req-date">🕐 ${date}</div>
+    ${actions}
+  </div>`;
+}
+
+async function approveReq(id) {
+  const amount = parseInt(document.getElementById('amt-'+id)?.value) || 0;
+  const notes  = document.getElementById('note-'+id)?.value.trim() || '';
+  if(!amount||amount<1) { alert('Credit amount (Ks) ထည့်ပေးပါ'); return; }
+  const abtn = document.getElementById('abtn-'+id);
+  const rbtn = document.getElementById('rbtn-'+id);
+  abtn.disabled=rbtn.disabled=true;
+  abtn.textContent='Approving...';
+  try {
+    const res = await api('/api/admin/fund-requests/'+id+'/approve','POST',{amount,adminNotes:notes});
+    document.getElementById('act-'+id).outerHTML =
+      `<div class="action-done approved">✅ ${res.message}</div>`;
+    document.getElementById('card-'+id).style.borderColor='#10B981';
+    loadDashboard();
+  } catch(e) {
+    alert('Error: '+e.message);
+    abtn.disabled=rbtn.disabled=false;
+    abtn.textContent='✅ Approve';
+  }
+}
+
+async function rejectReq(id) {
+  const noteEl = document.getElementById('note-'+id);
+  if(noteEl) noteEl.classList.add('show');
+  if(!confirm('This request ကို ပယ်ချမည်လား?')) { if(noteEl)noteEl.classList.remove('show'); return; }
+  const notes = noteEl?.value.trim() || 'Rejected by admin';
+  const abtn  = document.getElementById('abtn-'+id);
+  const rbtn  = document.getElementById('rbtn-'+id);
+  abtn.disabled=rbtn.disabled=true;
+  rbtn.textContent='Rejecting...';
+  try {
+    await api('/api/admin/fund-requests/'+id+'/reject','POST',{adminNotes:notes});
+    document.getElementById('act-'+id).outerHTML =
+      `<div class="action-done rejected">❌ Request Rejected</div>`;
+    document.getElementById('card-'+id).style.borderColor='#EF4444';
+  } catch(e) {
+    alert('Error: '+e.message);
+    abtn.disabled=rbtn.disabled=false;
+    rbtn.textContent='❌ Reject';
+  }
+}
+
+/* ── Users ───────────────────────────────────────────── */
+async function loadUsers() {
+  const tbody = document.getElementById('usersBody');
+  tbody.innerHTML = '<tr><td colspan="5" class="loading">⏳ Loading users...</td></tr>';
+  try {
+    const users = await api('/api/admin/users');
+    if(!users.length) { tbody.innerHTML='<tr><td colspan="5" class="loading">No users found</td></tr>'; return; }
+    tbody.innerHTML = users.map(u => `
+      <tr onclick="viewUser('${u._id}')">
+        <td><div class="user-cell">
+          <div class="user-dot"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+          <div><div class="user-name-cell">${u.name}${u.isAdmin?'<span class="admin-chip">Admin</span>':''}</div><div class="user-email-cell">${u.email}</div></div>
+        </div></td>
+        <td><span class="balance-chip">${(u.balance||0).toLocaleString()} Ks</span></td>
+        <td>${u.totalOrders||0}</td>
+        <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+        <td><button class="view-btn" onclick="event.stopPropagation();viewUser('${u._id}')">View</button></td>
+      </tr>`).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="5" class="loading" style="color:#DC2626">Error: ${e.message}</td></tr>`;
+  }
+}
+
+async function viewUser(id) {
+  const modal   = document.getElementById('userModal');
+  const body    = document.getElementById('modalBody');
+  const title   = document.getElementById('modalUserName');
+  modal.className = 'modal-overlay';
+  body.innerHTML  = '<div class="loading">⏳ Loading...</div>';
+  try {
+    const { user, fundRequests, orders } = await api('/api/admin/users/'+id);
+    title.textContent = user.name + (user.isAdmin?' (Admin)':'');
+    const frHtml = fundRequests.length
+      ? fundRequests.map(r=>`
+          <div class="mini-req">
+            ${r.screenshotUrl?`<img class="mini-req-img" src="${r.screenshotUrl}" onclick="viewImg('${r.screenshotUrl}')" />`:''}
+            <div class="mini-req-info">
+              <div class="mini-req-txn">Txn: ${r.transactionId}</div>
+              <div class="mini-req-amt">${r.amount?r.amount.toLocaleString()+' Ks':'—'} · <span class="badge ${r.status==='Approved'?'badge-approved':r.status==='Rejected'?'badge-rejected':'badge-pending'}">${r.status}</span></div>
+              <div class="mini-req-date">${new Date(r.createdAt).toLocaleDateString()}</div>
+            </div>
+          </div>`).join('')
+      : '<div style="color:#9CA3AF;font-size:.85rem">No deposit requests</div>';
+
+    body.innerHTML = `
+      <div class="user-stat-row">
+        <div class="user-stat-box"><div class="user-stat-val">${(user.balance||0).toLocaleString()} Ks</div><div class="user-stat-lbl">Balance</div></div>
+        <div class="user-stat-box"><div class="user-stat-val">${user.totalOrders||0}</div><div class="user-stat-lbl">Orders</div></div>
+        <div class="user-stat-box"><div class="user-stat-val">${(user.balanceSpent||0).toLocaleString()} Ks</div><div class="user-stat-lbl">Total Spent</div></div>
+      </div>
+      <div style="font-size:.82rem;color:#6B7280;margin-bottom:14px">📧 ${user.email} · Joined ${new Date(user.createdAt).toLocaleDateString()}</div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Manual Balance Adjustment</div>
+        <div class="balance-edit-row">
+          <input type="number" class="bal-inp" id="balInp-${user._id}" value="${user.balance||0}" min="0" />
+          <button class="bal-save-btn" onclick="saveBalance('${user._id}')">💾 Save</button>
+        </div>
+      </div>
+
+      <div class="modal-section">
+        <div class="modal-section-title">Deposit Requests (${fundRequests.length})</div>
+        ${frHtml}
+      </div>`;
+  } catch(e) {
+    body.innerHTML = `<div class="loading" style="color:#DC2626">Error: ${e.message}</div>`;
+  }
+}
+
+async function saveBalance(userId) {
+  const val = parseInt(document.getElementById('balInp-'+userId)?.value);
+  if(isNaN(val)||val<0){ alert('Valid balance required'); return; }
+  try {
+    const res = await api('/api/admin/users/'+userId+'/balance','PATCH',{balance:val});
+    alert('✅ Balance updated: '+res.balance.toLocaleString()+' Ks');
+    loadUsers();
+  } catch(e) { alert('Error: '+e.message); }
+}
+
+function closeUserModal() {
+  document.getElementById('userModal').className='modal-overlay hidden';
+}
+
+/* ── Image viewer ─────────────────────────────────────── */
+function viewImg(url) {
+  document.getElementById('viewerImg').src = url;
+  document.getElementById('imgViewer').className = 'img-viewer';
+}
+function closeImg() {
+  document.getElementById('imgViewer').className = 'img-viewer hidden';
+}
+
+/* ── Init ─────────────────────────────────────────────── */
+window.onload = async () => {
+  if(adminToken) {
+    try {
+      const me = await api('/api/admin/me');
+      document.getElementById('adminEmail').textContent = me.email;
+      showDashboard();
+    } catch(e) {
+      adminToken='';
+      localStorage.removeItem('smm_admin_token');
+    }
+  }
+};
+</script>
+</body>
+</html>
