@@ -488,6 +488,20 @@
           </div>
         </div>
 
+        <!-- Custom Comments (shown only when service type = Custom Comments) -->
+        <div class="order-group" id="commentsGroup" style="display:none">
+          <div class="order-label">
+            Comments
+            <span style="color:#9CA3AF;font-size:0.72rem;font-weight:600;margin-left:6px">(one per line)</span>
+          </div>
+          <textarea
+            id="orderComments"
+            class="comments-textarea"
+            placeholder="Enter one comment per line&#10;e.g. Great photo!&#10;Love this! ❤️&#10;Amazing post!"
+            rows="5"
+          ></textarea>
+        </div>
+
         <!-- Submit -->
         <button class="order-submit" id="submitBtn" onclick="submitOrder()">Submit</button>
         <div class="order-alert" id="orderAlert"></div>
@@ -812,7 +826,7 @@ const SERVICES = [
    DYNAMIC ORDER CATALOGUE (from JAP API)
    Rate: 1 USD = MMK_RATE Kyats × MARKUP markup
 ══════════════════════════════════════════════ */
-const MMK_RATE = 2200;   // 1 USD = 2200 Ks
+const MMK_RATE = 4500;   // 1 USD = 4500 Ks
 const MARKUP   = 1.25;   // 25% markup on provider price
 
 /* Category → icon color + SVG mapping */
@@ -925,7 +939,7 @@ async function fetchServices() {
       grouped[cat].push({
         id:       String(svc.service_id || svc.service || ''), // normalized by backend
         name:     svc.name || '',
-        avgTime:  '—',                                         // JAP has no avg_time
+        avgTime:  svc.average_time ? svc.average_time + ' min' : '—', // JAP: average_time
         min:      parseInt(svc.min || svc.min_amount)  || 10,
         max:      parseInt(svc.max || svc.max_amount)  || 10000000,
         priceUSD: parseFloat(svc.rate || svc.price)    || 0,  // JAP: rate per 1000 USD
@@ -1035,11 +1049,21 @@ function selectService(svcId) {
 
 function applySvc(svc) {
   document.getElementById('svcSelText').textContent = svc.id + ' - ' + svc.name;
-  document.getElementById('avgTimeDisplay').textContent = svc.avgTime || '—';
+  document.getElementById('avgTimeDisplay').textContent = svc.avgTime || 'N/A';
   document.getElementById('qtyHint').textContent =
     `Min: ${svc.min.toLocaleString()} - Max: ${svc.max.toLocaleString()}`;
   document.getElementById('orderQty').min = svc.min;
   document.getElementById('orderQty').max = svc.max;
+
+  // Show Custom Comments box only when service type is 'Custom Comments'
+  const isCustomComments = (svc.type || '').toLowerCase().includes('custom comment');
+  const commentsGroup = document.getElementById('commentsGroup');
+  if (commentsGroup) {
+    commentsGroup.style.display = isCustomComments ? 'block' : 'none';
+    if (!isCustomComments) {
+      document.getElementById('orderComments').value = '';
+    }
+  }
   calcCharge();
 }
 
@@ -1072,7 +1096,8 @@ function calcCharge() {
     _chargeMMK = 0;
     return;
   }
-  // priceUSD = USD per 1000 units (JAP standard)
+  // Formula: (Quantity / 1000) * Provider_Rate * MMK_RATE * MARKUP
+  // MMK_RATE = 4500 (1 USD = 4500 Ks), MARKUP = 1.25 (25% profit)
   const usd   = (qty / 1000) * currentSvc.priceUSD * MARKUP;
   _chargeMMK  = Math.ceil(usd * MMK_RATE);
   document.getElementById('chargeAmt').textContent = _chargeMMK.toLocaleString() + ' Ks';
@@ -1097,8 +1122,9 @@ async function submitOrder() {
     alertEl.className = 'order-alert show error';
     alertEl.textContent = 'Please select a service first.'; return;
   }
-  const link = document.getElementById('orderLink').value.trim();
-  const qty  = parseInt(document.getElementById('orderQty').value) || 0;
+  const link     = document.getElementById('orderLink').value.trim();
+  const qty      = parseInt(document.getElementById('orderQty').value) || 0;
+  const comments = document.getElementById('orderComments')?.value.trim() || '';
 
   if (!link) {
     alertEl.className = 'order-alert show error';
@@ -1115,14 +1141,17 @@ async function submitOrder() {
   btn.innerHTML = '<span class="spinner"></span>Submitting...';
 
   try {
-    const res = await apiCall('/api/orders', 'POST', {
+    const orderPayload = {
       serviceId:   currentSvc.id,
       serviceName: currentSvc.name,
       category:    currentCat ? currentCat.name : '',
       link,
       quantity:    qty,
       chargeMMK:   _chargeMMK,
-    });
+    };
+    // Add comments only for Custom Comments service type
+    if (comments) orderPayload.comments = comments;
+    const res = await apiCall('/api/orders', 'POST', orderPayload);
 
     alertEl.className = 'order-alert show success';
     alertEl.textContent = `✅ Order placed! ID: ${res.providerOrderId || res.orderId}. Balance: ${fmtMMK(res.remainingBalance)}`;
@@ -1130,6 +1159,8 @@ async function submitOrder() {
     // Reset form
     document.getElementById('orderLink').value = '';
     document.getElementById('orderQty').value  = '';
+    if (document.getElementById('orderComments'))
+      document.getElementById('orderComments').value = '';
     calcCharge();
 
     // Refresh user balance in header
