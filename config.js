@@ -1,74 +1,77 @@
 // ══════════════════════════════════════════════
 //  config.js — API URL + shared helpers
 // ══════════════════════════════════════════════
+
+/* Auto-detect API URL:
+   - localhost / 127.0.0.1  → local dev server
+   - otherwise              → production Render backend  */
 const CONFIG = {
-  API_URL: "https://smmpannelbackend.onrender.com",
+  API_URL: (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  )
+    ? 'http://localhost:5000'
+    : 'https://smmpannelbackend.onrender.com',
 };
 
 /* ── API call helper ────────────────────────── */
-async function apiCall(endpoint, method = "GET", body = null) {
-  const token = localStorage.getItem("smm_token");
-
+async function apiCall(endpoint, method = 'GET', body = null) {
+  const token = localStorage.getItem('smm_token');
   const opts = {
     method,
-    headers: { "Content-Type": "application/json" },
+    headers: { 'Content-Type': 'application/json' },
   };
-  if (token) opts.headers["Authorization"] = `Bearer ${token}`;
+  if (token) opts.headers['Authorization'] = `Bearer ${token}`;
   if (body)  opts.body = JSON.stringify(body);
 
-  let response, data;
+  let response;
   try {
     response = await fetch(`${CONFIG.API_URL}${endpoint}`, opts);
   } catch {
-    throw new Error("Cannot connect to server. Check your internet or try again.");
+    throw new Error('Cannot connect to server. Check your internet connection.');
   }
 
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error("Server returned an invalid response.");
+  // Guard against non-JSON responses (HTML error pages)
+  const ct = response.headers.get('content-type') || '';
+  if (!ct.includes('application/json')) {
+    throw new Error(`Server error (HTTP ${response.status}). Please try again.`);
   }
 
-  if (!response.ok) {
-    throw new Error(data.message || "Something went wrong");
-  }
+  let data;
+  try { data = await response.json(); }
+  catch { throw new Error('Server returned an invalid response.'); }
+
+  if (!response.ok) throw new Error(data.message || 'Something went wrong');
   return data;
 }
 
-/* ── Auth guards ────────────────────────────── */
+/* ── MMK formatter ──────────────────────────── */
+function fmtMMK(v) {
+  return Math.round(v || 0).toLocaleString() + ' Ks';
+}
 
-// ဒီ page ကို Login မဝင်ဘဲ access မလုပ်ရ (dashboard pages)
+/* ── Auth guards ─────────────────────────────── */
 function requireAuth() {
-  if (!localStorage.getItem("smm_token")) {
-    window.location.replace("/login");   // clean URL
-  }
+  if (!localStorage.getItem('smm_token')) window.location.replace('/login');
 }
-
-// Login ဝင်ပြီးသားဆိုရင် login page ကို ပြန်မဖွင့်ရ
 function redirectIfLoggedIn() {
-  if (localStorage.getItem("smm_token")) {
-    window.location.replace("/");        // dashboard root
-  }
+  if (localStorage.getItem('smm_token')) window.location.replace('/');
 }
 
-/* ── Alert / loading helpers ────────────────── */
-function showAlert(id, msg, type = "error") {
+/* ── Misc helpers ────────────────────────────── */
+function showAlert(id, msg, type = 'error') {
   const el = document.getElementById(id);
   if (!el) return;
   el.className = `alert show alert-${type}`;
   el.textContent = msg;
 }
-
 function hideAlert(id) {
   const el = document.getElementById(id);
-  if (el) el.className = "alert";
+  if (el) el.className = 'alert';
 }
-
 function setLoading(btnId, loading, defaultText) {
   const btn = document.getElementById(btnId);
   if (!btn) return;
   btn.disabled = loading;
-  btn.innerHTML = loading
-    ? `<span class="spinner"></span> Please wait...`
-    : defaultText;
+  btn.innerHTML = loading ? `<span class="spinner"></span> Please wait...` : defaultText;
 }

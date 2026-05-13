@@ -498,8 +498,9 @@
             id="orderComments"
             class="comments-textarea"
             placeholder="Enter one comment per line&#10;e.g. Great photo!&#10;Love this! ❤️&#10;Amazing post!"
-            rows="5"
+            oninput="onCommentsInput()"
           ></textarea>
+          <div class="comments-line-count" id="commentsLineCount">0 comments — 0 Ks</div>
         </div>
 
         <!-- Submit -->
@@ -645,13 +646,29 @@
   </div>
 
   <!-- ════════════════════════════════════════
-       TAB: ORDERS (coming soon)
+       TAB: ORDERS
   ════════════════════════════════════════ -->
   <div class="tab-section" id="tab-orders">
-    <div class="placeholder-tab">
-      <div class="pt-emoji">📋</div>
-      <h3>Orders</h3>
-      <p>Your order history will appear here — coming soon.</p>
+    <div class="orders-page">
+      <div class="orders-header">
+        <h2 class="orders-title">My Orders</h2>
+        <button class="orders-refresh-btn" onclick="loadOrders()">⟳ Refresh</button>
+      </div>
+
+      <!-- Status filter -->
+      <div class="orders-filter" id="ordersFilter">
+        <button class="of-btn active" data-status="" onclick="filterOrders(this,'')">All</button>
+        <button class="of-btn" data-status="Pending"     onclick="filterOrders(this,'Pending')">Pending</button>
+        <button class="of-btn" data-status="In progress" onclick="filterOrders(this,'In progress')">In Progress</button>
+        <button class="of-btn" data-status="Completed"   onclick="filterOrders(this,'Completed')">Completed</button>
+        <button class="of-btn" data-status="Partial"     onclick="filterOrders(this,'Partial')">Partial</button>
+        <button class="of-btn" data-status="Canceled"    onclick="filterOrders(this,'Canceled')">Canceled</button>
+      </div>
+
+      <!-- Order list -->
+      <div id="ordersList">
+        <div class="orders-loading">⏳ Loading orders...</div>
+      </div>
     </div>
   </div>
 
@@ -890,6 +907,8 @@ function setTab(tab) {
     const sb = document.getElementById(sideMap[tab]);
     if (sb) sb.classList.add('nav-active-item');
   }
+  // Load data when tab opens
+  if (tab === 'orders') loadOrders();
   closeAllDropdowns();
 }
 
@@ -1059,20 +1078,32 @@ function selectService(svcId) {
 
 function applySvc(svc) {
   document.getElementById('svcSelText').textContent = svc.id + ' - ' + svc.name;
-  document.getElementById('avgTimeDisplay').textContent = svc.avgTime || 'N/A';
-  document.getElementById('qtyHint').textContent =
-    `Min: ${svc.min.toLocaleString()} - Max: ${svc.max.toLocaleString()}`;
-  document.getElementById('orderQty').min = svc.min;
-  document.getElementById('orderQty').max = svc.max;
+  // average_time from JAP API
+  const avgT = svc.avgTime && svc.avgTime !== '—' ? svc.avgTime : (svc.average_time || 'N/A');
+  document.getElementById('avgTimeDisplay').textContent = avgT;
 
-  // Show Custom Comments box only when service type is 'Custom Comments'
   const isCustomComments = (svc.type || '').toLowerCase().includes('custom comment');
+  const qtyInp   = document.getElementById('orderQty');
+  const qtyHint  = document.getElementById('qtyHint');
   const commentsGroup = document.getElementById('commentsGroup');
-  if (commentsGroup) {
-    commentsGroup.style.display = isCustomComments ? 'block' : 'none';
-    if (!isCustomComments) {
-      document.getElementById('orderComments').value = '';
-    }
+  const lineCount = document.getElementById('commentsLineCount');
+
+  if (isCustomComments) {
+    // Custom Comments: qty controlled by comment line count
+    qtyInp.disabled = true;
+    qtyInp.value    = '';
+    qtyInp.placeholder = 'Auto (= comment lines)';
+    if (qtyHint) qtyHint.textContent = 'Quantity = number of comments entered';
+    if (commentsGroup) commentsGroup.style.display = 'block';
+  } else {
+    qtyInp.disabled    = false;
+    qtyInp.placeholder = 'Enter quantity';
+    qtyInp.min = svc.min;
+    qtyInp.max = svc.max;
+    if (qtyHint) qtyHint.textContent = `Min: ${svc.min.toLocaleString()} - Max: ${svc.max.toLocaleString()}`;
+    if (commentsGroup) { commentsGroup.style.display = 'none'; }
+    if (document.getElementById('orderComments')) document.getElementById('orderComments').value = '';
+    if (lineCount) lineCount.textContent = '';
   }
   calcCharge();
 }
@@ -1099,17 +1130,40 @@ function searchOrderService() {
 /* ══════════════════════════════════════════════
    CHARGE CALCULATION (USD → MMK)
 ══════════════════════════════════════════════ */
+/* Auto-count comment lines → set qty + recalc charge */
+function onCommentsInput() {
+  const ta   = document.getElementById('orderComments');
+  const qty  = ta ? ta.value.split('\n').filter(l => l.trim()).length : 0;
+  const qtyInp = document.getElementById('orderQty');
+  if (qtyInp && currentSvc && (currentSvc.type||'').toLowerCase().includes('custom comment')) {
+    qtyInp.value = qty;
+  }
+  calcCharge();
+  const lineCount = document.getElementById('commentsLineCount');
+  if (lineCount) {
+    const charge = _chargeMMK > 0 ? _chargeMMK.toLocaleString() + ' Ks' : '0 Ks';
+    lineCount.textContent = `${qty} comment${qty!==1?'s':''} — ${charge}`;
+  }
+}
+
 function calcCharge() {
-  const qty = parseInt(document.getElementById('orderQty').value) || 0;
+  const isCC  = currentSvc && (currentSvc.type||'').toLowerCase().includes('custom comment');
+  let qty;
+  if (isCC) {
+    const ta = document.getElementById('orderComments');
+    qty = ta ? ta.value.split('\n').filter(l => l.trim()).length : 0;
+  } else {
+    qty = parseInt(document.getElementById('orderQty').value) || 0;
+  }
+
   if (!currentSvc || qty <= 0) {
     document.getElementById('chargeAmt').textContent = '0 Ks';
     _chargeMMK = 0;
     return;
   }
-  // Formula: (Quantity / 1000) * Provider_Rate * MMK_RATE * MARKUP
-  // MMK_RATE = 4500 (1 USD = 4500 Ks), MARKUP = 1.25 (25% profit)
-  const usd   = (qty / 1000) * currentSvc.priceUSD * MARKUP;
-  _chargeMMK  = Math.ceil(usd * MMK_RATE);
+  // Formula: (qty / 1000) × rate × MMK_RATE × MARKUP
+  const usd  = (qty / 1000) * currentSvc.priceUSD * MARKUP;
+  _chargeMMK = Math.ceil(usd * MMK_RATE);
   document.getElementById('chargeAmt').textContent = _chargeMMK.toLocaleString() + ' Ks';
 }
 
@@ -1140,9 +1194,14 @@ async function submitOrder() {
     alertEl.className = 'order-alert show error';
     alertEl.textContent = 'Please paste your link.'; return;
   }
-  if (!qty || qty < currentSvc.min || qty > currentSvc.max) {
+  const isCC = (currentSvc.type||'').toLowerCase().includes('custom comment');
+  if (!isCC && (!qty || qty < currentSvc.min || qty > currentSvc.max)) {
     alertEl.className = 'order-alert show error';
     alertEl.textContent = `Quantity must be between ${currentSvc.min.toLocaleString()} and ${currentSvc.max.toLocaleString()}.`; return;
+  }
+  if (isCC && qty < 1) {
+    alertEl.className = 'order-alert show error';
+    alertEl.textContent = 'Please enter at least 1 comment.'; return;
   }
   if (_chargeMMK <= 0) { calcCharge(); }
 
@@ -1337,6 +1396,141 @@ function closeSidebar() { document.getElementById('sidebar').classList.remove('o
 function logout() { localStorage.removeItem('smm_token'); localStorage.removeItem('smm_user'); window.location.replace('/login'); }
 
 /* ══════════════════════════════════════════════
+   ORDERS — list, status sync, cancel
+══════════════════════════════════════════════ */
+let _allOrders      = [];
+let _currentOFilter = '';
+
+async function loadOrders() {
+  const listEl = document.getElementById('ordersList');
+  if (!listEl) return;
+  listEl.innerHTML = '<div class="orders-loading">⏳ Loading orders...</div>';
+
+  try {
+    const data = await apiCall('/api/orders?limit=50');
+    _allOrders = data.orders || [];
+    renderOrders(_currentOFilter);
+  } catch(e) {
+    listEl.innerHTML = `<div class="orders-loading" style="color:#DC2626">Error: ${e.message}</div>`;
+  }
+}
+
+function filterOrders(btn, status) {
+  _currentOFilter = status;
+  document.querySelectorAll('.of-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderOrders(status);
+}
+
+function renderOrders(status) {
+  const listEl = document.getElementById('ordersList');
+  if (!listEl) return;
+
+  const filtered = status
+    ? _allOrders.filter(o => (o.status||'').toLowerCase() === status.toLowerCase())
+    : _allOrders;
+
+  if (!filtered.length) {
+    listEl.innerHTML = `<div class="orders-empty">
+      <div class="oe-icon">📋</div>
+      <p>${status ? 'No ' + status + ' orders' : 'No orders yet'}</p>
+    </div>`;
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(o => buildOrderCard(o)).join('');
+}
+
+function buildOrderCard(o) {
+  const statusCls = {
+    'pending':     'st-pending',
+    'in progress': 'st-inprogress',
+    'completed':   'st-completed',
+    'partial':     'st-partial',
+    'canceled':    'st-canceled',
+    'cancelled':   'st-canceled',
+    'failed':      'st-failed',
+    'processing':  'st-processing',
+    'refill requested': 'st-refill',
+  }[(o.status||'').toLowerCase()] || 'st-processing';
+
+  const canCancel = !['Completed','Canceled','Cancelled','Failed'].includes(o.status);
+  const pct = o.quantity > 0 && o.remains > 0
+    ? Math.max(0, Math.round((1 - o.remains / o.quantity) * 100))
+    : o.status === 'Completed' ? 100 : 0;
+
+  const date = new Date(o.createdAt).toLocaleString();
+
+  return `<div class="order-card" id="ocard-${o._id}">
+    <div class="order-card-top">
+      <div class="order-svc-name">${o.serviceName || 'Service #'+o.serviceId}</div>
+      <div class="order-status-badge ${statusCls}">${o.status||'Pending'}</div>
+    </div>
+
+    <div class="order-meta-grid">
+      <div class="order-meta-box"><div class="order-meta-label">Quantity</div><div class="order-meta-val">${(o.quantity||0).toLocaleString()}</div></div>
+      <div class="order-meta-box"><div class="order-meta-label">Remains</div><div class="order-meta-val">${(o.remains||0).toLocaleString()}</div></div>
+      <div class="order-meta-box"><div class="order-meta-label">Charge</div><div class="order-meta-val">${(o.chargeMMK||0).toLocaleString()} Ks</div></div>
+      <div class="order-meta-box"><div class="order-meta-label">Provider #</div><div class="order-meta-val">${o.providerOrderId||'—'}</div></div>
+    </div>
+
+    <div class="order-link-row">
+      <div class="order-link-label">Link</div>
+      <div class="order-link-val">${o.link||'—'}</div>
+    </div>
+
+    ${pct > 0 ? `<div class="order-progress"><div class="order-progress-bar" style="width:${pct}%"></div></div>` : ''}
+
+    <div class="order-actions">
+      <button class="order-sync-btn" id="sync-${o._id}" onclick="syncOrderStatus('${o._id}')">🔄 Sync Status</button>
+      ${canCancel ? `<button class="order-cancel-btn" id="cancel-${o._id}" onclick="cancelOrder('${o._id}')">✕ Cancel</button>` : ''}
+    </div>
+    <div class="order-date">🕐 ${date}${o.startCount && o.startCount !== '0' ? ' · Start: '+o.startCount : ''}</div>
+  </div>`;
+}
+
+async function syncOrderStatus(orderId) {
+  const btn = document.getElementById('sync-'+orderId);
+  if (btn) { btn.disabled=true; btn.textContent='Syncing...'; }
+  try {
+    const res = await apiCall('/api/orders/'+orderId+'/sync-status','POST');
+    const o   = res.order;
+    const card = document.getElementById('ocard-'+orderId);
+    if (card && o) {
+      const idx = _allOrders.findIndex(x => x._id === orderId);
+      if (idx >= 0) _allOrders[idx] = { ..._allOrders[idx], ...o };
+      card.outerHTML = buildOrderCard(_allOrders[idx] || o);
+    }
+  } catch(e) {
+    alert('Sync failed: ' + e.message);
+  } finally {
+    const b = document.getElementById('sync-'+orderId);
+    if (b) { b.disabled=false; b.textContent='🔄 Sync Status'; }
+  }
+}
+
+async function cancelOrder(orderId) {
+  if (!confirm('This order ကို cancel လုပ်မည်လား? Refund ပြန်ရနိုင်ပါသည်။')) return;
+  const btn = document.getElementById('cancel-'+orderId);
+  if (btn) { btn.disabled=true; btn.textContent='Canceling...'; }
+  try {
+    const res = await apiCall('/api/orders/'+orderId+'/cancel','POST');
+    alert(res.message + (res.refundMMK > 0 ? `\n💰 Refunded: ${res.refundMMK.toLocaleString()} Ks` : ''));
+    // Refresh balance
+    try {
+      const me = await apiCall('/api/auth/me');
+      localStorage.setItem('smm_user', JSON.stringify(me));
+      applyUser(me);
+    } catch(_) {}
+    await loadOrders();
+  } catch(e) {
+    alert('Cancel failed: ' + e.message);
+    const b = document.getElementById('cancel-'+orderId);
+    if (b) { b.disabled=false; b.textContent='✕ Cancel'; }
+  }
+}
+
+/* ══════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════ */
 (async function init() {
@@ -1359,7 +1553,7 @@ function logout() { localStorage.removeItem('smm_token'); localStorage.removeIte
 })();
 
 function fmtMMK(v) {
-  return Math.round(v || 0).toLocaleString() + ' MMK';
+  return Math.round(v || 0).toLocaleString() + ' Ks';
 }
 
 function applyUser(u) {
