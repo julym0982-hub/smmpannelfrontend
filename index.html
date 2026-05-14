@@ -829,7 +829,7 @@
       <div style="padding:16px 14px 20px">
 
         <!-- Myanmar -->
-        <div class="tos-lang active" id="tos-mm">
+        <div id="tos-mm" style="display:block">
           <div class="tos-title">TheNetSMM — ဝန်ဆောင်မှုဆိုင်ရာ စည်းကမ်းချက်များနှင့် လုပ်ထုံးလုပ်နည်းများ</div>
           <h3 class="tos-section">၁။ အထွေထွေ သဘောတူညီချက် (General Agreement)</h3>
           <p class="tos-para">TheNetSMM ပလက်ဖောင်းတွင် အကောင့်ဖွင့်လှစ်ခြင်း သို့မဟုတ် ဝန်ဆောင်မှုများကို အသုံးပြုခြင်းသည် အောက်ဖော်ပြပါ စည်းကမ်းချက်များအားလုံးကို အပြည့်အစုံ ဖတ်ရှုနားလည်ပြီး၊ ခြွင်းချက်မရှိ လိုက်နာရန် သဘောတူညီပြီးဖြစ်သည်ဟု မှတ်ယူပါသည်။ အကယ်၍ ဤစည်းကမ်းချက်များအပေါ် သဘောတူညီနိုင်ခြင်း မရှိပါက ကျွန်ုပ်တို့၏ ဝန်ဆောင်မှုများကို အသုံးပြုခြင်းအား ချက်ချင်းရပ်တန့်ရပါမည်။</p>
@@ -851,7 +851,7 @@
         </div>
 
         <!-- English -->
-        <div class="tos-lang" id="tos-en">
+        <div id="tos-en" style="display:none">
           <div class="tos-title">TheNetSMM — Terms of Service and Operational Procedures</div>
           <h3 class="tos-section">1. General Agreement</h3>
           <p class="tos-para">By registering an account or utilizing any services on the TheNetSMM platform, it is deemed that you have fully read, understood, and unconditionally agreed to be bound by all the terms and conditions outlined below. If you do not agree with any part of these terms, you must immediately cease all use of our services.</p>
@@ -1669,16 +1669,32 @@ function applyUser(u) {
 /* ── Terms of Service — globe toggle ── */
 
 
+
 function tosToggleLang() {
-  const btn = document.getElementById('tosGlobeBtn');
-  const lbl = document.getElementById('tosGlobeLbl');
-  const isEN = btn.classList.toggle('tos-en-active');
-  document.getElementById('tos-mm').classList.toggle('active', !isEN);
-  document.getElementById('tos-en').classList.toggle('active',  isEN);
-  lbl.textContent = isEN ? 'EN' : 'MM';
-  btn.style.background    = isEN ? '#7C3AED' : '#fff';
-  btn.style.borderColor   = isEN ? '#7C3AED' : '#D1D5DB';
-  btn.style.color         = isEN ? '#fff'    : '#374151';
+  var mm  = document.getElementById('tos-mm');
+  var en  = document.getElementById('tos-en');
+  var btn = document.getElementById('tosGlobeBtn');
+  var lbl = document.getElementById('tosGlobeLbl');
+
+  var isCurrentlyMM = (mm.style.display !== 'none');
+
+  if (isCurrentlyMM) {
+    // Switch to English
+    mm.style.display  = 'none';
+    en.style.display  = 'block';
+    lbl.textContent   = 'EN';
+    btn.style.background  = '#7C3AED';
+    btn.style.borderColor = '#7C3AED';
+    btn.style.color       = '#fff';
+  } else {
+    // Switch to Myanmar
+    mm.style.display  = 'block';
+    en.style.display  = 'none';
+    lbl.textContent   = 'MM';
+    btn.style.background  = '#fff';
+    btn.style.borderColor = '#D1D5DB';
+    btn.style.color       = '#374151';
+  }
 }
 </script>
 </body>
