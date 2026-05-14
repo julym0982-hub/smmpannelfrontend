@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://i.ibb.co https://*.ibb.co; connect-src 'self' https://smmpannelbackend.onrender.com;" />
   <title>Dashboard — SMM Panel</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -993,6 +997,41 @@
 <script src="config.js"></script>
 <script src="avg_time.js"></script>
 <script>
+/* ── Security: sanitize user-generated content before DOM render */
+function sanitizeHTML(s) {
+  if (s == null) return "";
+  return String(s).replace(/[&<>"']/g, c =>
+    ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;"}[c]));
+}
+/* ── Performance: debounce rapid API calls */
+function debounce(fn, ms) {
+  let t; return function(...a) { clearTimeout(t); t = setTimeout(() => fn(...a), ms || 300); };
+}
+</script>
+<script>
+/* ── XSS: Sanitize before rendering to DOM ───────────────
+   Use this instead of innerHTML with user data            */
+function sanitizeHTML(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/&/g,  "&amp;")
+    .replace(/</g,  "&lt;")
+    .replace(/>/g,  "&gt;")
+    .replace(/"/g,  "&quot;")
+    .replace(/'/g,  "&#x27;");
+}
+/* Safe innerHTML setter */
+function safeSetHTML(el, html) {
+  if (!el) return;
+  // DOMPurify would be ideal; this strips script tags at minimum
+  el.innerHTML = html.replace(/<script[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+}
+/* Remove token on page unload if window closed (not tab switch) */
+window.addEventListener("beforeunload", () => {
+  // Keep token for tab switches, clear on browser close handled by session expiry
+});
+</script>
+<script>
 
 requireAuth();
 
@@ -1629,7 +1668,7 @@ function buildOrderCard(o, showCancel) {
   });
   return `<div class="ord-card" id="ocard-${o._id}">
   <div class="ord-head">
-    <div class="ord-name">${o.serviceName || 'Service #' + o.serviceId}</div>
+    <div class="ord-name">${sanitizeHTML(o.serviceName || 'Service #' + o.serviceId)}</div>
     <span class="ord-badge ${bc}">${bl}</span>
   </div>
   <div class="ord-body">
@@ -1641,7 +1680,7 @@ function buildOrderCard(o, showCancel) {
     </div>
     <div class="ord-link">
       <div class="ord-link-lbl">🔗 Link</div>
-      <div class="ord-link-val">${o.link || '—'}</div>
+      <div class="ord-link-val">${sanitizeHTML(o.link || '—')}</div>
     </div>
     <div class="ord-foot">
       <span class="ord-date">🕐 ${dt}</span>

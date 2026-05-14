@@ -94,9 +94,20 @@
       setLoading('signupBtn', true, 'Sign Up');
       try {
         const data = await apiCall('/api/auth/signup', 'POST', { name, email, password });
-        localStorage.setItem('smm_token', data.token);
-        localStorage.setItem('smm_user', JSON.stringify(data.user));
-        window.location.href = '/';
+        // Account created — show check-email message
+        document.getElementById('signupForm').style.display = 'none';
+        const msg = document.createElement('div');
+        msg.innerHTML = `<div style="text-align:center;padding:10px 0">
+          <div style="font-size:3rem;margin-bottom:14px">📬</div>
+          <h2 style="color:#059669;font-size:1.1rem;font-weight:900;margin-bottom:10px">Check Your Email!</h2>
+          <p style="font-size:.875rem;color:#374151;line-height:1.7">
+            We sent a confirmation link to<br><strong>${data.email || document.getElementById('email').value}</strong><br><br>
+            Click the link in the email to activate your account.<br>
+            <span style="color:#9CA3AF;font-size:.8rem">The link expires in 1 hour.</span>
+          </p>
+          <a href="/login" style="display:inline-block;margin-top:18px;color:#7C3AED;font-weight:800;font-size:.875rem;text-decoration:none">Back to Login &rsaquo;</a>
+        </div>`;
+        document.querySelector('.auth-card').appendChild(msg);
       } catch (err) {
         showAlert('alert', err.message);
       } finally {
