@@ -26,7 +26,7 @@ async function apiCall(endpoint, method = 'GET', body = null) {
 
   let response;
   try {
-    response = await fetch(`${CONFIG.API_URL}${endpoint}`, opts);
+    response = await fetch(`${CONFIG.API_URL}${endpoint}`, { ...opts, credentials: 'include' });
   } catch {
     throw new Error('Cannot connect to server. Check your internet connection.');
   }

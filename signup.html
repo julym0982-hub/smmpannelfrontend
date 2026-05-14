@@ -94,26 +94,75 @@
       setLoading('signupBtn', true, 'Sign Up');
       try {
         const data = await apiCall('/api/auth/signup', 'POST', { name, email, password });
-        // Account created — show check-email message
-        document.getElementById('signupForm').style.display = 'none';
-        const msg = document.createElement('div');
-        msg.innerHTML = `<div style="text-align:center;padding:10px 0">
-          <div style="font-size:3rem;margin-bottom:14px">📬</div>
-          <h2 style="color:#059669;font-size:1.1rem;font-weight:900;margin-bottom:10px">Check Your Email!</h2>
-          <p style="font-size:.875rem;color:#374151;line-height:1.7">
-            We sent a confirmation link to<br><strong>${data.email || document.getElementById('email').value}</strong><br><br>
-            Click the link in the email to activate your account.<br>
-            <span style="color:#9CA3AF;font-size:.8rem">The link expires in 1 hour.</span>
-          </p>
-          <a href="/login" style="display:inline-block;margin-top:18px;color:#7C3AED;font-weight:800;font-size:.875rem;text-decoration:none">Back to Login &rsaquo;</a>
-        </div>`;
-        document.querySelector('.auth-card').appendChild(msg);
+        // Store token (cookie is primary auth, localStorage is fallback)
+        if (data.token) localStorage.setItem('smm_token', data.token);
+        if (data.user)  localStorage.setItem('smm_user', JSON.stringify(data.user));
+
+        // Show backup codes if returned (new user)
+        if (data.backupCodes && data.backupCodes.length) {
+          document.querySelector('form').style.display = 'none';
+          const div = document.createElement('div');
+          div.style.cssText = 'padding:10px 0;text-align:center';
+          div.innerHTML = `
+            <div style="font-size:2rem;margin-bottom:10px">🔐</div>
+            <h3 style="font-size:1rem;font-weight:900;color:#111827;margin-bottom:8px">Save Your Backup Codes</h3>
+            <p style="font-size:.78rem;color:#DC2626;font-weight:700;background:#FEF2F2;border-radius:8px;padding:8px;margin-bottom:12px">
+              ⚠️ Screenshot or save these now — they won't be shown again!
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px">
+              ${data.backupCodes.map(c=>`<div style="background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:8px;padding:8px 4px;font-family:monospace;font-size:.9rem;font-weight:700;color:#1E1B4B;letter-spacing:1px">${c}</div>`).join('')}
+            </div>
+            <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;flex-wrap:wrap">
+              <button onclick="downloadBkCodes(${JSON.stringify(data.backupCodes)})"
+                style="padding:9px 14px;border:none;border-radius:10px;background:#7C3AED;color:#fff;font-size:.8rem;font-weight:700;cursor:pointer">⬇ Download</button>
+              <button onclick="copyBkCodes(${JSON.stringify(data.backupCodes)})"
+                id="copyBkBtn" style="padding:9px 14px;border:1.5px solid #E5E7EB;border-radius:10px;background:#fff;font-size:.8rem;font-weight:700;cursor:pointer">📋 Copy All</button>
+            </div>
+            <p style="font-size:.78rem;color:#6B7280;line-height:1.6;margin-bottom:12px">
+              Check your email and click the confirmation link to activate your account.
+            </p>
+            <a href="/" style="display:inline-block;color:#7C3AED;font-weight:800;font-size:.875rem;text-decoration:none">Continue →</a>`;
+          document.querySelector('.auth-card').appendChild(div);
+          return;
+        }
+        window.location.href = '/';
       } catch (err) {
         showAlert('alert', err.message);
       } finally {
         setLoading('signupBtn', false, 'Sign Up');
       }
     });
-  </script>
+  
+function downloadCodes(codes) {
+  const txt = "TheNetSMM Backup Codes\n" + "=".repeat(30) + "\n\n" +
+    codes.map((c,i) => `${i+1}. ${c}`).join("\n") +
+    "\n\n⚠️  Keep these safe. Each code can only be used once.";
+  const blob = new Blob([txt], { type: "text/plain" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = "thenetsmm-backup-codes.txt"; a.click();
+}
+function copyCodes(codes) {
+  navigator.clipboard.writeText(codes.join("\n")).then(() => {
+    const btn = document.getElementById("copyBtn");
+    btn.textContent = "✅ Copied!";
+    setTimeout(() => btn.textContent = "📋 Copy All", 2000);
+  });
+}
+
+function downloadBkCodes(codes) {
+  const txt = "TheNetSMM Backup Codes\n" + "=".repeat(28) + "\n\n" +
+    codes.map((c,i) => (i+1)+". "+c).join("\n") +
+    "\n\n⚠️  Each code is one-time use only. Keep safe!";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([txt],{type:"text/plain"}));
+  a.download = "thenetsmm-backup-codes.txt"; a.click();
+}
+function copyBkCodes(codes) {
+  navigator.clipboard.writeText(codes.join("\n")).then(() => {
+    const b = document.getElementById("copyBkBtn");
+    if(b){b.textContent="✅ Copied!"; setTimeout(()=>b.textContent="📋 Copy All",2000);}
+  });
+}
+</script>
 </body>
 </html>
