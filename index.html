@@ -801,19 +801,32 @@
        TAB: TERMS OF SERVICE
   ════════════════════════════════════════ -->
   <div class="tab-section" id="tab-terms">
-    <div class="tos-page">
+    <div style="background:#F5F5FA;min-height:calc(100vh - 68px);padding-bottom:100px">
 
-      <!-- Header row with globe toggle on right -->
-      <div class="tos-header-row">
-        <h2 class="tos-page-title">Terms of Service</h2>
-        <button class="tos-globe-toggle" id="tosGlobeBtn" onclick="tosToggleLang()">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          <span id="tosGlobeLbl">မြန်မာ</span>
-          <svg class="tos-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      <!-- Sticky header: title left, globe toggle right -->
+      <div style="display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+                  padding:14px 14px 12px;background:#fff;border-bottom:1.5px solid #F0F0F5;
+                  position:sticky;top:0;z-index:10;gap:8px">
+        <span style="font-size:1.05rem;font-weight:900;color:#1E1B4B;white-space:nowrap">Terms of Service</span>
+        <button id="tosGlobeBtn" onclick="tosToggleLang()"
+          style="display:inline-flex;flex-direction:row;align-items:center;gap:5px;
+                 background:#fff;border:1.5px solid #D1D5DB;border-radius:20px;
+                 padding:6px 11px;cursor:pointer;font-family:inherit;
+                 font-size:.78rem;font-weight:800;color:#374151;
+                 white-space:nowrap;flex-shrink:0;
+                 box-shadow:0 1px 4px rgba(0,0,0,.08);transition:all .18s">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;flex-shrink:0">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          <span id="tosGlobeLbl">MM</span>
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;flex-shrink:0">
+            <path d="M7 10l5 5 5-5z"/>
+          </svg>
         </button>
       </div>
 
-      <div class="tos-content">
+      <!-- Content -->
+      <div style="padding:16px 14px 20px">
 
         <!-- Myanmar -->
         <div class="tos-lang active" id="tos-mm">
@@ -830,9 +843,9 @@
           <p class="tos-para"><strong>အငြင်းပွားမှု (Disputes):</strong> အကြောင်းမဲ့ Dispute သို့မဟုတ် Chargeback တောင်းဆိုပါက အကောင့်အမြဲတမ်းပိတ်သိမ်းပြီး လက်ကျန်ငွေ သိမ်းဆည်းပိုင်ခွင့်ရှိသည်။</p>
           <h3 class="tos-section">၄။ အသုံးပြုသူ၏ တာဝန်ဝတ္တရားများ (User Responsibility)</h3>
           <p class="tos-para"><strong>Public အကောင့်:</strong> အော်ဒါမတင်မီ Social Media အကောင့်ကို Public ထားရှိရမည်။ Private ထားခြင်း သို့မဟုတ် မှားယွင်းသော Link ပေးခြင်းကြောင့် ဖြစ်သော ကျရှုံးမှုများအတွက် အလျော်အစားမပေးပါ။</p>
-          <p class="tos-para"><strong>တားမြစ်ချက်:</strong> တရားမဝင်အကြောင်းအရာ၊ ညစ်ညမ်းရုပ်ပုံ၊ အမုန်းစကား၊ မူးယစ်ဆေးဝါးနှင့်ပတ်သက်သော Link များ မှာယူခြင်းကို တင်းကြပ်စွာ တားမြစ်သည်။ စစ်ဆေးတွေ့ရှိပါက ချက်ချင်းရပ်ပြီး ငွေပြန်မအမ်းပါ။</p>
+          <p class="tos-para"><strong>တားမြစ်ချက်:</strong> တရားမဝင်အကြောင်းအရာ၊ ညစ်ညမ်းရုပ်ပုံ၊ အမုန်းစကား၊ မူးယစ်ဆေးဝါးနှင့် ပတ်သက်သော Link များ မှာယူခြင်းကို တားမြစ်သည်။ စစ်ဆေးတွေ့ရှိပါက ချက်ချင်းရပ်ပြီး ငွေပြန်မအမ်းပါ။</p>
           <h3 class="tos-section">၅။ တာဝန်ယူမှု ကန့်သတ်ချက် (Limitation of Liability)</h3>
-          <p class="tos-para">TheNetSMM သည် ဝန်ဆောင်မှုအကောင်းဆုံး ပံ့ပိုးသော်လည်း Facebook, Instagram, TikTok စသည့် ပလက်ဖောင်းများ Update များကြောင့် အကောင့်ပိတ်ခံရခြင်း၊ Post ဖျက်ထုတ်ခံရခြင်း သို့မဟုတ် Follower Drop ဆင်းသွားခြင်းများအတွက် တာဝန်မယူပါ။</p>
+          <p class="tos-para">TheNetSMM သည် ဝန်ဆောင်မှုအကောင်းဆုံး ပံ့ပိုးသော်လည်း Facebook, Instagram, TikTok စသည့် ပလက်ဖောင်းများ Update ကြောင့် အကောင့်ပိတ်ခံရခြင်း၊ Post ဖျက်ထုတ်ခံရခြင်း သို့မဟုတ် Follower Drop ဆင်းသွားခြင်းများအတွက် တာဝန်မယူပါ။</p>
           <h3 class="tos-section">၆။ ကိုယ်ရေးအချက်အလက် လုံခြုံမှု (Privacy Policy)</h3>
           <p class="tos-para">အသုံးပြုသူများ၏ အချက်အလက်များကို အော်ဒါများ ဖြည့်ဆည်းရန်အတွက်သာ အသုံးပြုမည်ဖြစ်ပြီး မည်သည့် တတိယပုဂ္ဂိုလ် (Third Party) ကိုမျှ ပေါက်ကြားစေမည်မဟုတ်ကြောင်း အာမခံပါသည်။</p>
         </div>
@@ -844,22 +857,22 @@
           <p class="tos-para">By registering an account or utilizing any services on the TheNetSMM platform, it is deemed that you have fully read, understood, and unconditionally agreed to be bound by all the terms and conditions outlined below. If you do not agree with any part of these terms, you must immediately cease all use of our services.</p>
           <h3 class="tos-section">2. Service Scope and Limitations</h3>
           <p class="tos-para"><strong>Purpose:</strong> TheNetSMM is intended solely for enhancing the online "appearance" of social media accounts. We do not guarantee that new followers, likes, or views will interact or engage with your content.</p>
-          <p class="tos-para"><strong>Delivery Time:</strong> The delivery times provided for each service are estimates only. Depending on current server loads, delays may occur. Consequently, orders in "Processing" status cannot be canceled or refunded due to duration.</p>
-          <p class="tos-para"><strong>Double Orders:</strong> Placing multiple orders for the same link before the initial service is completed is strictly prohibited. TheNetSMM assumes no responsibility and will not issue refunds for order errors or failures caused by such overlapping requests.</p>
+          <p class="tos-para"><strong>Delivery Time:</strong> The delivery times provided for each service are estimates only. Depending on current server loads, delays may occur. Orders in "Processing" status cannot be canceled or refunded due to duration.</p>
+          <p class="tos-para"><strong>Double Orders:</strong> Placing multiple orders for the same link before the initial service is completed is strictly prohibited. TheNetSMM assumes no responsibility and will not issue refunds for order errors caused by such overlapping requests.</p>
           <h3 class="tos-section">3. Financial and Refund Policy</h3>
           <p class="tos-para"><strong>Irreversible Deposits:</strong> Once a deposit is successfully made, funds cannot be withdrawn or refunded back to the original payment method under any circumstances. Deposited funds must be used exclusively for purchasing services on TheNetSMM.</p>
           <p class="tos-para"><strong>Refund Logic:</strong> If a server fails to deliver an order, the corresponding amount will be credited back only to the User's Wallet Balance on the platform.</p>
           <p class="tos-para"><strong>Disputes and Chargebacks:</strong> Initiating groundless disputes or chargebacks will result in the immediate and permanent termination of your account, along with the forfeiture of any remaining balance.</p>
           <h3 class="tos-section">4. User Obligations</h3>
-          <p class="tos-para"><strong>Public Access:</strong> Users must ensure that the target social media account is set to "Public" before placing an order. No compensation or refunds will be provided for failures resulting from accounts being set to Private or for providing incorrect links.</p>
+          <p class="tos-para"><strong>Public Access:</strong> Users must ensure that the target social media account is set to "Public" before placing an order. No compensation or refunds will be provided for failures resulting from accounts set to Private or for providing incorrect links.</p>
           <p class="tos-para"><strong>Prohibited Content:</strong> Ordering services for links involving illegal activities, pornography, hate speech, or drug-related content is strictly forbidden. We reserve the right to terminate such orders immediately without a refund.</p>
           <h3 class="tos-section">5. Limitation of Liability</h3>
-          <p class="tos-para">While TheNetSMM strives for maximum efficiency, we are not liable for account suspensions, content deletions, or fluctuations in counts (drops) caused by algorithm updates or policy changes on social media platforms (e.g., Facebook, Instagram, TikTok). Use of these services is at the user's own risk.</p>
+          <p class="tos-para">While TheNetSMM strives for maximum efficiency, we are not liable for account suspensions, content deletions, or fluctuations in counts caused by algorithm updates or policy changes on social media platforms (e.g., Facebook, Instagram, TikTok). Use of these services is at the user's own risk.</p>
           <h3 class="tos-section">6. Privacy Policy</h3>
           <p class="tos-para">We are committed to protecting your privacy. Any personal information collected will be used solely for the fulfillment of your orders and will never be sold, shared, or redistributed to any third party.</p>
         </div>
 
-      </div>
+      </div><!-- /content -->
     </div>
   </div>
 
@@ -1654,13 +1667,18 @@ function applyUser(u) {
 
 
 /* ── Terms of Service — globe toggle ── */
+
+
 function tosToggleLang() {
-  const btn  = document.getElementById('tosGlobeBtn');
-  const lbl  = document.getElementById('tosGlobeLbl');
-  const isEN = btn.classList.toggle('en');
+  const btn = document.getElementById('tosGlobeBtn');
+  const lbl = document.getElementById('tosGlobeLbl');
+  const isEN = btn.classList.toggle('tos-en-active');
   document.getElementById('tos-mm').classList.toggle('active', !isEN);
   document.getElementById('tos-en').classList.toggle('active',  isEN);
-  lbl.textContent = isEN ? 'English' : 'မြန်မာ';
+  lbl.textContent = isEN ? 'EN' : 'MM';
+  btn.style.background    = isEN ? '#7C3AED' : '#fff';
+  btn.style.borderColor   = isEN ? '#7C3AED' : '#D1D5DB';
+  btn.style.color         = isEN ? '#fff'    : '#374151';
 }
 </script>
 </body>
