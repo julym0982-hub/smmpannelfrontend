@@ -829,6 +829,7 @@
 </div><!-- /dash-page -->
 
 <script src="config.js"></script>
+<script src="avg_time.js"></script>
 <script>
 
 requireAuth();
@@ -1078,8 +1079,10 @@ function selectService(svcId) {
 
 function applySvc(svc) {
   document.getElementById('svcSelText').textContent = svc.id + ' - ' + svc.name;
-  // average_time from JAP API
-  const avgT = svc.avgTime && svc.avgTime !== '—' ? svc.avgTime : (svc.average_time || 'N/A');
+  // Lookup average_time: AVG_TIME table first, then JAP API field, then Unknown
+  const localTime = (typeof AVG_TIME !== 'undefined') ? (AVG_TIME[String(svc.id)] || '') : '';
+  const apiTime   = svc.average_time || svc.avgTime || '';
+  const avgT      = localTime || apiTime || 'Unknown';
   document.getElementById('avgTimeDisplay').textContent = avgT;
 
   const isCustomComments = (svc.type || '').toLowerCase().includes('custom comment');
