@@ -803,11 +803,115 @@
   <div class="tab-section" id="tab-terms">
     <div class="tos-page">
 
-      <!-- Language switcher -->
-      <div class="tos-lang-switcher">
-        <button class="tos-lang-btn active" onclick="tosLang('mm',this)">🇲🇲 မြန်မာ</button>
-        <button class="tos-lang-btn"        onclick="tosLang('en',this)">🇬🇧 English</button>
+      <!-- Header row with globe toggle on right -->
+      <div class="tos-header-row">
+        <h2 class="tos-page-title">Terms of Service</h2>
+        <button class="tos-globe-toggle" id="tosGlobeBtn" onclick="tosToggleLang()">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+          <span id="tosGlobeLbl">မြန်မာ</span>
+          <svg class="tos-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+        </button>
       </div>
+
+      <div class="tos-content">
+
+        <!-- Myanmar -->
+        <div class="tos-lang active" id="tos-mm">
+          <div class="tos-title">TheNetSMM — ဝန်ဆောင်မှုဆိုင်ရာ စည်းကမ်းချက်များနှင့် လုပ်ထုံးလုပ်နည်းများ</div>
+          <h3 class="tos-section">၁။ အထွေထွေ သဘောတူညီချက် (General Agreement)</h3>
+          <p class="tos-para">TheNetSMM ပလက်ဖောင်းတွင် အကောင့်ဖွင့်လှစ်ခြင်း သို့မဟုတ် ဝန်ဆောင်မှုများကို အသုံးပြုခြင်းသည် အောက်ဖော်ပြပါ စည်းကမ်းချက်များအားလုံးကို အပြည့်အစုံ ဖတ်ရှုနားလည်ပြီး၊ ခြွင်းချက်မရှိ လိုက်နာရန် သဘောတူညီပြီးဖြစ်သည်ဟု မှတ်ယူပါသည်။ အကယ်၍ ဤစည်းကမ်းချက်များအပေါ် သဘောတူညီနိုင်ခြင်း မရှိပါက ကျွန်ုပ်တို့၏ ဝန်ဆောင်မှုများကို အသုံးပြုခြင်းအား ချက်ချင်းရပ်တန့်ရပါမည်။</p>
+          <h3 class="tos-section">၂။ ဝန်ဆောင်မှု၏ သဘောသဘာဝနှင့် ကန့်သတ်ချက်များ (Service Scope)</h3>
+          <p class="tos-para">TheNetSMM သည် ဆိုရှယ်မီဒီယာအကောင့်များ၏ အသွင်အပြင် (Appearance) ကို မြှင့်တင်ရန်အတွက်သာ ရည်ရွယ်သည်။ Follower၊ Like သို့မဟုတ် View အသစ်များသည် သင့်အကြောင်းအရာများနှင့် အပြန်အလှန်တုံ့ပြန်မှု (Interaction) ရှိလာမည်ဟု အာမမခံပါ။</p>
+          <p class="tos-para"><strong>ပို့ဆောင်ချိန် (Delivery Time):</strong> ဝန်ဆောင်မှုတိုင်းတွင် ဖော်ပြထားသော အချိန်သည် ပုံမှန်ခန့်မှန်းခြေသာ ဖြစ်သည်။ Server load ပေါ်မူတည်၍ နှောင့်နှေးမှုများ ရှိနိုင်သဖြင့် Processing ကာလတွင် ပယ်ဖျက်တောင်းဆိုခွင့် မရှိပါ။</p>
+          <p class="tos-para"><strong>နှစ်ထပ်မှာယူမှု (Double Orders):</strong> Link တစ်ခုတည်းသို့ ဝန်ဆောင်မှုပြီးမြောက်မတိုင်မီ ထပ်မံမှာယူခြင်းကြောင့် ဖြစ်ပေါ်သော အမှားများအတွက် TheNetSMM မှ တာဝန်မယူသလို ငွေပြန်အမ်းမည်မဟုတ်ပါ။</p>
+          <h3 class="tos-section">၃။ ငွေကြေးဆိုင်ရာနှင့် ငွေပြန်အမ်းခြင်း မူဝါဒ (Financial Policy)</h3>
+          <p class="tos-para"><strong>နောက်ပြန်မလှည့်နိုင်သော ငွေဖြည့်သွင်းမှု:</strong> Deposit ပြုလုပ်ပြီးပါက မည်သည့်အကြောင်းပြချက်ဖြင့်မျှ မူလအကောင့်ထဲ ပြန်ထုတ်ခွင့် သို့မဟုတ် Refund မတောင်းနိုင်ပါ။ ဖြည့်သွင်းငွေများကို TheNetSMM တွင်သာ အသုံးပြုရမည်။</p>
+          <p class="tos-para"><strong>ငွေပြန်အမ်းခြင်း (Refunds):</strong> Server ဘက်မှ ပို့ဆောင်ပေးနိုင်ခြင်းမရှိမှသာ သက်ဆိုင်ရာပမာဏကို User Wallet Balance ထဲ ပြန်ထည့်သွင်းပေးပါမည်။</p>
+          <p class="tos-para"><strong>အငြင်းပွားမှု (Disputes):</strong> အကြောင်းမဲ့ Dispute သို့မဟုတ် Chargeback တောင်းဆိုပါက အကောင့်အမြဲတမ်းပိတ်သိမ်းပြီး လက်ကျန်ငွေ သိမ်းဆည်းပိုင်ခွင့်ရှိသည်။</p>
+          <h3 class="tos-section">၄။ အသုံးပြုသူ၏ တာဝန်ဝတ္တရားများ (User Responsibility)</h3>
+          <p class="tos-para"><strong>Public အကောင့်:</strong> အော်ဒါမတင်မီ Social Media အကောင့်ကို Public ထားရှိရမည်။ Private ထားခြင်း သို့မဟုတ် မှားယွင်းသော Link ပေးခြင်းကြောင့် ဖြစ်သော ကျရှုံးမှုများအတွက် အလျော်အစားမပေးပါ။</p>
+          <p class="tos-para"><strong>တားမြစ်ချက်:</strong> တရားမဝင်အကြောင်းအရာ၊ ညစ်ညမ်းရုပ်ပုံ၊ အမုန်းစကား၊ မူးယစ်ဆေးဝါးနှင့်ပတ်သက်သော Link များ မှာယူခြင်းကို တင်းကြပ်စွာ တားမြစ်သည်။ စစ်ဆေးတွေ့ရှိပါက ချက်ချင်းရပ်ပြီး ငွေပြန်မအမ်းပါ။</p>
+          <h3 class="tos-section">၅။ တာဝန်ယူမှု ကန့်သတ်ချက် (Limitation of Liability)</h3>
+          <p class="tos-para">TheNetSMM သည် ဝန်ဆောင်မှုအကောင်းဆုံး ပံ့ပိုးသော်လည်း Facebook, Instagram, TikTok စသည့် ပလက်ဖောင်းများ Update များကြောင့် အကောင့်ပိတ်ခံရခြင်း၊ Post ဖျက်ထုတ်ခံရခြင်း သို့မဟုတ် Follower Drop ဆင်းသွားခြင်းများအတွက် တာဝန်မယူပါ။</p>
+          <h3 class="tos-section">၆။ ကိုယ်ရေးအချက်အလက် လုံခြုံမှု (Privacy Policy)</h3>
+          <p class="tos-para">အသုံးပြုသူများ၏ အချက်အလက်များကို အော်ဒါများ ဖြည့်ဆည်းရန်အတွက်သာ အသုံးပြုမည်ဖြစ်ပြီး မည်သည့် တတိယပုဂ္ဂိုလ် (Third Party) ကိုမျှ ပေါက်ကြားစေမည်မဟုတ်ကြောင်း အာမခံပါသည်။</p>
+        </div>
+
+        <!-- English -->
+        <div class="tos-lang" id="tos-en">
+          <div class="tos-title">TheNetSMM — Terms of Service and Operational Procedures</div>
+          <h3 class="tos-section">1. General Agreement</h3>
+          <p class="tos-para">By registering an account or utilizing any services on the TheNetSMM platform, it is deemed that you have fully read, understood, and unconditionally agreed to be bound by all the terms and conditions outlined below. If you do not agree with any part of these terms, you must immediately cease all use of our services.</p>
+          <h3 class="tos-section">2. Service Scope and Limitations</h3>
+          <p class="tos-para"><strong>Purpose:</strong> TheNetSMM is intended solely for enhancing the online "appearance" of social media accounts. We do not guarantee that new followers, likes, or views will interact or engage with your content.</p>
+          <p class="tos-para"><strong>Delivery Time:</strong> The delivery times provided for each service are estimates only. Depending on current server loads, delays may occur. Consequently, orders in "Processing" status cannot be canceled or refunded due to duration.</p>
+          <p class="tos-para"><strong>Double Orders:</strong> Placing multiple orders for the same link before the initial service is completed is strictly prohibited. TheNetSMM assumes no responsibility and will not issue refunds for order errors or failures caused by such overlapping requests.</p>
+          <h3 class="tos-section">3. Financial and Refund Policy</h3>
+          <p class="tos-para"><strong>Irreversible Deposits:</strong> Once a deposit is successfully made, funds cannot be withdrawn or refunded back to the original payment method under any circumstances. Deposited funds must be used exclusively for purchasing services on TheNetSMM.</p>
+          <p class="tos-para"><strong>Refund Logic:</strong> If a server fails to deliver an order, the corresponding amount will be credited back only to the User's Wallet Balance on the platform.</p>
+          <p class="tos-para"><strong>Disputes and Chargebacks:</strong> Initiating groundless disputes or chargebacks will result in the immediate and permanent termination of your account, along with the forfeiture of any remaining balance.</p>
+          <h3 class="tos-section">4. User Obligations</h3>
+          <p class="tos-para"><strong>Public Access:</strong> Users must ensure that the target social media account is set to "Public" before placing an order. No compensation or refunds will be provided for failures resulting from accounts being set to Private or for providing incorrect links.</p>
+          <p class="tos-para"><strong>Prohibited Content:</strong> Ordering services for links involving illegal activities, pornography, hate speech, or drug-related content is strictly forbidden. We reserve the right to terminate such orders immediately without a refund.</p>
+          <h3 class="tos-section">5. Limitation of Liability</h3>
+          <p class="tos-para">While TheNetSMM strives for maximum efficiency, we are not liable for account suspensions, content deletions, or fluctuations in counts (drops) caused by algorithm updates or policy changes on social media platforms (e.g., Facebook, Instagram, TikTok). Use of these services is at the user's own risk.</p>
+          <h3 class="tos-section">6. Privacy Policy</h3>
+          <p class="tos-para">We are committed to protecting your privacy. Any personal information collected will be used solely for the fulfillment of your orders and will never be sold, shared, or redistributed to any third party.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+      <div class="tos-content">
+        <!-- Myanmar -->
+        <div class="tos-lang active" id="tos-mm">
+          
+          <div class="tos-title">TheNetSMM — ဝန်ဆောင်မှုဆိုင်ရာ စည်းကမ်းချက်များနှင့် လုပ်ထုံးလုပ်နည်းများ</div>
+          <h3 class="tos-section">၁။ အထွေထွေ သဘောတူညီချက် (General Agreement)</h3>
+          <p class="tos-para">TheNetSMM ပလက်ဖောင်းတွင် အကောင့်ဖွင့်လှစ်ခြင်း သို့မဟုတ် ဝန်ဆောင်မှုများကို အသုံးပြုခြင်းသည် အောက်ဖော်ပြပါ စည်းကမ်းချက်များအားလုံးကို အပြည့်အစုံ ဖတ်ရှုနားလည်ပြီး၊ ခြွင်းချက်မရှိ လိုက်နာရန် သဘောတူညီပြီးဖြစ်သည်ဟု မှတ်ယူပါသည်။ အကယ်၍ ဤစည်းကမ်းချက်များအပေါ် သဘောတူညီနိုင်ခြင်း မရှိပါက ကျွန်ုပ်တို့၏ ဝန်ဆောင်မှုများကို အသုံးပြုခြင်းအား ချက်ချင်းရပ်တန့်ရပါမည်။</p>
+          <h3 class="tos-section">၂။ ဝန်ဆောင်မှု၏ သဘောသဘာဝနှင့် ကန့်သတ်ချက်များ (Service Scope)</h3>
+          <p class="tos-para">TheNetSMM သည် ဆိုရှယ်မီဒီယာအကောင့်များ၏ အသွင်အပြင် (Appearance) ကို မြှင့်တင်ရန်အတွက်သာ ရည်ရွယ်သည်။ Follower၊ Like သို့မဟုတ် View အသစ်များသည် သင့်အကြောင်းအရာများနှင့် အပြန်အလှန်တုံ့ပြန်မှု (Interaction) ရှိလာမည်ဟု အာမမခံပါ။</p>
+          <p class="tos-para"><strong>ပို့ဆောင်ချိန် (Delivery Time):</strong> ဝန်ဆောင်မှုတိုင်းတွင် ဖော်ပြထားသော အချိန်သည် ပုံမှန်ခန့်မှန်းခြေသာ ဖြစ်သည်။ Server load ပေါ်မူတည်၍ နှောင့်နှေးမှုများ ရှိနိုင်သဖြင့် အော်ဒါတင်ပြီးနောက် လုပ်ဆောင်နေဆဲ (Processing) ကာလအတွင်း အော်ဒါအား ပယ်ဖျက်ပေးရန် တောင်းဆိုခွင့် မရှိပါ။</p>
+          <p class="tos-para"><strong>နှစ်ထပ်မှာယူမှု (Double Orders):</strong> Link တစ်ခုတည်းသို့ ဝန်ဆောင်မှုတစ်ခုအား ပြီးမြောက်အောင် မဆောင်ရွက်ရသေးမီ ထပ်မံမှာယူခြင်းကြောင့် ဖြစ်ပေါ်လာသော အော်ဒါအမှားအယွင်းများအတွက် TheNetSMM မှ တာဝန်ယူမည်မဟုတ်သလို ငွေပြန်အမ်းပေးမည်မဟုတ်ပါ။</p>
+          <h3 class="tos-section">၃။ ငွေကြေးဆိုင်ရာနှင့် ငွေပြန်အမ်းခြင်း မူဝါဒ (Financial Policy)</h3>
+          <p class="tos-para"><strong>နောက်ပြန်မလှည့်နိုင်သော ငွေဖြည့်သွင်းမှု:</strong> Deposit ပြုလုပ်ပြီးပါက မည်သည့်အကြောင်းပြချက်ဖြင့်မျှ မိမိ၏ မူလငွေပေးချေမှု အကောင့်ထဲသို့ ပြန်လည်ထုတ်ယူခွင့် သို့မဟုတ် Refund တောင်းခံခွင့် မရှိပါ။ ဖြည့်သွင်းထားသော ငွေများကို TheNetSMM တွင် ဝန်ဆောင်မှုများမှာယူရန်အတွက်သာ အသုံးပြုရမည်။</p>
+          <p class="tos-para"><strong>ငွေပြန်အမ်းခြင်း (Refunds):</strong> မှာယူထားသော အော်ဒါအား Server ဘက်မှ ပို့ဆောင်ပေးနိုင်ခြင်း မရှိမှသာလျှင် သက်ဆိုင်ရာငွေပမာဏကို User Wallet Balance ထဲသို့သာ ပြန်လည်ထည့်သွင်းပေးပါမည်။</p>
+          <p class="tos-para"><strong>အငြင်းပွားမှု (Disputes):</strong> ငွေပေးချေမှုနှင့် ပတ်သက်၍ အကြောင်းမဲ့ Dispute ပြုလုပ်ခြင်း သို့မဟုတ် Chargeback တောင်းဆိုခြင်းများ ပြုလုပ်ပါက သင့်အကောင့်အား အမြဲတမ်းပိတ်သိမ်းပြီး လက်ကျန်ငွေများကို သိမ်းဆည်းပိုင်ခွင့်ရှိသည်။</p>
+          <h3 class="tos-section">၄။ အသုံးပြုသူ၏ တာဝန်ဝတ္တရားများ (User Responsibility)</h3>
+          <p class="tos-para"><strong>Public အကောင့်:</strong> အော်ဒါမတင်မီ မိမိ၏ Social Media အကောင့်အား Public (လူတိုင်းမြင်နိုင်အောင်) ထားရှိရမည်။ Private ထားရှိခြင်း သို့မဟုတ် မှားယွင်းသော Link ပေးခြင်းတို့ကြောင့် ဖြစ်ပေါ်လာသော အော်ဒါကျရှုံးမှုများအတွက် အလျော်အစား ပြုလုပ်ပေးမည်မဟုတ်ပါ။</p>
+          <p class="tos-para"><strong>တားမြစ်ထားသော အကြောင်းအရာ:</strong> တရားမဝင်သော အကြောင်းအရာများ၊ ညစ်ညမ်းရုပ်ပုံများ၊ အမုန်းစကားများ သို့မဟုတ် မူးယစ်ဆေးဝါးနှင့် ပတ်သက်သော Link များအား မှာယူခြင်းကို တင်းကြပ်စွာ တားမြစ်သည်။ စစ်ဆေးတွေ့ရှိပါက အော်ဒါကို ချက်ချင်းရပ်စဲမည်ဖြစ်ပြီး ငွေပြန်အမ်းမည်မဟုတ်ပါ။</p>
+          <h3 class="tos-section">၅။ တာဝန်ယူမှု ကန့်သတ်ချက် (Limitation of Liability)</h3>
+          <p class="tos-para">TheNetSMM သည် ဝန်ဆောင်မှုများကို အကောင်းဆုံးဖြစ်အောင် ပံ့ပိုးပေးသော်လည်း ဆိုရှယ်မီဒီယာ ပလက်ဖောင်းများ (Facebook, Instagram, TikTok စသည်) ၏ Update များကြောင့် ဖြစ်ပေါ်လာသော အကောင့်ပိတ်ခံရခြင်း၊ Post များ ဖျက်ထုတ်ခံရခြင်း သို့မဟုတ် Follower အရေအတွက် ပြန်လည်ကျဆင်းခြင်း (Drop) များအတွက် တစ်စုံတစ်ရာ တာဝန်ယူမည်မဟုတ်ပါ။</p>
+          <h3 class="tos-section">၆။ ကိုယ်ရေးအချက်အလက် လုံခြုံမှု (Privacy Policy)</h3>
+          <p class="tos-para">အသုံးပြုသူများ၏ အချက်အလက်များကို အော်ဒါများ ဖြည့်ဆည်းရန်အတွက်သာ အသုံးပြုမည်ဖြစ်ပြီး၊ မည်သည့် တတိယပုဂ္ဂိုလ် (Third Party) ကိုမျှ ပေါက်ကြားစေမည်မဟုတ်ကြောင်း အာမခံပါသည်။</p>
+        </div>
+        <!-- English -->
+        <div class="tos-lang" id="tos-en">
+          
+          <div class="tos-title">TheNetSMM — Terms of Service and Operational Procedures</div>
+          <h3 class="tos-section">1. General Agreement</h3>
+          <p class="tos-para">By registering an account or utilizing any services on the TheNetSMM platform, it is deemed that you have fully read, understood, and unconditionally agreed to be bound by all the terms and conditions outlined below. If you do not agree with any part of these terms, you must immediately cease all use of our services.</p>
+          <h3 class="tos-section">2. Service Scope and Limitations</h3>
+          <p class="tos-para"><strong>Purpose:</strong> TheNetSMM is intended solely for enhancing the online "appearance" of social media accounts. We do not guarantee that new followers, likes, or views will interact or engage with your content.</p>
+          <p class="tos-para"><strong>Delivery Time:</strong> The delivery times provided for each service are estimates only. Depending on current server loads, delays may occur. Consequently, orders in "Processing" status cannot be canceled or refunded due to duration.</p>
+          <p class="tos-para"><strong>Double Orders:</strong> Placing multiple orders for the same link before the initial service is completed is strictly prohibited. TheNetSMM assumes no responsibility and will not issue refunds for order errors or failures caused by such overlapping requests.</p>
+          <h3 class="tos-section">3. Financial and Refund Policy</h3>
+          <p class="tos-para"><strong>Irreversible Deposits:</strong> Once a deposit is successfully made, funds cannot be withdrawn or refunded back to the original payment method under any circumstances. Deposited funds must be used exclusively for purchasing services on TheNetSMM.</p>
+          <p class="tos-para"><strong>Refund Logic:</strong> If a server fails to deliver an order, the corresponding amount will be credited back only to the User's Wallet Balance on the platform.</p>
+          <p class="tos-para"><strong>Disputes &amp; Chargebacks:</strong> Initiating groundless disputes or chargebacks will result in the immediate and permanent termination of your account, along with the forfeiture of any remaining balance.</p>
+          <h3 class="tos-section">4. User Obligations</h3>
+          <p class="tos-para"><strong>Public Access:</strong> Users must ensure that the target social media account is set to "Public" before placing an order. No compensation or refunds will be provided for failures resulting from accounts set to Private or for providing incorrect links.</p>
+          <p class="tos-para"><strong>Prohibited Content:</strong> Ordering services for links involving illegal activities, pornography, hate speech, or drug-related content is strictly forbidden. We reserve the right to terminate such orders immediately without a refund.</p>
+          <h3 class="tos-section">5. Limitation of Liability</h3>
+          <p class="tos-para">While TheNetSMM strives for maximum efficiency, we are not liable for account suspensions, content deletions, or fluctuations in counts (drops) caused by algorithm updates or policy changes on social media platforms (e.g., Facebook, Instagram, TikTok). Use of these services is at the user's own risk.</p>
+          <h3 class="tos-section">6. Privacy Policy</h3>
+          <p class="tos-para">We are committed to protecting your privacy. Any personal information collected will be used solely for the fulfillment of your orders and will never be sold, shared, or redistributed to any third party.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
       <div class="tos-content">
 
@@ -1649,13 +1753,16 @@ function applyUser(u) {
   }
 }
 
-/* ── Terms of Service language toggle ── */
-function tosLang(lang, btn) {
-  document.querySelectorAll('.tos-lang').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tos-lang-btn').forEach(el => el.classList.remove('active'));
-  const el = document.getElementById('tos-' + lang);
-  if (el) el.classList.add('active');
-  if (btn) btn.classList.add('active');
+
+
+/* ── Terms of Service — globe toggle ── */
+function tosToggleLang() {
+  const btn  = document.getElementById('tosGlobeBtn');
+  const lbl  = document.getElementById('tosGlobeLbl');
+  const isEN = btn.classList.toggle('en');
+  document.getElementById('tos-mm').classList.toggle('active', !isEN);
+  document.getElementById('tos-en').classList.toggle('active',  isEN);
+  lbl.textContent = isEN ? 'English' : 'မြန်မာ';
 }
 </script>
 </body>
