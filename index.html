@@ -223,6 +223,57 @@
   .funds-alert.show { display:block; }
   .funds-alert.success { background:#F0FDF4; border:1.5px solid #BBF7D0; color:#16A34A; }
   .funds-alert.error   { background:#FEF2F2; border:1.5px solid #FECACA; color:#DC2626; }
+
+  /* ══════════════════════════════════════════════════════
+     ORDERS TAB — complete styles
+  ══════════════════════════════════════════════════════ */
+  .orders-page        { background:#F2F3F8; min-height:calc(100vh - 68px); padding-bottom:90px; }
+  .orders-header      { display:flex; align-items:center; justify-content:space-between; padding:14px 14px 0; }
+  .orders-title       { font-size:1.15rem; font-weight:900; color:#1E1B4B; }
+  .orders-refresh-btn { display:inline-flex; align-items:center; gap:5px; background:#fff; border:1.5px solid #7C3AED; border-radius:10px; padding:6px 12px; font-size:.8rem; font-weight:700; color:#7C3AED; cursor:pointer; font-family:inherit; }
+  .orders-refresh-btn:hover { background:#EDE9FE; }
+  .of-row             { display:flex; gap:8px; padding:12px 14px 14px; overflow-x:auto; scrollbar-width:none; }
+  .of-row::-webkit-scrollbar { display:none; }
+  .of-card            { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:10px 12px; border-radius:14px; border:1.5px solid #E5E7EB; background:#fff; cursor:pointer; font-family:inherit; font-size:.72rem; font-weight:800; color:#6B7280; white-space:nowrap; flex-shrink:0; min-width:62px; transition:all .18s; box-shadow:0 1px 5px rgba(0,0,0,.06); }
+  .of-card svg        { width:20px; height:20px; fill:currentColor; }
+  .of-card:hover      { border-color:#7C3AED; color:#7C3AED; }
+  .of-card.active     { background:linear-gradient(135deg,#7C3AED,#E91E8C); border-color:transparent; color:#fff; box-shadow:0 4px 14px rgba(124,58,237,.35); }
+  .ord-card           { background:#fff; border-radius:20px; margin:0 12px 12px; box-shadow:0 2px 12px rgba(0,0,0,.08); overflow:hidden; }
+  .ord-head           { padding:14px 16px 10px; border-bottom:1px solid #F3F4F6; }
+  .ord-name           { font-size:.875rem; font-weight:800; color:#1E1B4B; line-height:1.5; margin-bottom:6px; word-break:break-word; }
+  .ord-badge          { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:.72rem; font-weight:800; }
+  .ob-pending         { background:#FEF3C7; color:#D97706; }
+  .ob-inprogress      { background:#DBEAFE; color:#2563EB; }
+  .ob-completed       { background:#D1FAE5; color:#059669; }
+  .ob-partial         { background:#FED7AA; color:#C2410C; }
+  .ob-canceled        { background:#FEE2E2; color:#DC2626; }
+  .ob-processing      { background:#F3F4F6; color:#6B7280; }
+  .ob-failed          { background:#FEE2E2; color:#DC2626; }
+  .ord-body           { padding:12px 14px; }
+  .ord-grid           { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+  .ord-stat           { background:#F9FAFB; border-radius:10px; padding:8px 10px; }
+  .ord-stat-lbl       { font-size:.65rem; color:#9CA3AF; font-weight:700; margin-bottom:2px; }
+  .ord-stat-val       { font-size:.88rem; font-weight:800; color:#1E1B4B; }
+  .ord-link           { background:#F0EDFC; border-radius:10px; padding:8px 10px; margin-bottom:10px; }
+  .ord-link-lbl       { font-size:.65rem; color:#7C3AED; font-weight:700; margin-bottom:3px; }
+  .ord-link-val       { font-size:.75rem; color:#5B21B6; font-weight:600; word-break:break-all; line-height:1.5; }
+  .ord-foot           { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+  .ord-date           { font-size:.68rem; color:#9CA3AF; }
+  .ord-btns           { display:flex; gap:6px; }
+  .ord-sync           { display:inline-flex; align-items:center; gap:4px; padding:7px 13px; border:1.5px solid #D1D5DB; border-radius:10px; font-size:.75rem; font-weight:700; background:#fff; color:#374151; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .ord-sync:hover     { border-color:#7C3AED; color:#7C3AED; }
+  .ord-sync:disabled  { opacity:.5; cursor:not-allowed; }
+  .ord-sync svg       { width:13px; height:13px; fill:currentColor; }
+  .ord-cancel         { display:inline-flex; align-items:center; gap:4px; padding:7px 13px; border:none; border-radius:10px; font-size:.75rem; font-weight:700; background:#FEE2E2; color:#DC2626; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .ord-cancel:hover   { background:#DC2626; color:#fff; }
+  .ord-cancel:disabled{ opacity:.5; cursor:not-allowed; }
+  .ord-cancel svg     { width:13px; height:13px; fill:currentColor; }
+  .orders-loading     { text-align:center; padding:50px 20px; color:#9CA3AF; font-weight:700; }
+  .orders-error       { text-align:center; padding:40px 20px; }
+  .orders-error p     { color:#DC2626; font-weight:700; margin-bottom:14px; font-size:.9rem; }
+  .orders-retry       { padding:9px 22px; border:none; border-radius:10px; background:#7C3AED; color:#fff; font-size:.875rem; font-weight:700; cursor:pointer; font-family:inherit; }
+  .orders-empty       { text-align:center; padding:60px 20px; color:#9CA3AF; }
+  .orders-empty p     { font-weight:700; font-size:.875rem; }
 </style></head>
 <body>
 
@@ -1552,51 +1603,53 @@ function renderOrders(status) {
 }
 
 function buildOrderCard(o, showCancel) {
-  const statusMap = {
-    'pending':     ['st-pending',    '⏳ Pending'],
-    'in progress': ['st-inprogress', '🔄 In Progress'],
-    'completed':   ['st-completed',  '✅ Completed'],
-    'partial':     ['st-partial',    '⚠️ Partial'],
-    'canceled':    ['st-canceled',   '❌ Canceled'],
-    'cancelled':   ['st-canceled',   '❌ Canceled'],
-    'failed':      ['st-failed',     '❌ Failed'],
-    'processing':  ['st-processing', '⚙️ Processing'],
+  const smap = {
+    'pending':     ['ob-pending',    '⏳ Pending'],
+    'in progress': ['ob-inprogress', '🔄 In Progress'],
+    'completed':   ['ob-completed',  '✅ Completed'],
+    'partial':     ['ob-partial',    '⚠️ Partial'],
+    'canceled':    ['ob-canceled',   '❌ Canceled'],
+    'cancelled':   ['ob-canceled',   '❌ Canceled'],
+    'failed':      ['ob-failed',     '❌ Failed'],
+    'processing':  ['ob-processing', '⚙️ Processing'],
   };
-  const sk = (o.status||'').toLowerCase();
-  const [stCls, stLabel] = statusMap[sk] || ['st-processing', o.status||'Pending'];
-  const date = new Date(o.createdAt).toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-
-  return `<div class="order-card" id="ocard-${o._id}">
-    <div class="order-card-head">
-      <div class="order-svc-name">${o.serviceName || ('Service #' + o.serviceId)}</div>
-      <span class="order-status-badge ${stCls}">${stLabel}</span>
+  const sk = (o.status || '').toLowerCase();
+  const [bc, bl] = smap[sk] || ['ob-processing', o.status || 'Pending'];
+  const dt = new Date(o.createdAt).toLocaleString('en-GB', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit'
+  });
+  return `<div class="ord-card" id="ocard-${o._id}">
+  <div class="ord-head">
+    <div class="ord-name">${o.serviceName || 'Service #' + o.serviceId}</div>
+    <span class="ord-badge ${bc}">${bl}</span>
+  </div>
+  <div class="ord-body">
+    <div class="ord-grid">
+      <div class="ord-stat"><div class="ord-stat-lbl">Quantity</div><div class="ord-stat-val">${(o.quantity||0).toLocaleString()}</div></div>
+      <div class="ord-stat"><div class="ord-stat-lbl">Remains</div><div class="ord-stat-val">${(o.remains||0).toLocaleString()}</div></div>
+      <div class="ord-stat"><div class="ord-stat-lbl">Charge</div><div class="ord-stat-val">${(o.chargeMMK||0).toLocaleString()} Ks</div></div>
+      <div class="ord-stat"><div class="ord-stat-lbl">Provider #</div><div class="ord-stat-val">${o.providerOrderId || '—'}</div></div>
     </div>
-    <div class="order-card-body">
-      <div class="order-stats">
-        <div class="order-stat"><div class="order-stat-lbl">Quantity</div><div class="order-stat-val">${(o.quantity||0).toLocaleString()}</div></div>
-        <div class="order-stat"><div class="order-stat-lbl">Remains</div><div class="order-stat-val">${(o.remains||0).toLocaleString()}</div></div>
-        <div class="order-stat"><div class="order-stat-lbl">Charge</div><div class="order-stat-val">${(o.chargeMMK||0).toLocaleString()} Ks</div></div>
-        <div class="order-stat"><div class="order-stat-lbl">Provider #</div><div class="order-stat-val">${o.providerOrderId||'—'}</div></div>
-      </div>
-      <div class="order-link-box">
-        <div class="order-link-lbl">Link</div>
-        <div class="order-link-val">${o.link||'—'}</div>
-      </div>
-      <div class="order-foot">
-        <span class="order-date-str">🕐 ${date}</span>
-        <div style="display:flex;gap:6px">
-          <button class="order-sync-btn" id="sync-${o._id}" onclick="syncOrderStatus('${o._id}')">
-            <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
-            Sync
-          </button>
-          ${showCancel ? `<button class="order-cancel-btn" id="cancel-${o._id}" onclick="cancelOrder('${o._id}')">
-            <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-            Cancel
-          </button>` : ''}
-        </div>
+    <div class="ord-link">
+      <div class="ord-link-lbl">🔗 Link</div>
+      <div class="ord-link-val">${o.link || '—'}</div>
+    </div>
+    <div class="ord-foot">
+      <span class="ord-date">🕐 ${dt}</span>
+      <div class="ord-btns">
+        <button class="ord-sync" id="sync-${o._id}" onclick="syncOrderStatus('${o._id}')">
+          <svg viewBox="0 0 24 24"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+          Sync
+        </button>
+        ${showCancel ? `<button class="ord-cancel" id="cancel-${o._id}" onclick="cancelOrder('${o._id}')">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          Cancel
+        </button>` : ''}
       </div>
     </div>
-  </div>`;
+  </div>
+</div>`;
 }
 
 async function syncOrderStatus(orderId) {
@@ -1609,7 +1662,7 @@ async function syncOrderStatus(orderId) {
     if (card && o) {
       const idx = _allOrders.findIndex(x => x._id === orderId);
       if (idx >= 0) _allOrders[idx] = { ..._allOrders[idx], ...o };
-      card.outerHTML = buildOrderCard(_allOrders[idx] || o);
+      card.outerHTML = buildOrderCard(_allOrders[idx] || o, _currentOFilter.toLowerCase() === 'pending');
     }
   } catch(e) {
     alert('Sync failed: ' + e.message);
