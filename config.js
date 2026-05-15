@@ -1,7 +1,15 @@
 // ══════════════════════════════════════════════════════════
-//  config.js — API URL + shared helpers
-//  JWT stored in HttpOnly cookie (server-managed, XSS-safe)
+//  config.js — Auth state: HttpOnly cookie (JWT) + localStorage (user profile)
+//
+//  Flow:
+//    Login  → server sets HttpOnly cookie + returns user data
+//             → frontend saves user data to localStorage (smm_user)
+//    Check  → requireAuth()       checks localStorage.smm_user (sync, fast)
+//    Check  → redirectIfLoggedIn() checks localStorage.smm_user (sync, fast)
+//    Logout → POST /api/auth/logout clears cookie
+//             → frontend clears localStorage
 // ══════════════════════════════════════════════════════════
+
 const CONFIG = {
   API_URL: (
     window.location.hostname === 'localhost' ||
@@ -11,65 +19,64 @@ const CONFIG = {
     : 'https://smmpannelbackend.onrender.com',
 };
 
-/* ── API call helper ─────────────────────────────────────
-   credentials:'include' sends HttpOnly cookie automatically
-   No manual token handling needed (XSS-safe)             */
+/* ── API call ─────────────────────────────────────────────
+   credentials:'include' → HttpOnly cookie sent automatically */
 async function apiCall(endpoint, method = 'GET', body = null) {
   const opts = {
     method,
-    credentials: 'include',                // ← sends HttpOnly cookie
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
   };
   if (body) opts.body = JSON.stringify(body);
 
   let response;
   try {
-    response = await fetch(`${CONFIG.API_URL}${endpoint}`, opts);
+    response = await fetch(CONFIG.API_URL + endpoint, opts);
   } catch {
     throw new Error('Cannot connect to server. Check your internet connection.');
   }
 
   const ct = response.headers.get('content-type') || '';
-  if (!ct.includes('application/json')) {
-    throw new Error(`Server error (HTTP ${response.status}). Please try again.`);
-  }
+  if (!ct.includes('application/json'))
+    throw new Error('Server error (HTTP ' + response.status + '). Please try again.');
 
   const data = await response.json();
   if (!response.ok) throw new Error(data.message || 'Something went wrong');
   return data;
 }
 
-/* ── Auth guards ─────────────────────────────────────────
-   Use smm_user (non-sensitive profile data) from localStorage
-   JWT token itself is NEVER in localStorage (XSS risk)   */
+/* ── Auth guards (synchronous — no API calls, no loops) ─── */
 function requireAuth() {
-  if (!localStorage.getItem('smm_user')) window.location.replace('/login');
-}
-function redirectIfLoggedIn() {
-  // Try pinging /api/auth/me; cookie decides if session is valid
-  apiCall('/api/auth/me').then(() => window.location.replace('/')).catch(() => {});
+  if (!localStorage.getItem('smm_user'))
+    window.location.replace('/login');
 }
 
-/* ── Logout ──────────────────────────────────────────────*/
+function redirectIfLoggedIn() {
+  if (localStorage.getItem('smm_user'))
+    window.location.replace('/');
+}
+
+/* ── Logout ───────────────────────────────────────────────*/
 async function logout() {
   try { await apiCall('/api/auth/logout', 'POST'); } catch (_) {}
   localStorage.removeItem('smm_user');
   window.location.replace('/login');
 }
 
-/* ── Utilities ───────────────────────────────────────────*/
+/* ── Utilities ────────────────────────────────────────────*/
 function sanitizeHTML(s) {
   if (s == null) return '';
   return String(s).replace(/[&<>"']/g, c =>
-    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;' }[c]));
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' }[c]));
 }
 function debounce(fn, ms) {
-  let t; return function(...a) { clearTimeout(t); t = setTimeout(() => fn(...a), ms || 300); };
+  let t;
+  return function (...a) { clearTimeout(t); t = setTimeout(() => fn(...a), ms || 300); };
 }
-function showAlert(id, msg, type = 'error') {
+function showAlert(id, msg, type) {
   const el = document.getElementById(id);
   if (!el) return;
-  el.className = `alert show alert-${type}`;
+  el.className = 'alert show alert-' + (type || 'error');
   el.textContent = msg;
 }
 function hideAlert(id) {

@@ -1439,6 +1439,7 @@ async function submitOrder() {
     // Refresh user balance in header
     try {
       const fresh = await apiCall('/api/auth/me');
+    localStorage.setItem('smm_user', JSON.stringify(fresh));
       localStorage.setItem('smm_user', JSON.stringify(fresh));
       applyUser(fresh);
     } catch(_) {}
@@ -1563,8 +1564,7 @@ async function submitFunds() {
   if (sp) sp.textContent = 'Uploading...';
 
   try {
-    const token    = localStorage.getItem('smm_token');
-    const formData = new FormData();
+    const token    = const formData = new FormData();
     formData.append('amount',        amount);
     formData.append('transactionId', txnId);
     formData.append('screenshot',    file);
@@ -1597,7 +1597,11 @@ async function submitFunds() {
 
 function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
-function logout() { localStorage.removeItem('smm_token'); localStorage.removeItem('smm_user'); window.location.replace('/login'); }
+async function logout() {
+  try { await apiCall('/api/auth/logout', 'POST'); } catch (_) {}
+  localStorage.removeItem('smm_user');
+  window.location.replace('/login');
+}
 
 /* ══════════════════════════════════════════════
    ORDERS — list, status sync, cancel

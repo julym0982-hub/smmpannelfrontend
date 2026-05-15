@@ -809,7 +809,8 @@
       btn.innerHTML = '<span class="spinner"></span>Logging in...';
       try {
         const data = await apiCall('/api/auth/login','POST',{username:user,password:pw});
-        localStorage.setItem('smm_token', data.token);
+        // Save non-sensitive user profile to localStorage (token is in HttpOnly cookie)
+        if (data.user) localStorage.setItem('smm_user', JSON.stringify(data.user));
         window.location.replace('/');
       } catch(e) {
         showAlert('loginAlert', e.message || 'Login failed.');
