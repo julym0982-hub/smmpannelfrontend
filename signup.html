@@ -67,10 +67,15 @@
 
   </div>
 
-  <script src="config.js"></script>
+  <script src="config.js">
+function goToLogin() {
+  // Clear any stale user data before going to login
+  localStorage.removeItem('smm_user');
+  window.location.replace('/login');
+}
+</script>
   <script>
-    redirectIfLoggedIn();
-
+    
     function togglePw(inputId, iconId) {
       const pw   = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
@@ -94,38 +99,66 @@
       setLoading('signupBtn', true, 'Sign Up');
       try {
         const data = await apiCall('/api/auth/signup', 'POST', { name, email, password });
-        // Token set via HttpOnly cookie by server — no localStorage needed
-        localStorage.setItem('smm_user', JSON.stringify(data.user));
-
-        // Show backup codes (displayed only once)
         const codes = data.backupCodes || [];
-        document.getElementById('signupForm').style.display = 'none';
+
+        // Hide form, clear alerts
+        const form = document.getElementById('signupForm');
+        if (form) form.style.display = 'none';
+        const alertEl = document.getElementById('alert');
+        if (alertEl) alertEl.className = 'alert';
+
         const box = document.createElement('div');
+        box.style.cssText = 'padding:8px 0';
         box.innerHTML = `
-          <div style="text-align:center;padding:8px 0">
-            <div style="font-size:2.2rem;margin-bottom:12px">🔐</div>
-            <h2 style="color:#1E1B4B;font-size:1.1rem;font-weight:900;margin-bottom:8px">Save Your Backup Codes!</h2>
-            <div style="background:#FEF9C3;border:2px solid #F59E0B;border-radius:12px;padding:12px 14px;margin-bottom:14px">
-              <p style="color:#92400E;font-size:.78rem;font-weight:800;margin-bottom:8px">
-                ⚠️ Screenshot ရိုက်ထားပါ — ဒီ codes တွေကို Password ပြောင်းဖို့ အသုံးပြုရမည်။ ပျောက်ရင် ပြန်မရနိုင်!
-              </p>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
-                ${codes.map((c,i) => `
-                  <div style="background:#fff;border:1.5px solid #D97706;border-radius:8px;
-                       padding:8px;font-family:monospace;font-size:.85rem;font-weight:800;
-                       color:#1E1B4B;text-align:center">${c}</div>`).join('')}
-              </div>
-            </div>
-            <p style="font-size:.78rem;color:#6B7280;margin-bottom:16px">
-              Each code can only be used <strong>once</strong>. Store them safely offline.
+          <div style="text-align:center;margin-bottom:18px">
+            <div style="font-size:2.5rem;margin-bottom:10px">🔐</div>
+            <h2 style="color:#1E1B4B;font-size:1.15rem;font-weight:900;margin-bottom:6px">Account Created!</h2>
+            <p style="color:#374151;font-size:.85rem;line-height:1.6">
+              Backup Codes ကို <strong>ယခုချက်ချင်း</strong> screenshot ရိုက်ပါ
             </p>
-            <a href="/" style="display:inline-block;padding:12px 28px;border-radius:12px;
-               background:linear-gradient(90deg,#7B3FBF,#E91E8C);color:#fff;
-               font-weight:800;text-decoration:none;font-size:.9rem">
-              Continue to Dashboard →
-            </a>
-          </div>`;
+          </div>
+          <div style="background:#FEF3C7;border:2px solid #F59E0B;border-radius:14px;padding:14px;margin-bottom:16px">
+            <p style="color:#92400E;font-size:.82rem;font-weight:800;margin-bottom:10px">
+              ⚠️ ဒီ codes တွေကို ထပ်မကြည့်နိုင်တော့ပါ — ယခုပဲ သိမ်းပါ!
+            </p>
+            <p style="color:#78350F;font-size:.78rem;line-height:1.6;margin-bottom:12px">
+              • Password မေ့ရင် ဒီ codes ဖြင့်သာ ပြောင်းနိုင်သည်<br>
+              • Code တစ်ခုကို တစ်ကြိမ်သာ သုံးနိုင်သည်
+            </p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              ${codes.map(c => \`
+                <div style="background:#fff;border:2px solid #D97706;border-radius:10px;
+                     padding:10px;text-align:center;font-family:monospace;
+                     font-size:.9rem;font-weight:900;color:#1E1B4B;letter-spacing:.1em">
+                  \${c}
+                </div>\`).join('')}
+            </div>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;
+                 margin-bottom:16px;padding:12px;background:#F0FDF4;
+                 border:1.5px solid #BBF7D0;border-radius:12px">
+            <input type="checkbox" id="confirmSaved"
+              style="width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#059669"/>
+            <span style="font-size:.83rem;color:#166534;font-weight:700;line-height:1.5">
+              ✅ Codes တွေကို screenshot ရိုက်ပြီး သိမ်းဆည်းပြီးပြီ
+            </span>
+          </label>
+          <button id="goLoginBtn" onclick="goToLogin()" disabled
+            style="width:100%;padding:14px;border:none;border-radius:14px;
+                   background:linear-gradient(90deg,#7B3FBF,#E91E8C);color:#fff;
+                   font-size:.95rem;font-weight:800;cursor:not-allowed;opacity:.4;
+                   transition:opacity .2s;font-family:inherit">
+            Login ဝင်မည် →
+          </button>`;
+
         document.querySelector('.auth-card').appendChild(box);
+
+        document.getElementById('confirmSaved').addEventListener('change', function() {
+          const btn = document.getElementById('goLoginBtn');
+          btn.disabled = !this.checked;
+          btn.style.opacity = this.checked ? '1' : '.4';
+          btn.style.cursor  = this.checked ? 'pointer' : 'not-allowed';
+        });
       } catch (err) {
         showAlert('alert', err.message);
       } finally {
