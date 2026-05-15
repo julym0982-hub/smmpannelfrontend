@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://i.ibb.co https://*.ibb.co; connect-src 'self' https://smmpannelbackend.onrender.com;" />
   <title>Dashboard — SMM Panel</title>
@@ -1439,7 +1438,6 @@ async function submitOrder() {
     // Refresh user balance in header
     try {
       const fresh = await apiCall('/api/auth/me');
-    localStorage.setItem('smm_user', JSON.stringify(fresh));
       localStorage.setItem('smm_user', JSON.stringify(fresh));
       applyUser(fresh);
     } catch(_) {}
@@ -1564,14 +1562,14 @@ async function submitFunds() {
   if (sp) sp.textContent = 'Uploading...';
 
   try {
-    const token    = const formData = new FormData();
+    const formData = new FormData();
     formData.append('amount',        amount);
     formData.append('transactionId', txnId);
     formData.append('screenshot',    file);
 
     const resp = await fetch((CONFIG.API_URL || '') + '/api/funds/request', {
       method:  'POST',
-      headers: { 'Authorization': 'Bearer ' + token },
+      // credentials:'include' in apiCall sends cookie automatically
       body:    formData,
     });
     const data = await resp.json();
@@ -1801,7 +1799,7 @@ ${e.message}`;
 /* ══════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════ */
-(async function init() {
+(async async function init() {
   const saved = localStorage.getItem('smm_user');
   if (saved) applyUser(JSON.parse(saved));
   try {
