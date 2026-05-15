@@ -1,10 +1,7 @@
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 //  config.js — API URL + shared helpers
-// ══════════════════════════════════════════════
-
-/* Auto-detect API URL:
-   - localhost / 127.0.0.1  → local dev server
-   - otherwise              → production Render backend  */
+//  JWT stored in HttpOnly cookie (server-managed, XSS-safe)
+// ══════════════════════════════════════════════════════════
 const CONFIG = {
   API_URL: (
     window.location.hostname === 'localhost' ||
@@ -14,51 +11,61 @@ const CONFIG = {
     : 'https://smmpannelbackend.onrender.com',
 };
 
-/* ── API call helper ────────────────────────── */
+/* ── API call helper ─────────────────────────────────────
+   credentials:'include' sends HttpOnly cookie automatically
+   No manual token handling needed (XSS-safe)             */
 async function apiCall(endpoint, method = 'GET', body = null) {
-  const token = localStorage.getItem('smm_token');
   const opts = {
     method,
+    credentials: 'include',                // ← sends HttpOnly cookie
     headers: { 'Content-Type': 'application/json' },
   };
-  if (token) opts.headers['Authorization'] = `Bearer ${token}`;
-  if (body)  opts.body = JSON.stringify(body);
+  if (body) opts.body = JSON.stringify(body);
 
   let response;
   try {
-    response = await fetch(`${CONFIG.API_URL}${endpoint}`, { ...opts, credentials: 'include' });
+    response = await fetch(`${CONFIG.API_URL}${endpoint}`, opts);
   } catch {
     throw new Error('Cannot connect to server. Check your internet connection.');
   }
 
-  // Guard against non-JSON responses (HTML error pages)
   const ct = response.headers.get('content-type') || '';
   if (!ct.includes('application/json')) {
     throw new Error(`Server error (HTTP ${response.status}). Please try again.`);
   }
 
-  let data;
-  try { data = await response.json(); }
-  catch { throw new Error('Server returned an invalid response.'); }
-
+  const data = await response.json();
   if (!response.ok) throw new Error(data.message || 'Something went wrong');
   return data;
 }
 
-/* ── MMK formatter ──────────────────────────── */
-function fmtMMK(v) {
-  return Math.round(v || 0).toLocaleString() + ' Ks';
-}
-
-/* ── Auth guards ─────────────────────────────── */
+/* ── Auth guards ─────────────────────────────────────────
+   Use smm_user (non-sensitive profile data) from localStorage
+   JWT token itself is NEVER in localStorage (XSS risk)   */
 function requireAuth() {
-  if (!localStorage.getItem('smm_token')) window.location.replace('/login');
+  if (!localStorage.getItem('smm_user')) window.location.replace('/login');
 }
 function redirectIfLoggedIn() {
-  if (localStorage.getItem('smm_token')) window.location.replace('/');
+  // Try pinging /api/auth/me; cookie decides if session is valid
+  apiCall('/api/auth/me').then(() => window.location.replace('/')).catch(() => {});
 }
 
-/* ── Misc helpers ────────────────────────────── */
+/* ── Logout ──────────────────────────────────────────────*/
+async function logout() {
+  try { await apiCall('/api/auth/logout', 'POST'); } catch (_) {}
+  localStorage.removeItem('smm_user');
+  window.location.replace('/login');
+}
+
+/* ── Utilities ───────────────────────────────────────────*/
+function sanitizeHTML(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;' }[c]));
+}
+function debounce(fn, ms) {
+  let t; return function(...a) { clearTimeout(t); t = setTimeout(() => fn(...a), ms || 300); };
+}
 function showAlert(id, msg, type = 'error') {
   const el = document.getElementById(id);
   if (!el) return;
@@ -73,5 +80,7 @@ function setLoading(btnId, loading, defaultText) {
   const btn = document.getElementById(btnId);
   if (!btn) return;
   btn.disabled = loading;
-  btn.innerHTML = loading ? `<span class="spinner"></span> Please wait...` : defaultText;
+  btn.innerHTML = loading
+    ? '<span class="spinner"></span> Please wait...'
+    : defaultText;
 }

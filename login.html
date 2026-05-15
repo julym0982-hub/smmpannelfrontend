@@ -809,9 +809,7 @@
       btn.innerHTML = '<span class="spinner"></span>Logging in...';
       try {
         const data = await apiCall('/api/auth/login','POST',{username:user,password:pw});
-        // Store token in localStorage as fallback (cookie is primary)
-        if (data.token) localStorage.setItem('smm_token', data.token);
-        if (data.user)  localStorage.setItem('smm_user', JSON.stringify(data.user));
+        localStorage.setItem('smm_token', data.token);
         window.location.replace('/');
       } catch(e) {
         showAlert('loginAlert', e.message || 'Login failed.');
