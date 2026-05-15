@@ -3,9 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="DENY" />
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://i.ibb.co https://*.ibb.co; connect-src 'self' https://smmpannelbackend.onrender.com;" />
   <title>Dashboard — SMM Panel</title>
   <link rel="stylesheet" href="style.css" />
@@ -1021,15 +1018,8 @@ function sanitizeHTML(str) {
     .replace(/'/g,  "&#x27;");
 }
 /* Safe innerHTML setter */
-function safeSetHTML(el, html) {
-  if (!el) return;
-  // DOMPurify would be ideal; this strips script tags at minimum
-  el.innerHTML = html.replace(/<script[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
-}
-/* Remove token on page unload if window closed (not tab switch) */
-window.addEventListener("beforeunload", () => {
-  // Keep token for tab switches, clear on browser close handled by session expiry
-});
+/* safeSetHTML removed */
+
 </script>
 <script>
 
@@ -1298,4 +1288,19 @@ function applySvc(svc) {
     qtyInp.value    = '';
     qtyInp.placeholder = 'Auto (= comment lines)';
     if (qtyHint) qtyHint.textContent = 'Quantity = number of comments entered';
-    if (commentsGroup) commentsGroup.styl
+    if (commentsGroup) commentsGroup.style.display = 'block';
+  } else {
+    qtyInp.disabled    = false;
+    qtyInp.placeholder = 'Enter quantity';
+    qtyInp.min = svc.min;
+    qtyInp.max = svc.max;
+    if (qtyHint) qtyHint.textContent = `Min: ${svc.min.toLocaleString()} - Max: ${svc.max.toLocaleString()}`;
+    if (commentsGroup) { commentsGroup.style.display = 'none'; }
+    if (document.getElementById('orderComments')) document.getElementById('orderComments').value = '';
+    if (lineCount) lineCount.textContent = '';
+  }
+  calcCharge();
+}
+
+function searchOrderService() {
+  const q = document.getElementById('orderSearch
