@@ -1799,7 +1799,7 @@ ${e.message}`;
 /* ══════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════ */
-(async async function init() {
+(async function() {
   const saved = localStorage.getItem('smm_user');
   if (saved) applyUser(JSON.parse(saved));
   try {
