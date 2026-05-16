@@ -396,15 +396,18 @@ async function doLogin() {
   if (!email || !password) { errEl.className='login-err show'; errEl.textContent='Email and password required'; return; }
   btn.disabled = true; btn.textContent = 'Logging in...';
   try {
-    const data = await fetch(API + '/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    }).then(r => r.json());
-    if (!data.token) throw new Error(data.message || 'Login failed');
+    // Use credentials:'include' so HttpOnly cookie is set by server
+    const resp = await fetch(API + '/api/auth/login', {
+      method:      'POST',
+      credentials: 'include',
+      headers:     { 'Content-Type': 'application/json' },
+      body:        JSON.stringify({ email, password }),
+    });
+    const data = await resp.json();
+    // Backend returns { message, user } — no token in body (HttpOnly cookie)
+    if (!resp.ok) throw new Error(data.message || 'Login failed');
     if (!data.user?.isAdmin) throw new Error('Admin access required. Contact support.');
-    adminToken = data.token;
-    document.getElementById('adminEmail').textContent = data.user.email;
+    document.getElementById('adminEmail').textContent = data.user.email || email;
     showDashboard();
   } catch(e) {
     errEl.className = 'login-err show';
@@ -412,8 +415,8 @@ async function doLogin() {
   } finally { btn.disabled=false; btn.textContent='Login as Admin'; }
 }
 
-function doLogout() {
-  adminToken = '';
+async function doLogout() {
+  try { await api('/api/auth/logout', 'POST'); } catch(_) {}
   localStorage.removeItem('smm_user');
   document.getElementById('adminScreen').style.display = 'none';
   document.getElementById('loginScreen').style.display = '';
