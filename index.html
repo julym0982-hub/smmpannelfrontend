@@ -1752,6 +1752,7 @@ async function cancelOrder(orderId) {
 
 ဤ Order ကို Cancel လုပ်မည်လား?
 
+• JAP API ကို စစ်ဆေးပြီးမှ Cancel ပြုလုပ်မည်
 • Refund ပမာဏ: Cancel အောင်မြင်မှ ပြန်ပေးမည်`)) return;
 
   const btn = document.getElementById('cancel-' + orderId);
@@ -1789,6 +1790,7 @@ New Balance: ${res.newBalance.toLocaleString()} Ks`;
       ? `❌ ${e.message}
 
 Order ကို Cancel မလုပ်နိုင်ပါ။
+(JAP ဘက်မှ ငြင်းပယ်ခဲ့သည်)`
       : `❌ Cancel မအောင်မြင်ပါ:
 ${e.message}`;
     alert(errMsg);
