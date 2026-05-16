@@ -1223,7 +1223,7 @@ function buildDropdowns() {
   document.getElementById('catDrop').innerHTML = ORDER_CATALOGUE.map(c => `
     <div class="select-dropdown-item" onclick="selectCategory('${c.id}')">
       <div class="di-icon" style="background:${c.iconInfo.bg}">${c.iconInfo.svg}</div>
-      <span>${c.name}</span>
+      <span>${sanitizeHTML(c.name)}</span>
     </div>
   `).join('');
 

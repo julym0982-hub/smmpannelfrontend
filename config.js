@@ -1,15 +1,6 @@
 // ══════════════════════════════════════════════════════════
-//  config.js — Auth state: HttpOnly cookie (JWT) + localStorage (user profile)
-//
-//  Flow:
-//    Login  → server sets HttpOnly cookie + returns user data
-//             → frontend saves user data to localStorage (smm_user)
-//    Check  → requireAuth()       checks localStorage.smm_user (sync, fast)
-//    Check  → redirectIfLoggedIn() checks localStorage.smm_user (sync, fast)
-//    Logout → POST /api/auth/logout clears cookie
-//             → frontend clears localStorage
+//  config.js  —  Auth: HttpOnly cookie (JWT) + localStorage (profile only)
 // ══════════════════════════════════════════════════════════
-
 const CONFIG = {
   API_URL: (
     window.location.hostname === 'localhost' ||
@@ -20,11 +11,12 @@ const CONFIG = {
 };
 
 /* ── API call ─────────────────────────────────────────────
-   credentials:'include' → HttpOnly cookie sent automatically */
+   credentials:'include' → HttpOnly cookie sent automatically
+   JWT is NEVER touched by JavaScript (XSS-safe)          */
 async function apiCall(endpoint, method = 'GET', body = null) {
   const opts = {
     method,
-    credentials: 'include',
+    credentials: 'include',          // sends HttpOnly cookie automatically
     headers: { 'Content-Type': 'application/json' },
   };
   if (body) opts.body = JSON.stringify(body);
@@ -45,30 +37,35 @@ async function apiCall(endpoint, method = 'GET', body = null) {
   return data;
 }
 
-/* ── Auth guards (synchronous — no API calls, no loops) ─── */
+/* ── Fix 3: Auth guards — localStorage is UI cache only.
+   requireAuth() checks localStorage for fast redirect,
+   but the REAL auth is the HttpOnly cookie validated server-side.
+   If the cookie is missing, /api/auth/me will fail and
+   the app gracefully handles it.                          */
 function requireAuth() {
-  if (!localStorage.getItem('smm_user'))
-    window.location.replace('/login');
+  if (!localStorage.getItem('smm_user')) window.location.replace('/login');
 }
-
 function redirectIfLoggedIn() {
-  if (localStorage.getItem('smm_user'))
-    window.location.replace('/');
+  if (localStorage.getItem('smm_user')) window.location.replace('/');
 }
 
-/* ── Logout ───────────────────────────────────────────────*/
+/* ── Logout: always call server to clear cookie ──────────*/
 async function logout() {
   try { await apiCall('/api/auth/logout', 'POST'); } catch (_) {}
   localStorage.removeItem('smm_user');
   window.location.replace('/login');
 }
 
-/* ── Utilities ────────────────────────────────────────────*/
+/* ── XSS Fix: sanitize before any innerHTML insertion ────*/
 function sanitizeHTML(s) {
   if (s == null) return '';
-  return String(s).replace(/[&<>"']/g, c =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' }[c]));
+  return String(s).replace(/[&<>"'`]/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;',
+    '"': '&quot;', "'": '&#x27;', '`': '&#x60;',
+  }[c]));
 }
+
+/* ── Utilities ────────────────────────────────────────────*/
 function debounce(fn, ms) {
   let t;
   return function (...a) { clearTimeout(t); t = setTimeout(() => fn(...a), ms || 300); };

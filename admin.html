@@ -355,14 +355,15 @@ body{font-family:'Nunito',system-ui,sans-serif;background:#F3F4F6;color:#111827;
 /* ── Config ────────────────────────────────────────── */
 const API = (typeof CONFIG !== 'undefined' && CONFIG.API_URL) ? CONFIG.API_URL : '';
 
-let adminToken = localStorage.getItem('smm_admin_token') || '';
+// Auth via HttpOnly cookie (smm_token) — no localStorage token needed
 let currentFRStatus = 'Pending';
 
 /* ── API helper ─────────────────────────────────────── */
 async function api(path, method='GET', body=null) {
   const opts = {
     method,
-    headers: { 'Authorization': 'Bearer ' + adminToken, 'Content-Type': 'application/json' }
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
   };
   if (body) opts.body = JSON.stringify(body);
 
@@ -403,7 +404,6 @@ async function doLogin() {
     if (!data.token) throw new Error(data.message || 'Login failed');
     if (!data.user?.isAdmin) throw new Error('Admin access required. Contact support.');
     adminToken = data.token;
-    localStorage.setItem('smm_admin_token', adminToken);
     document.getElementById('adminEmail').textContent = data.user.email;
     showDashboard();
   } catch(e) {
@@ -414,7 +414,7 @@ async function doLogin() {
 
 function doLogout() {
   adminToken = '';
-  localStorage.removeItem('smm_admin_token');
+  localStorage.removeItem('smm_user');
   document.getElementById('adminScreen').style.display = 'none';
   document.getElementById('loginScreen').style.display = '';
   document.getElementById('loginPass').value = '';
@@ -575,7 +575,7 @@ async function loadUsers() {
       <tr onclick="viewUser('${u._id}')">
         <td><div class="user-cell">
           <div class="user-dot"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
-          <div><div class="user-name-cell">${u.name}${u.isAdmin?'<span class="admin-chip">Admin</span>':''}</div><div class="user-email-cell">${u.email}</div></div>
+          <div><div class="user-name-cell">${sanitizeHTML(u.name || '')}${u.isAdmin?'<span class="admin-chip">Admin</span>':''}</div><div class="user-email-cell">${sanitizeHTML(u.email || '')}</div></div>
         </div></td>
         <td><span class="balance-chip">${(u.balance||0).toLocaleString()} Ks</span></td>
         <td>${u.totalOrders||0}</td>
@@ -614,7 +614,7 @@ async function viewUser(id) {
         <div class="user-stat-box"><div class="user-stat-val">${user.totalOrders||0}</div><div class="user-stat-lbl">Orders</div></div>
         <div class="user-stat-box"><div class="user-stat-val">${(user.balanceSpent||0).toLocaleString()} Ks</div><div class="user-stat-lbl">Total Spent</div></div>
       </div>
-      <div style="font-size:.82rem;color:#6B7280;margin-bottom:14px">📧 ${user.email} · Joined ${new Date(user.createdAt).toLocaleDateString()}</div>
+      <div style="font-size:.82rem;color:#6B7280;margin-bottom:14px">📧 ${sanitizeHTML(user.email || '')} · Joined ${new Date(user.createdAt).toLocaleDateString()}</div>
 
       <div class="modal-section">
         <div class="modal-section-title">Manual Balance Adjustment</div>
@@ -665,7 +665,8 @@ window.onload = async () => {
       showDashboard();
     } catch(e) {
       adminToken='';
-      localStorage.removeItem('smm_admin_token');
+      try { await adminApiCall('/api/auth/logout', 'POST'); } catch(_) {}
+    localStorage.removeItem('smm_user');
     }
   }
 };
