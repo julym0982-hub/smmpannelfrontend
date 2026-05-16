@@ -457,7 +457,7 @@
     <span class="logo" onclick="showSection('login')">TheNet<span>SMM</span></span>
     <div class="nav-links">
       <button class="nav-link active" id="nl-login"    onclick="showSection('login')">Login</button>
-      <button class="nav-link"        id="nl-signup"   onclick="showSection('signup')">Signup</button>
+      <button class="nav-link"        id="nl-signup"   onclick="window.location.href='/signup'">Signup</button>
       <button class="nav-link"        id="nl-api"      onclick="showSection('api')">API</button>
       <button class="nav-link"        id="nl-faqs"     onclick="goToFaq()">FAQs</button>
       <button class="nav-link"        id="nl-terms"    onclick="showSection('terms')">Terms</button>
@@ -471,7 +471,7 @@
 
   <div class="mobile-drawer" id="drawer">
     <button class="nav-link" onclick="showSection('login');closeDrawer()">Login</button>
-    <button class="nav-link" onclick="showSection('signup');closeDrawer()">Signup</button>
+    <button class="nav-link" onclick="window.location.href='/signup'">Signup</button>
     <button class="nav-link" onclick="showSection('api');closeDrawer()">API</button>
     <button class="nav-link" onclick="goToFaq();closeDrawer()">FAQs</button>
     <button class="nav-link" onclick="showSection('terms');closeDrawer()">Terms</button>
@@ -524,7 +524,7 @@
             <div class="forgot-wrap"><a href="/forgot-password" class="forgot-link">Forgot password?</a></div>
           </div>
           <button class="btn-primary" id="loginBtn" onclick="doLogin()">Log In</button>
-          <p class="auth-footer-p">Not registered yet? <a href="#" onclick="showSection('signup');return false;">Sign Up &rsaquo;</a></p>
+          <p class="auth-footer-p">Not registered yet? <a href="/signup">Sign Up &rsaquo;</a></p>
         </div>
       </div>
     </div>
