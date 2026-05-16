@@ -9,7 +9,7 @@
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--bg:linear-gradient(135deg,#230769,#5B1AB0 30%,#9B2FC9 62%,#E91E8C);--btn:linear-gradient(90deg,#7B3FBF,#E91E8C);--font:'Nunito',system-ui,sans-serif}
-    body{font-family:var(--font);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;-webkit-font-smoothing:antialiased}
+    body{font-family:var(--font);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px}
     .brand{display:flex;flex-direction:column;align-items:center;margin-bottom:18px}
     .brand-logo{font-size:1.9rem;font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:12px}
     .brand-logo span{color:#E91E8C}
@@ -18,16 +18,16 @@
     .brand-line:nth-child(1){width:100%}.brand-line:nth-child(2){width:65%}.brand-line:nth-child(3){width:40%}
     .card{background:#fff;border-radius:26px;padding:36px 30px;width:100%;max-width:420px;box-shadow:0 24px 70px rgba(0,0,0,.32)}
     .icon-wrap{display:flex;justify-content:center;margin-bottom:14px}
-    .icon-circle{width:68px;height:68px;background:linear-gradient(135deg,#C026D3,#7C3AED);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(124,58,237,.4)}
+    .icon-circle{width:68px;height:68px;background:linear-gradient(135deg,#C026D3,#7C3AED);border-radius:50%;display:flex;align-items:center;justify-content:center}
     .icon-circle svg{width:34px;height:34px;fill:#fff}
-    .title{font-size:1.6rem;font-weight:900;color:#111827;text-align:center;margin-bottom:6px}
-    .subtitle{font-size:.85rem;color:#6B7280;text-align:center;margin-bottom:22px;line-height:1.6}
+    .title{font-size:1.55rem;font-weight:900;color:#111827;text-align:center;margin-bottom:6px}
+    .subtitle{font-size:.85rem;color:#6B7280;text-align:center;margin-bottom:20px}
     .alert{padding:11px 14px;border-radius:12px;font-size:.875rem;font-weight:700;text-align:center;margin-bottom:14px;display:none}
     .alert.show{display:block}
     .alert-error{background:#FEF2F2;border:1.5px solid #FECACA;color:#DC2626}
     .form-group{margin-bottom:14px}
     .form-label{display:block;font-size:.85rem;font-weight:700;color:#374151;margin-bottom:6px}
-    .input-wrap{display:flex;align-items:center;gap:10px;background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:13px;padding:12px 14px;transition:border-color .2s,background .2s}
+    .input-wrap{display:flex;align-items:center;gap:10px;background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:13px;padding:12px 14px;transition:border-color .2s}
     .input-wrap:focus-within{border-color:#9333EA;background:#fff}
     .input-wrap>svg{flex-shrink:0;width:18px;height:18px;fill:#A78BFA}
     .input-wrap input{flex:1;border:none;background:transparent;outline:none;font-size:.88rem;font-weight:600;font-family:var(--font);color:#374151}
@@ -35,22 +35,21 @@
     .eye-btn{background:none;border:none;cursor:pointer;padding:0;display:flex;color:#9CA3AF}
     .eye-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .btn{width:100%;padding:14px;border:none;border-radius:14px;background:var(--btn);color:#fff;font-size:.95rem;font-weight:800;font-family:var(--font);cursor:pointer;box-shadow:0 5px 20px rgba(139,47,201,.42);transition:opacity .2s,transform .1s}
-    .btn:hover{opacity:.91}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn:hover{opacity:.91}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.45;cursor:not-allowed}
     .spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:7px}
     @keyframes spin{to{transform:rotate(360deg)}}
     .footer-link{text-align:center;font-size:.85rem;color:#6B7280;margin-top:16px}
     .footer-link a{color:#7C3AED;font-weight:800;text-decoration:none}
-    /* Backup codes section */
+    /* Backup codes */
     #codesSection{display:none}
-    .codes-warning{background:#FEF3C7;border:2px solid #F59E0B;border-radius:14px;padding:14px 16px;margin-bottom:16px}
-    .codes-warning-title{color:#92400E;font-size:.82rem;font-weight:900;margin-bottom:8px}
-    .codes-warning-text{color:#78350F;font-size:.78rem;line-height:1.7}
+    .warn-box{background:#FEF3C7;border:2px solid #F59E0B;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+    .warn-title{color:#92400E;font-size:.82rem;font-weight:900;margin-bottom:8px}
+    .warn-body{color:#78350F;font-size:.78rem;line-height:1.7}
     .codes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-    .code-chip{background:#fff;border:2px solid #D97706;border-radius:10px;padding:11px 8px;text-align:center;font-family:'Courier New',monospace;font-size:.88rem;font-weight:900;color:#1E1B4B;letter-spacing:.1em}
-    .confirm-box{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:12px 14px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:12px;margin:14px 0}
-    .confirm-box input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#059669;cursor:pointer}
-    .confirm-box span{font-size:.83rem;color:#166534;font-weight:700;line-height:1.5}
-    #goLoginBtn{margin-top:0}
+    .code-chip{background:#fff;border:2px solid #D97706;border-radius:10px;padding:11px 8px;text-align:center;font-family:'Courier New',monospace;font-size:.9rem;font-weight:900;color:#1E1B4B;letter-spacing:.1em;word-break:break-all}
+    .confirm-row{display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:12px 14px;background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:12px;margin:14px 0}
+    .confirm-row input{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#059669;cursor:pointer}
+    .confirm-row span{font-size:.83rem;color:#166534;font-weight:700;line-height:1.5}
   </style>
 </head>
 <body>
@@ -60,7 +59,7 @@
   </div>
 
   <div class="card">
-    <!-- ── SIGNUP FORM ── -->
+    <!-- ── Form ── -->
     <div id="formSection">
       <div class="icon-wrap">
         <div class="icon-circle">
@@ -78,6 +77,7 @@
           <input type="text" id="name" placeholder="Enter your name" autocomplete="name"/>
         </div>
       </div>
+
       <div class="form-group">
         <label class="form-label">Email</label>
         <div class="input-wrap">
@@ -85,24 +85,26 @@
           <input type="email" id="email" placeholder="Enter your email" autocomplete="email"/>
         </div>
       </div>
+
       <div class="form-group">
         <label class="form-label">Password</label>
         <div class="input-wrap">
           <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.8-2.2-5-5-5S7 3.2 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.7 1.4-3.1 3.1-3.1 1.7 0 3.1 1.4 3.1 3.1v2z"/></svg>
           <input type="password" id="password" placeholder="Min 6 characters" autocomplete="new-password"/>
           <button type="button" class="eye-btn" onclick="togglePw()">
-            <svg id="eyeIcon" viewBox="0 0 24 24">
+            <svg id="eyeIco" viewBox="0 0 24 24">
               <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
               <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
             </svg>
           </button>
         </div>
       </div>
+
       <button class="btn" id="signupBtn" onclick="doSignup()">Create Account</button>
       <p class="footer-link">Already have an account? <a href="/login">Log In &rsaquo;</a></p>
     </div>
 
-    <!-- ── BACKUP CODES SECTION (shown after signup) ── -->
+    <!-- ── Backup codes (shown after signup) ── -->
     <div id="codesSection">
       <div style="text-align:center;margin-bottom:18px">
         <div style="font-size:2.8rem;margin-bottom:10px">🔐</div>
@@ -112,23 +114,25 @@
         </p>
       </div>
 
-      <div class="codes-warning">
-        <div class="codes-warning-title">⚠️ ဤ page မပိတ်မချင်း screenshot ရိုက်ထားပါ!</div>
-        <div class="codes-warning-text">
+      <div class="warn-box">
+        <div class="warn-title">⚠️ ဒီ page ပိတ်ပြီးရင် codes ကို ထပ်မကြည့်နိုင်တော့!</div>
+        <div class="warn-body">
           • Password မေ့ရင် ဒီ backup code ဖြင့်သာ ပြောင်းနိုင်သည်<br>
-          • Code တစ်ခုကို တစ်ကြိမ်သာ သုံးနိုင်သည် — ပြီးရင် invalid ဖြစ်သည်<br>
-          • ဒီ page ပိတ်ပြီးရင် codes ကို ထပ်မကြည့်နိုင်တော့ပါ
+          • Code တစ်ခုကို တစ်ကြိမ်သာ သုံးနိုင်သည်<br>
+          • Screenshots ရိုက်ပြီး လုံခြုံသောနေရာတွင် သိမ်းပါ
         </div>
-        <div class="codes-grid" id="codesGrid"></div>
+        <div class="codes-grid" id="codesGrid">
+          <!-- codes injected here -->
+        </div>
       </div>
 
-      <label class="confirm-box">
-        <input type="checkbox" id="confirmCheck" onchange="onConfirmChange(this)"/>
-        <span>✅ Codes တွေကို screenshot ရိုက်ပြီး လုံခြုံသောနေရာတွင် သိမ်းဆည်းပြီးပြီ</span>
+      <label class="confirm-row">
+        <input type="checkbox" id="confirmChk" onchange="onConfirm(this)"/>
+        <span>✅ Codes တွေကို screenshot ရိုက်ပြီး သိမ်းဆည်းပြီးပြီ</span>
       </label>
 
       <button class="btn" id="goLoginBtn" onclick="goLogin()" disabled
-        style="opacity:.4;cursor:not-allowed">
+        style="opacity:.42;cursor:not-allowed">
         Login ဝင်မည် →
       </button>
     </div>
@@ -136,30 +140,36 @@
 
   <script src="config.js"></script>
   <script>
-    // Don't redirect if already logged in — user might be signing up a new account
-    // redirectIfLoggedIn() intentionally NOT called here
+    // ⚠️ IMPORTANT: Do NOT call redirectIfLoggedIn() here
+    // User might be creating a new account even while another session is active
 
     function togglePw() {
       const pw = document.getElementById('password');
-      const ic = document.getElementById('eyeIcon');
-      if (pw.type === 'password') {
-        pw.type = 'text';
-        ic.innerHTML = '<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
-      } else {
-        pw.type = 'password';
-        ic.innerHTML = '<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
-      }
+      const ic = document.getElementById('eyeIco');
+      const show = pw.type === 'password';
+      pw.type = show ? 'text' : 'password';
+      ic.innerHTML = show
+        ? '<path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>'
+        : '<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
     }
 
     async function doSignup() {
       const alertEl = document.getElementById('alert');
       alertEl.className = 'alert';
+
       const name     = document.getElementById('name').value.trim();
       const email    = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
-      if (!name)          { alertEl.className='alert show alert-error'; alertEl.textContent='Name ထည့်ပါ'; return; }
-      if (!email)         { alertEl.className='alert show alert-error'; alertEl.textContent='Email ထည့်ပါ'; return; }
-      if (password.length < 6) { alertEl.className='alert show alert-error'; alertEl.textContent='Password အနည်းဆုံး 6 လုံးဖြစ်ရမည်'; return; }
+
+      if (!name)           { showErr('Name ထည့်ပါ');                           return; }
+      if (!email)          { showErr('Email ထည့်ပါ');                          return; }
+      if (!email.includes('@')) { showErr('Email မှန်ကန်ကြောင်း စစ်ပါ');    return; }
+      if (password.length < 6) { showErr('Password အနည်းဆုံး 6 လုံးဖြစ်ရမည်'); return; }
+
+      function showErr(msg) {
+        alertEl.className = 'alert show alert-error';
+        alertEl.textContent = msg;
+      }
 
       const btn = document.getElementById('signupBtn');
       btn.disabled = true;
@@ -167,35 +177,48 @@
 
       try {
         const data = await apiCall('/api/auth/signup', 'POST', { name, email, password });
+        console.log('[Signup] Success, backupCodes count:', (data.backupCodes || []).length);
 
-        // Show backup codes (not redirect — user must save codes first)
-        const codes = data.backupCodes || [];
+        // Populate codes grid
+        const codes = Array.isArray(data.backupCodes) ? data.backupCodes : [];
         const grid  = document.getElementById('codesGrid');
-        grid.innerHTML = codes.map(c =>
-          '<div class="code-chip">' + c + '</div>'
-        ).join('');
 
-        // Switch view
+        if (codes.length === 0) {
+          // Codes missing — still show section with warning
+          grid.innerHTML = '<div style="grid-column:1/-1;color:#DC2626;font-size:.8rem;font-weight:700;padding:8px 0">⚠️ Codes ထွက်မလာပါ — Admin ကို ဆက်သွယ်ပါ</div>';
+          console.warn('[Signup] No backup codes in response:', data);
+        } else {
+          grid.innerHTML = codes.map(function(c) {
+            return '<div class="code-chip">' + c + '</div>';
+          }).join('');
+        }
+
+        // Show codes section, hide form
         document.getElementById('formSection').style.display  = 'none';
         document.getElementById('codesSection').style.display = 'block';
 
+        // Reset button in case user navigates back
+        btn.disabled    = false;
+        btn.textContent = 'Create Account';
+
       } catch (err) {
+        console.error('[Signup] Error:', err.message);
         alertEl.className = 'alert show alert-error';
         alertEl.textContent = err.message || 'Signup failed. Please try again.';
-        btn.disabled = false;
+        btn.disabled    = false;
         btn.textContent = 'Create Account';
       }
     }
 
-    function onConfirmChange(cb) {
+    function onConfirm(cb) {
       const btn = document.getElementById('goLoginBtn');
-      btn.disabled     = !cb.checked;
-      btn.style.opacity = cb.checked ? '1' : '.4';
+      btn.disabled      = !cb.checked;
+      btn.style.opacity = cb.checked ? '1' : '.42';
       btn.style.cursor  = cb.checked ? 'pointer' : 'not-allowed';
     }
 
     function goLogin() {
-      // Clear any old session before going to login
+      // Clear old session — new account needs fresh login
       localStorage.removeItem('smm_user');
       window.location.replace('/login');
     }
