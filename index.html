@@ -1616,9 +1616,30 @@ async function loadOrders() {
   listEl.innerHTML = '<div class="orders-loading">⏳ Loading orders...</div>';
 
   try {
+    // Step 1: Get orders from DB
     const data = await apiCall('/api/orders?limit=50');
     _allOrders = data.orders || [];
-    renderOrders(_currentOFilter);
+    renderOrders(_currentOFilter);  // show cached status first (fast)
+
+    // Step 2: Auto-sync status for Pending/In-progress orders (background)
+    const needSync = _allOrders
+      .filter(o => ['pending','in progress','processing'].includes((o.status||'').toLowerCase()))
+      .slice(0, 20);  // max 20 at once
+    if (needSync.length > 0) {
+      try {
+        const synced = await apiCall('/api/orders/sync-bulk', 'POST', {
+          orderIds: needSync.map(o => o._id)
+        });
+        if (synced.orders) {
+          // Merge updated statuses
+          synced.orders.forEach(upd => {
+            const idx = _allOrders.findIndex(x => x._id === upd._id);
+            if (idx >= 0) _allOrders[idx] = { ..._allOrders[idx], ...upd };
+          });
+          renderOrders(_currentOFilter);  // re-render with fresh statuses
+        }
+      } catch (_) {}  // silent fail — cached statuses still show
+    }
   } catch(e) {
     listEl.innerHTML = `<div class="orders-error">
       <p>⚠️ ${e.message}</p>
@@ -1752,8 +1773,7 @@ async function cancelOrder(orderId) {
 
 ဤ Order ကို Cancel လုပ်မည်လား?
 
-• JAP API ကို စစ်ဆေးပြီးမှ Cancel ပြုလုပ်မည်
-• Refund ပမာဏ: Cancel အောင်မြင်မှ ပြန်ပေးမည်`)) return;
+• Cancel အောင်မြင်ပါက Balance ပြန်ဖြည့်ပေးမည်`)) return;
 
   const btn = document.getElementById('cancel-' + orderId);
   if (btn) { btn.disabled = true; btn.innerHTML = '⏳ Canceling...'; }
@@ -1785,14 +1805,19 @@ New Balance: ${res.newBalance.toLocaleString()} Ks`;
     await loadOrders();
 
   } catch (e) {
-    // Show JAP-specific error message
-    const errMsg = e.message.includes('JAP refused')
-      ? `❌ ${e.message}
+    // Show user-friendly error (no provider name exposed)
+    const rawMsg  = e.message || '';
+    const cleaned = rawMsg
+      .replace(/JAP refused cancel:\s*/i, '')
+      .replace(/\[JAP\]\s*/gi, '')
+      .replace(/JAP\s*/gi, '')
+      .trim();
+    const errMsg = cleaned
+      ? `❌ Cancel မလုပ်နိုင်ပါ
 
-Order ကို Cancel မလုပ်နိုင်ပါ။
-(JAP ဘက်မှ ငြင်းပယ်ခဲ့သည်)`
-      : `❌ Cancel မအောင်မြင်ပါ:
-${e.message}`;
+လုပ်ဆောင်နေဆဲ ဖြစ်၍ ငြင်းပယ်မရပါ — ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ
+(${cleaned})`
+      : '❌ Cancel မလုပ်နိုင်ပါ — ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ';
     alert(errMsg);
     const b = document.getElementById('cancel-' + orderId);
     if (b) { b.disabled = false; b.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg> Cancel'; }
