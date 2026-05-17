@@ -1160,6 +1160,18 @@ async function fetchServices() {
   try {
     const data = await apiCall('/api/provider/services');
 
+    // Backend is warming up DB (202 = first run, syncing in background)
+    if (data.syncing) {
+      setOrderLoading(false);
+      const alertEl = document.getElementById('orderAlert');
+      if (alertEl) {
+        alertEl.className = 'order-alert show info';
+        alertEl.textContent = '⏳ Services ကို ပြင်ဆင်နေပါသည် — 30 seconds နောက် အလိုအလျောက် ပြန်ဆွဲပါမည်...';
+      }
+      setTimeout(fetchServices, 30000);  // retry after 30s
+      return;
+    }
+
     // Group services by category — JAP field mapping
     // JAP: service(ID), name, rate(USD/1000), min, max, category, refill, cancel
     const grouped = {};
