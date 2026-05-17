@@ -1204,9 +1204,29 @@ async function fetchServices() {
   } catch (e) {
     setOrderLoading(false);
     console.error('[Services]', e.message);
-    document.getElementById('orderAlert').className = 'order-alert show error';
-    document.getElementById('orderAlert').textContent = 'Could not load services. Please refresh.';
+    const alertEl = document.getElementById('orderAlert');
+    if (alertEl) {
+      alertEl.className = 'order-alert show error';
+      alertEl.innerHTML =
+        'Services ကို ချိတ်ဆက်မရပါ — ' +
+        '<button onclick="retryServices()" style="background:none;border:none;' +
+        'color:#7C3AED;font-weight:800;cursor:pointer;text-decoration:underline;' +
+        'font-size:inherit">🔄 Retry</button>';
+    }
+    // Auto-retry once after 8 seconds
+    if (!window._svcRetried) {
+      window._svcRetried = true;
+      console.log('[Services] Auto-retry in 8s...');
+      setTimeout(function() { window._svcRetried = false; fetchServices(); }, 8000);
+    }
   }
+}
+
+function retryServices() {
+  window._svcRetried = false;
+  const alertEl = document.getElementById('orderAlert');
+  if (alertEl) alertEl.className = 'order-alert';
+  fetchServices();
 }
 
 function setOrderLoading(on) {
